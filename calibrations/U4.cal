@@ -1,0 +1,45 @@
+# AUSAlib version: 17.1
+# Calibrator version: 2.0
+# Calibrator arguments: Calibrator -s /home/erik/devel/projects/e21010/setup/setup.json -o /home/erik/devel/projects/e21010/data/cal/ -k /home/erik/devel/projects/e21010/setup/3a_U3-U4.json -d U4 --eloss --gui --no-match
+# Input files: 
+#	/home/erik/devel/projects/e21010/data/unpacked/009_000.root
+#	/home/erik/devel/projects/e21010/data/unpacked/009_001.root
+#	/home/erik/devel/projects/e21010/data/unpacked/009_002.root
+#	/home/erik/devel/projects/e21010/data/unpacked/009_003.root
+# Calibration of U4
+# Performed @ 2023-08-21 13:52
+# Performed by erik on susics
+# Front
+  0.0    0.0
+  0.0    0.0
+-19.0428 3.57289
+-14.3147 3.46409
+-12.1634 3.6616
+-19.6048 3.45974
+-16.4327 3.60309
+-4.28566 3.55853
+-20.1225 3.5583
+-10.2842 3.65686
+-15.4612 3.59701
+-19.8926 3.71438
+-41.4103 3.57718
+-32.9068 3.50322
+-22.5762 3.67583
+-44.9849 3.64773
+# Back
+-29.765 3.66608
+-29.9475 3.49176
+-26.2816 3.59719
+-21.6639 3.55526
+-17.5109 3.62168
+-20.194 3.48526
+-31.9953 3.78669
+-8.30556 3.73243
+-12.8449 3.61739
+-38.3005 3.53917
+-38.5294 3.63256
+-42.2364 3.64459
+-20.6059 3.56681
+  0.0    0.0
+  0.0    0.0
+  0.0    0.0

@@ -1,0 +1,13 @@
+{
+  "type" : "SquareDSSD",
+  "thickness" : "65 um",
+  "deadLayer" : "100 nm",
+  "deadLayer_back" : "500 nm",
+  "nFrontStrips" : 16,
+  "nBackStrips" : 16,
+  "stripWidth" : "3000.0 um",
+  "stripPitch" : "3.1 mm",
+  "backContactThickness": "0.2 um",
+  "gridThickness" : "0.2 um",
+  "SiO2Thickness" : "1 um"
+}

@@ -1,0 +1,25 @@
+{
+  "DSD" : {
+    "__GLOBAL__" : {
+      "tolerance" : 300,
+      "low_cut" : 100
+    },
+    "U2": {
+      "front"  : {"disable" : [6]}
+    },
+    "U3": {
+      "back"  : {"disable" : [16]}
+    },
+    "U4": {
+      "front"  : {"disable" : [1, 2]}
+    },
+    "U5": {
+      "front"  : {"disable" : [2]}
+    }
+  },
+  "SSD" : {
+    "__GLOBAL__" : {
+      "low_cut" : 100
+    }
+  }
+}

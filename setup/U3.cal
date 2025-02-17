@@ -1,0 +1,45 @@
+# AUSAlib version: 17.1
+# Calibrator version: 2.0
+# Calibrator arguments: Calibrator -s /home/erik/devel/projects/e21010/setup/setup.json -o /home/erik/devel/projects/e21010/data/cal/ -k /home/erik/devel/projects/e21010/setup/3a_U3-U4.json -d U3 --eloss --gui --no-match
+# Input files: 
+#	/home/erik/devel/projects/e21010/data/unpacked/009_000.root
+#	/home/erik/devel/projects/e21010/data/unpacked/009_001.root
+#	/home/erik/devel/projects/e21010/data/unpacked/009_002.root
+#	/home/erik/devel/projects/e21010/data/unpacked/009_003.root
+# Calibration of U3
+# Performed @ 2023-08-21 13:50
+# Performed by erik on susics
+# Front
+-23.4378 3.54491
+-41.378 3.37405
+-33.0058 3.49175
+-55.3426 3.26508
+-41.0375 3.49506
+-44.0815 3.46262
+-37.1368 3.4594
+-49.2485 3.41178
+-74.295 3.54754
+-49.9986 3.92784
+-83.7627 3.75124
+-50.6123 3.15581
+-66.3914 3.42292
+-64.7217 3.45036
+-71.7411 3.56303
+-52.7905 3.57906
+# Back
+-54.1877 3.46169
+-48.5312 3.33036
+-52.8251 3.40514
+-60.408 3.36337
+-36.7729 3.37377
+-58.9193 3.33218
+-59.9755 3.54632
+-65.9182 3.36787
+-49.0686 3.3548
+-55.4352 3.63157
+-53.5621 3.39164
+-66.6557 3.72169
+-52.8561 3.31365
+-52.5011 3.55999
+-57.6454 2.99387
+  0.0    0.0

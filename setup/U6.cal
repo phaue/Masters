@@ -1,0 +1,46 @@
+# AUSAlib version: 17.1
+# Calibrator version: 2.0
+# Calibrator arguments: Calibrator -s /home/erik/devel/projects/e21010/setup/setup.json -o /home/erik/devel/projects/e21010/data/cal/ -k /home/erik/devel/projects/e21010/setup/3a_U6.json -d U6 --eloss --gui --no-match
+# Input files: 
+#	/home/erik/devel/projects/e21010/data/unpacked/011_000.root
+#	/home/erik/devel/projects/e21010/data/unpacked/011_001.root
+#	/home/erik/devel/projects/e21010/data/unpacked/011_002.root
+#	/home/erik/devel/projects/e21010/data/unpacked/011_003.root
+#	/home/erik/devel/projects/e21010/data/unpacked/011_004.root
+# Calibration of U6
+# Performed @ 2023-08-21 17:25
+# Performed by erik on susics
+# Front
+-43.7478 3.52907
+-80.4164 3.29364
+-69.4758 3.68356
+-77.9539 3.44187
+-46.9476 3.41326
+-74.4112 3.31451
+-43.8581 3.23486
+-70.1491 3.42177
+-56.0651 3.82522
+-59.2787 3.43812
+-56.3295 3.47666
+-40.3564 3.40498
+-61.7357 3.34994
+-29.8029 3.37215
+-58.0712 3.43519
+-51.7741 3.32009
+# Back
+-47.2036 3.34371
+-75.5536 3.4464
+-48.7594 3.37444
+-77.2651 3.48834
+-59.3901 3.42067
+-66.9192 3.28967
+-89.3612 7.14549
+-70.6935 3.53042
+-71.0339 3.41465
+-58.8804 3.65869
+-59.2183 3.46891
+-61.517 4.13446
+-64.254 3.46353
+-53.8495 3.43127
+-65.2156 3.47162
+-57.6013 3.39106
