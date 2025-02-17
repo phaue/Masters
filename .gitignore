@@ -1,4 +1,4 @@
-/Masters/data/*
-/Masters/setup/*
-/Masters/calibrations/*
+/data/*
+/setup/*
+/calibrations/*
 **/build/
