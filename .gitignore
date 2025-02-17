@@ -1,4 +1,7 @@
-/data/*
-/setup/*
-/calibrations/*
+data/*
+setup/*
+calibrations/*
+!data/.gitkeep
+!setup/.gitkeep
+!calibrations/.gitkeep
 **/build/
