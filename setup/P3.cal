@@ -1,0 +1,10 @@
+# AUSAlib version: 17.1
+# Calibrator version: 2.0
+# Calibrator arguments: Calibrator --eloss --gui -d P3 -k FRIB3a.json
+# Input files: 
+#	P3P4.root
+# Calibration of P3
+# Performed @ 2023-06-23 23:24
+# Performed by jeppe on S540
+# SSD
+-307.894 3.13171

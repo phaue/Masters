@@ -1,0 +1,10 @@
+{
+  "type" : "Pad",
+  "thickness" : "1458 um",
+  "deadLayer": "500 nm",
+  "frontContactThickness": "0.2 um",
+  "deadLayer_back" : "500 nm",
+  "backContactThickness": "0.2 um",
+  "upLength" : "50.0 mm",
+  "transverseLength" : "50.0 mm"
+}

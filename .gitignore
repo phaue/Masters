@@ -1,9 +1,9 @@
 #Excluding the data, setup and calibration files from the git
 data/*
-setup/*
+#setup/*
 calibrations/*
 !data/.gitkeep
-!setup/.gitkeep
+#!setup/.gitkeep
 !calibrations/.gitkeep
 #Excluding all build files from the git, the repository is to be build locally.
 **/build/
