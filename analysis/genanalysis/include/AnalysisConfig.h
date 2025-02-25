@@ -16,7 +16,7 @@ using namespace AUSA;
 
 string setup_path, target_path, input_path, output_path_dir;
 string specificAnalysis;
-bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, bananas, exclude_beta_region;
+bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 
 Config cfg;
 string path;
@@ -48,9 +48,11 @@ void prepareAnalysis(unsigned int run_number){
   specificAnalysis = cfg.lookup("specificAnalysis").c_str();
   exclude_hpges = cfg.exists("exclude_hpges") && cfg.lookup("exclude_hpges");
   exclude_U5 = cfg.exists("exclude_U5") && cfg.lookup("exclude_U5");
-  include_DSSSD_rim = cfg.exists("include_dsd_rim") && cfg.lookup("include_DSSSD_rim");
-  exclude_beta_region = cfg.exists("include_beta_region") && cfg.lookup("exclude_beta_region");
+  include_DSSSD_rim = cfg.exists("include_DSSSD_rim") && cfg.lookup("include_DSSSD_rim");
+  include_beta_region = cfg.exists("include_beta_region") && cfg.lookup("include_beta_region");
   include_spurious_zone = cfg.exists("include_spurious_zone") && cfg.lookup("include_spurious_zone");
+  include_banana_cuts = cfg.exists("include_banana_cuts") && cfg.lookup("include_banana_cuts");
+
 }//prepareAnalysis
 
 void printConfig() {
@@ -64,8 +66,9 @@ void printConfig() {
              << "Exclude HPGes:         " << exclude_hpges                                  << endl
              << "Exclude U5:            " << exclude_U5                                     << endl
              << "Include DSSSD rims:    " << include_DSSSD_rim                              << endl
-             << "Exclude beta region:   " << exclude_beta_region                            << endl
+             << "Exclude beta region:   " << include_beta_region                            << endl
              << "Include spurious zone: " << include_spurious_zone                          << endl
+             << "Include_banana_cuts: "   << include_banana_cuts                            << endl
              << "-------------------------------------------------------------------------" << endl << endl;
     }
 }

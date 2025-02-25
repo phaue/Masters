@@ -39,21 +39,24 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       GeneralAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
                       bool _exclude_hpges = false, bool _exclude_U5 = false,
                       bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
-                      bool _include_banana_cuts=false, bool _exclude_beta_region =false)
+                      bool _include_banana_cuts=false, bool _include_beta_region =false)
           :setupSpecs(_setupSpecs), target(_target),
             exclude_hpges(_exclude_hpges), exclude_U5(_exclude_U5), include_DSSSD_rim(_include_DSSSD_rim),
-            include_spurious_zone(_include_spurious_zone), include_banana_cuts(_include_banana_cuts), exclude_beta_region(_exclude_beta_region){
+            include_spurious_zone(_include_spurious_zone), include_banana_cuts(_include_banana_cuts), include_beta_region(_include_beta_region){
         //Constructor for the general analysis script
 
-        implantation_depth = 41.0 ; // fra Eriks fil --> why tho
+        implantation_depth = 41.0/1e6 ; // fra Eriks fil --> why tho
         origin = target->getCenter() + (target->getThickness() / 2. - implantation_depth) * target->getNormal();
+        cout << "target center=(" << target->getCenter().X() << ", " << target->getCenter().Y() << ", " << target->getCenter().Z() << ")" << endl
+         << " implantation=(" << origin.X() << ", " << origin.Y() << ", " << origin.Z() << ")" << endl
+         << "target thickness=" << target->getThickness() << endl;
 
         //Define all the detectors in the setup using the Detector.h file
-
+              //betacutoff can now be determined for U1 U2 U3 U4
         U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
         U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
         U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
-        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 500.);// should change according to thicknesses
+        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);// should change according to thicknesses
         U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 500.);
         U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 500.);
 
@@ -221,7 +224,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       void findDSSSDHit(Detector_frib *detector) {
         unsigned short id = detector->getId();
         auto &out = output.getDssdOutput(detector->getName());
-        auto &det = out.detector();
+        auto &d = out.detector();
         auto MUL = AUSA::mul(out);
 
         for (int i = 0; i<MUL; i++) {
@@ -230,7 +233,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.id = id;
           hit.Edep = energy(out, i); // from AUSA
 
-          //if(!exclude_beta_region && hit.Edep <= detector i havent specified the beta region yet in the detector header file
+          if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
 
           auto FI = fSeg(out, i); // from AUSA
           auto BI = bSeg(out, i); // from AUSA
@@ -256,15 +259,15 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.FT = fTime(out, i); // from AUSA
           hit.BT = bTime(out, i); // from AUSA
 
-          TVector3 pos = det.getUniformPixelPosition(FI, BI);
+          TVector3 pos = d.getUniformPixelPosition(FI, BI);
           hit.position = pos;
           TVector3 dir = (hit.position - origin).Unit();
           hit.direction = dir;
 
           hit.theta = dir.Theta();
           hit.phi = dir.Phi();
-          hit.angle = dir.Angle(-det.getNormal());
-
+          auto incidenceangle = hit.direction.Angle(-d.getNormal());
+          hit.angle = incidenceangle;
           hits.emplace_back(std::move(hit));
           }//forloop
         }//find dsssd hit
@@ -274,7 +277,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         if (detector->getName() == "P5") return; // Pad still dead
         unsigned short id = detector->getId();
         auto &out = output.getSingleOutput(detector->getName());
-        auto &det = out.detector();
+        auto &d = out.detector();
         auto MUL = AUSA::mul(out);
 
         for (int i = 0; i<MUL; i++) {
@@ -288,14 +291,15 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.FE = hit.Edep;
           hit.FT = out.time(i);
 
-          TVector3 pos = det.getPosition(FI);
+          TVector3 pos = d.getPosition(FI);
           hit.position = pos;
           TVector3 dir = (hit.position - origin).Unit();
           hit.direction = dir;
 
           hit.theta = dir.Theta();
           hit.phi = dir.Phi();
-          hit.angle = dir.Angle(-det.getNormal());
+          auto incidenceangle = hit.direction.Angle(-d.getNormal());
+          hit.angle = incidenceangle;
 
           hits.emplace_back(std::move(hit));
           }//forloop
@@ -436,7 +440,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             }//addDSSSDHit
 
         void addTelescopeHit(Hit *dsssd_hit, Hit *pad_hit){
-            v_id->add(dsssd_hit->id);
+            v_id->add(dsssd_hit->id); //id of the dsssd determines the id of the telescope hit
             v_dir->add(dsssd_hit->direction);
             v_pos->add(dsssd_hit->position);
             v_theta->add(dsssd_hit->theta);
@@ -445,8 +449,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             v_Edep->add(NAN);
             v_fEdep->add(dsssd_hit->Edep);
             v_bEdep->add(pad_hit->Edep);
-            v_FI->add(dsssd_hit->FI);
-            v_BI->add(dsssd_hit->BI);
+            v_FI->add(dsssd_hit->FI); //front strip hit of the dsssd determines FI
+            v_BI->add(dsssd_hit->BI); //back strip hit of the dsssd determines BI
             v_FT->add(dsssd_hit->FT);
             v_BT->add(dsssd_hit->BT);
 
@@ -491,7 +495,7 @@ TVector3 origin; // origin of the projectiles to be analyzed
 shared_ptr<Setup> setupSpecs;
 shared_ptr<Target> target;
 double implantation_depth;
-bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, exclude_beta_region;
+bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 //
 TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
 TelescopeTabulation *aU1P1, *aU2P2, *aU3P3, *aU4P4, *aU6P6;

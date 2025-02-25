@@ -26,9 +26,9 @@ class BananaMaker : public GeneralAnalysis {
   BananaMaker(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
                     bool _exclude_hpges = false, bool _exclude_U5 = false,
                     bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
-                    bool _include_banana_cuts=false, bool _exclude_beta_region =false)
+                    bool _include_banana_cuts=false, bool _include_beta_region =false)
         : GeneralAnalysis(_setupSpecs, _target, output, _exclude_hpges, _exclude_U5,
-                          _include_DSSSD_rim, _include_spurious_zone, _exclude_beta_region) {}
+                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
 
   void specificAnalysis() override {
     if (hits.empty()) return;
@@ -107,6 +107,9 @@ findFilesMatchingWildcard(Form(input_path.c_str(), run), input);
       //finds all the run files for a single run number and puts them in input
 system(("mkdir -p " + output_path_dir).c_str());
 
+
+
+
 for(auto &runpart : input){
   SortedReader reader{*setup};
   reader.add(runpart);
@@ -114,12 +117,12 @@ for(auto &runpart : input){
 
   //stem returns "file" of input path/to/file.xyz
   string stem = getStem(runpart);
-  TString outfile = (output_path_dir + stem + "lio.root").c_str(); //specifies the name of the output
+  TString outfile = (output_path_dir + "/" + stem + "lio.root").c_str(); //specifies the name of the output
   TFile output(outfile, "RECREATE");
   shared_ptr<GeneralAnalysis> analysis;
   if(specificAnalysis == "BananaMaker"){
     analysis= make_shared<BananaMaker>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
-                                        include_spurious_zone, exclude_beta_region);
+                                        include_spurious_zone, include_banana_cuts, include_beta_region);
     }//type of analysis can add more else ifs
   else {
       cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;
