@@ -68,7 +68,7 @@ void printConfig() {
              << "Include DSSSD rims:    " << include_DSSSD_rim                              << endl
              << "Exclude beta region:   " << include_beta_region                            << endl
              << "Include spurious zone: " << include_spurious_zone                          << endl
-             << "Include_banana_cuts: "   << include_banana_cuts                            << endl
+             << "Include_banana_cuts:   " << include_banana_cuts                            << endl
              << "-------------------------------------------------------------------------" << endl << endl;
     }
 }

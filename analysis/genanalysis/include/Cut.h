@@ -19,11 +19,13 @@ class Cut{
     //The isInside criteria is specified somewhere later, this is just a helper function so to say
 
     bool isSatisfied(double x, double y) const{
-      return cutLogic ==include_region ? isInside(x, y): !isInside(x, y);
+      //cout << "isSatisfied called with x: " << x << ", y: " << y << endl;
+      return cutLogic == include_region ? isInside(x, y) : !isInside(x, y);
+    }
     //If cutLogic is equal to include_region then it checks if the point x,y is inside the region by calling
      // isInside, if however cutLogic is equal to exclude_region then it checks if the point x,y is outside the region
       //method to find whether or not a point x,y lies within a certain region or not
-    }
+  
 
     protected:
       cut_logic cutLogic; // makes sure that this variable cannot be changed outside the scope of this class

@@ -57,15 +57,15 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
         U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
         U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);// should change according to thicknesses
-        U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 500.);
-        U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 500.);
+        //U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 500.);
+        //U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 500.);
 
         P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, Alpha, setupSpecs);
         P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
-        P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); // this pad detector is dead
-        P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
+        //P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); // this pad detector is dead
+        //P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
 
         G1 = new Detector_frib(12, "G1", HPGe, Gamma, setupSpecs);
         G2 = new Detector_frib(13, "G2", HPGe, Gamma, setupSpecs);
@@ -76,12 +76,20 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         makePartners(U3, P3);
         makePartners(U4, P4);
         //makePartners(U5, P5); pad 5 is dead so no reason to do this
-        makePartners(U6, P6);
+        //makePartners(U6, P6);
 
         if (include_banana_cuts) {
-        //need to set the banana cuts here when they are done example of how this is done is seen below
-        //    U1->setBananaCut(new gCut(getProjectRoot() + "/telescope/gcuts_hybrid.root", "banana0", include_region));
-        }; //bananas
+        // need to set the banana cuts here when they are done example of how this is done is seen below
+          try {
+              U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU1", include_region));
+              U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU2", include_region));
+              U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU3", include_region));
+              U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU4", include_region));
+          } catch (const runtime_error &e) {
+              cerr << "Error initializing banana cuts: " << e.what() << endl;
+              throw;
+          }
+      } // bananas
 
         //beta region is the region that lies in the very low energies, these zones are different for each detector
         //i should ideally include them, change detector header and this file when done
@@ -91,33 +99,33 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         pU2P2 = new TelescopeTabulation(setupSpecs, target, "U2", "P2", "p");
         pU3P3 = new TelescopeTabulation(setupSpecs, target, "U3", "P3", "p");
         pU4P4 = new TelescopeTabulation(setupSpecs, target, "U4", "P4", "p");
-        pU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "p");
+        //pU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "p");
 
         aU1P1 = new TelescopeTabulation(setupSpecs, target, "U1", "P1", "a");
         aU2P2 = new TelescopeTabulation(setupSpecs, target, "U2", "P2", "a");
         aU3P3 = new TelescopeTabulation(setupSpecs, target, "U3", "P3", "a");
         aU4P4 = new TelescopeTabulation(setupSpecs, target, "U4", "P4", "a");
-        aU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "a");
+        //aU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "a");
 
 
-        //Sets the implantation depth for all the tabulations
-          for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4, pU6P6,
-                       aU1P1, aU2P2, aU3P3, aU4P4, aU6P6}) {
+        //Sets the implantation depth for all the tabulations missing , pU6P6, aU6P6
+          for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4,
+                       aU1P1, aU2P2, aU3P3, aU4P4}) {
           tabulations->setImplantationDepth(implantation_depth);}
 
         pU2P2->setESignalThreshold(340.); aU2P2->setESignalThreshold(340.);
         pU3P3->setESignalThreshold(180.); aU3P3->setESignalThreshold(180.);
         pU4P4->setESignalThreshold(350.); aU4P4->setESignalThreshold(350.);
-        pU6P6->setESignalThreshold(220.); aU6P6->setESignalThreshold(220.);
+        //pU6P6->setESignalThreshold(220.); aU6P6->setESignalThreshold(220.);
 
         U1->addTelescopeTabulation(pU1P1); U1->addTelescopeTabulation(aU1P1);
         U2->addTelescopeTabulation(pU2P2); U2->addTelescopeTabulation(aU2P2);
         U3->addTelescopeTabulation(pU3P3); U3->addTelescopeTabulation(aU3P3);
         U4->addTelescopeTabulation(pU4P4); U4->addTelescopeTabulation(aU4P4);
-        U6->addTelescopeTabulation(pU6P6); U6->addTelescopeTabulation(aU6P6);
+        //U6->addTelescopeTabulation(pU6P6); U6->addTelescopeTabulation(aU6P6);
 
-
-        detectors.insert({U1, U2, U3, U4, U5, U6, P1, P2, P3, P4, P5, P6, G1, G2});
+//missing U5, U6, P5, P6
+        detectors.insert({U1, U2, U3, U4, P1, P2, P3, P4, G1, G2}); 
 
         output->cd(); //something about output file used for mid-analysis dumping
         tree = new TTree("a", "a");
@@ -497,12 +505,12 @@ shared_ptr<Target> target;
 double implantation_depth;
 bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 //
-TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
-TelescopeTabulation *aU1P1, *aU2P2, *aU3P3, *aU4P4, *aU6P6;
+TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4;//, *pU6P6;
+TelescopeTabulation *aU1P1, *aU2P2, *aU3P3, *aU4P4;//, *aU6P6;
 
 
 unordered_set<Detector_frib *> detectors;
-Detector_frib *U1, *U2, *U3, *U4, *U5, *U6, *P1, *P2, *P3, *P4, *P5, *P6, *G1, *G2;
+Detector_frib *U1, *U2, *U3, *U4, *P1, *P2, *P3, *P4, *G1, *G2;//, *U5, *U6, *P5, *P6
 
 TTree *tree; //defines the tree in which we save the new parameters
 int NUM;

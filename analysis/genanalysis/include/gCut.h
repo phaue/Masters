@@ -13,14 +13,16 @@ using namespace std;
 
 class gCut: public Cut{//inherit from the cut class
   public:
-    gCut(const string &input_filename, const string &name_of_cut, cut_logic cutLogic=include_region) : Cut(cutLogic){
+    gCut(const string &input_filename, const string &name_of_cut, cut_logic cutLogic=include_region)
+     : Cut(cutLogic){
       TFile f(input_filename.c_str());
       // find the cut from the name and saves it to graph
       cut_graph = (TGraph*) gROOT -> FindObject(name_of_cut.c_str());
-      }
+  }
 
       bool isInside(double x, double y) const override{
-        return cut_graph -> IsInside(x, y);// overrides the bool from the cut class and now checks
+        //cout << "isInside called with x: " << x << ", y: " << y << endl;
+        return cut_graph->IsInside(x, y);// overrides the bool from the cut class and now checks
         //whether this found graph object has x and y inside its specified region.
         }
 
@@ -30,6 +32,7 @@ class gCut: public Cut{//inherit from the cut class
           }
       }
   private:
-    TGraph *cut_graph;
+    TGraph* cut_graph;
     };
-    #endif
+
+#endif

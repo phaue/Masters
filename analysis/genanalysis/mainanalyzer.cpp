@@ -88,6 +88,81 @@ class BananaMaker : public GeneralAnalysis {
   }//specificanalysis
 };//BananaMaker
 
+
+class SingleProton : public GeneralAnalysis{
+  public:
+  SingleProton(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
+                    bool _exclude_hpges = false, bool _exclude_U5 = false,
+                    bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+                    bool _include_banana_cuts=false, bool _include_beta_region =false)
+        : GeneralAnalysis(_setupSpecs, _target, output, _exclude_hpges, _exclude_U5,
+                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
+
+  void specificAnalysis() override {
+    if (hits.empty()) return;
+
+    unordered_set<Hit*> telescope_frontside_candidates;
+    unordered_set<Hit*> telescope_backside_candidates;
+
+    for(auto &hit : hits) {
+      auto det = hit.detector;
+      switch(det->getType()) {
+        case DSSSD:
+          if(det->hasPartner()){
+            telescope_frontside_candidates.emplace(&hit);
+            }
+            else { //U5 doesnt have a partner so we need to treat it aswell
+              treatDSSSDHit(&hit);
+              addDSSSDHit(&hit);
+              }
+              break;
+        case Pad:
+          telescope_backside_candidates.emplace(&hit);
+          break;
+      default: //treats the rest of the cases such as NoType and HPGe
+        break;
+      }//switch
+    }//for hit in hits
+
+
+    unordered_set<Hit*> telescope_frontside_successes;
+    unordered_set<Hit*> telescope_backside_successes;
+    for(auto dsssd_hit : telescope_frontside_candidates) {
+      auto dsssd_det = dsssd_hit->detector;
+      for(auto pad_hit : telescope_backside_candidates) {
+        auto pad_det = pad_hit->detector;
+        if(dsssd_det->getPartner() == pad_det){
+          bool telescope_success = treatTelescopeHit(dsssd_hit, pad_hit);
+          if(telescope_success){
+
+            if(dsssd_det->getBananaCut()->isSatisfied(pad_hit->Edep, dsssd_hit->Edep)){
+            /// troubleshooting 
+            //my script doesnt work with the isSatisfied call
+
+
+            ///
+            
+            telescope_frontside_successes.emplace(dsssd_hit);
+            telescope_backside_successes.emplace(pad_hit);
+            addTelescopeHit(dsssd_hit, pad_hit);
+            }
+          }//if telescope hit is a success
+        }//if dsssd and pad is partnered
+      }//for each pad hit in telescope backside candidates
+    }// for each dsssd hit in telescope frontside candidates
+
+    for(auto hit : telescope_frontside_successes){
+      telescope_frontside_candidates.erase(hit);
+      }//removes all hits that were a success from the frontside candidates
+
+    for(auto hit : telescope_frontside_candidates){
+      treatDSSSDHit(hit);
+      addDSSSDHit(hit);
+      }//treats the leftover non-matched dsssd hits.
+  }//specificanalysis
+};//singleproton
+
+
 int main(int argc, char *argv[]) {
   clock_t start = clock();
 //preparefileio sets up the location of the setup file, target file, input file and output dir
@@ -121,9 +196,13 @@ for(auto &runpart : input){
   TFile output(outfile, "RECREATE");
   shared_ptr<GeneralAnalysis> analysis;
   if(specificAnalysis == "BananaMaker"){
-    analysis= make_shared<BananaMaker>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
+    analysis = make_shared<BananaMaker>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
                                         include_spurious_zone, include_banana_cuts, include_beta_region);
-    }//type of analysis can add more else ifs
+    }//type of analysis can add more else 
+  else if(specificAnalysis == "SingleProton"){
+    analysis = make_shared<SingleProton>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
+                                          include_spurious_zone, include_banana_cuts, include_beta_region);
+    }
   else {
       cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;
       abort();

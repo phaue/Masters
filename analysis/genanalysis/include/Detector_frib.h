@@ -78,7 +78,7 @@ namespace Detectors_ {
    double getBackDeadLayer() const {return backside_DeadLayer;};
    double getBetaCut() const {return BetaCut;};
    //get the banana cut for a specific detector
-   gCut* getBananaCut() const {return banana;};
+   gCut* getBananaCut() const {return banana;}
    //get telescope tabulations
    vector<TelescopeTabulation*> getTelescopeTabulations() const { return tTabulations; };
 
@@ -113,15 +113,14 @@ namespace Detectors_ {
     double frontside_DeadLayer{}, Detector_thickness{}, backside_DeadLayer{}; // = 0.0 by default
     double BetaCut{};
     bool withPartner = false;
-    gCut* banana{};
+    gCut* banana;
     vector<TelescopeTabulation*> tTabulations;
 
     }; //detector class
 
   void makePartners(Detector_frib* det1, Detector_frib* det2){
     det1->setPartner(det2);
-    det2->setPartner(det1);
-  }
+    det2->setPartner(det1);}
   } //detectors namespace
 
 
