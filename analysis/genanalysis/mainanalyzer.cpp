@@ -80,7 +80,16 @@ class BananaMaker : public GeneralAnalysis {
     for(auto hit : telescope_frontside_successes){
       telescope_frontside_candidates.erase(hit);
       }//removes all hits that were a success from the frontside candidates
-
+      
+      for(auto hit : telescope_backside_successes){
+        telescope_backside_candidates.erase(hit);
+        }//removes all hits that were a success from the frontside candidates
+     
+      for(auto hit : telescope_backside_candidates){
+        treatPadHit(hit);
+        addPadHit(hit);
+      }
+  
     for(auto hit : telescope_frontside_candidates){
       treatDSSSDHit(hit);
       addDSSSDHit(hit);

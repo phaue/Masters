@@ -39,7 +39,7 @@ void prepareFileIO(const string& configfile){
     cerr << "'input_file' not found in the config file!" << endl;
   }
   if (cfg.exists("auto_output_path_dir") && cfg.lookup("auto_output_path_dir")){
-      output_path_dir = getProjectRoot() + "data/" + getStem(configfile);}
+      output_path_dir = getProjectRoot() + "data/" + getStem(configfile) +"/" + cfg.lookup("isotopetype").c_str();}
   else{
       output_path_dir = getProjectRoot() + cfg.lookup("output_path_dir").c_str();}
   };//prepareFileIO

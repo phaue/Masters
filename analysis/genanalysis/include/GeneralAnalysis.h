@@ -45,7 +45,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             include_spurious_zone(_include_spurious_zone), include_banana_cuts(_include_banana_cuts), include_beta_region(_include_beta_region){
         //Constructor for the general analysis script
 
-        implantation_depth = 41.0/1e6 ; // fra Eriks fil --> why tho
+        implantation_depth = 41/1e6 ; // 
         origin = target->getCenter() + (target->getThickness() / 2. - implantation_depth) * target->getNormal();
         cout << "target center=(" << target->getCenter().X() << ", " << target->getCenter().Y() << ", " << target->getCenter().Z() << ")" << endl
          << " implantation=(" << origin.X() << ", " << origin.Y() << ", " << origin.Z() << ")" << endl
@@ -468,6 +468,29 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             mul++;
             }//addTelescopeHit
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void addPadHit(Hit *hit){
+          v_id->add(hit->id);
+          v_dir->add(hit->direction);
+          v_pos->add(hit->position);
+          v_theta->add(hit->theta);
+          v_phi->add(hit->phi);
+          v_angle->add(hit->angle);
+          v_Edep->add(hit->Edep);
+          v_fEdep->add(NAN);
+          v_bEdep->add(NAN);
+          v_FI->add(hit->FI);
+          v_BI->add(hit->BI);
+          v_FT->add(hit->FT);
+          v_BT->add(hit->BT);
+
+          v_E->add(hit->E);
+          v_Ea->add(NAN);
+
+          mul++;
+          //p = true
+        }//addPadHit
+
 
         //code that runs after all events have been analyzed
       void terminate() override { //after analyzing we need to terminate the program
