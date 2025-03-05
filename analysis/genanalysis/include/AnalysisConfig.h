@@ -15,7 +15,7 @@ using namespace AUSA;
 
 
 string setup_path, target_path, input_path, output_path_dir;
-string specificAnalysis;
+string specificAnalysis, isotopetype;
 bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 
 Config cfg;
@@ -46,13 +46,13 @@ void prepareFileIO(const string& configfile){
 
 void prepareAnalysis(unsigned int run_number){
   specificAnalysis = cfg.lookup("specificAnalysis").c_str();
+  isotopetype = cfg.lookup("isotopetype").c_str();
   exclude_hpges = cfg.exists("exclude_hpges") && cfg.lookup("exclude_hpges");
   exclude_U5 = cfg.exists("exclude_U5") && cfg.lookup("exclude_U5");
   include_DSSSD_rim = cfg.exists("include_DSSSD_rim") && cfg.lookup("include_DSSSD_rim");
   include_beta_region = cfg.exists("include_beta_region") && cfg.lookup("include_beta_region");
   include_spurious_zone = cfg.exists("include_spurious_zone") && cfg.lookup("include_spurious_zone");
   include_banana_cuts = cfg.exists("include_banana_cuts") && cfg.lookup("include_banana_cuts");
-
 }//prepareAnalysis
 
 void printConfig() {

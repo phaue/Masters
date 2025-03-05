@@ -3,6 +3,7 @@
 #include "Hit.h"
 #include "AnalysisConfig.h"
 #include "GeneralAnalysis.h"
+#include "U1analysis.h"
 #include <gsl/gsl_vector.h>
 #include <TROOT.h>
 #include <Math/Interpolator.h>
@@ -172,6 +173,88 @@ class SingleProton : public GeneralAnalysis{
 };//singleproton
 
 
+class AboveBananaAnalysis : public U1analysis{
+  public : AboveBananaAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
+    string _isotope)
+:U1analysis(_setupSpecs, _target, output, _isotope) {}
+
+  void specificAnalysis() override {
+  if (hits.empty()) return;
+
+  unordered_set<Hit*> telescope_frontside_candidates;
+  unordered_set<Hit*> telescope_backside_candidates;
+
+  for(auto &hit : hits) {
+    auto det = hit.detector;
+    switch(det->getType()) {
+      case DSSSD:
+        if(det->hasPartner()){
+          telescope_frontside_candidates.emplace(&hit);
+        }
+        else { //U5 doesnt have a partner so we need to treat it aswell
+          break;
+        }
+          break;
+      case Pad:
+        telescope_backside_candidates.emplace(&hit);
+        break;
+      default: //treats the rest of the cases such as NoType and HPGe
+        break;
+  }//switch
+  }//for hit in hits
+  unordered_set<Hit*> telescope_frontside_successes;
+  unordered_set<Hit*> telescope_backside_successes;
+
+  for(auto dsssd_hit : telescope_frontside_candidates) {
+    auto dsssd_det = dsssd_hit->detector;
+    for(auto pad_hit : telescope_backside_candidates) {
+      auto pad_det = pad_hit->detector;
+      if(dsssd_det->getPartner() == pad_det){
+        if(dsssd_det->getBananaCut()->isSatisfied(pad_hit->Edep, dsssd_hit->Edep)){            
+          if(pad_hit->Edep+dsssd_hit->Edep <4100 && pad_hit->Edep+dsssd_hit->Edep > 3900){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4100);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          }
+          else if(pad_hit->Edep+dsssd_hit->Edep <5500 && pad_hit->Edep+dsssd_hit->Edep > 5200){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 5400);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          }
+          else if(pad_hit->Edep+dsssd_hit->Edep <4700 && pad_hit->Edep+dsssd_hit->Edep > 4400){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4700);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          }
+          else{
+            bool telescope_success = treatTelescopeHit(dsssd_hit, pad_hit);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          }
+        }//if telescope hit is a success
+      }//if dsssd and pad is partnered
+    }//for each pad hit in telescope backside candidates
+  }// for each dsssd hit in telescope frontside candidates
+
+}//specificanalysis
+};//AboveBananaAnalysis
+
+
+
+
+
 int main(int argc, char *argv[]) {
   clock_t start = clock();
 //preparefileio sets up the location of the setup file, target file, input file and output dir
@@ -204,6 +287,7 @@ for(auto &runpart : input){
   TString outfile = (output_path_dir + "/" + stem + "lio.root").c_str(); //specifies the name of the output
   TFile output(outfile, "RECREATE");
   shared_ptr<GeneralAnalysis> analysis;
+  shared_ptr<U1analysis> U1ana;
   if(specificAnalysis == "BananaMaker"){
     analysis = make_shared<BananaMaker>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
                                         include_spurious_zone, include_banana_cuts, include_beta_region);
@@ -212,6 +296,14 @@ for(auto &runpart : input){
     analysis = make_shared<SingleProton>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
+  else if(specificAnalysis == "AboveBananaAnalysis"){
+    cout << "isotope type isssss " << isotopetype << endl;
+    U1ana = make_shared<AboveBananaAnalysis>(setup, target, &output, isotopetype);
+    if (!U1ana) {
+      cerr << "Failed to initialize AboveBananaAnalysis!" << endl;
+      abort();
+  }
+  }  
   else {
       cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;
       abort();
@@ -222,7 +314,7 @@ for(auto &runpart : input){
   cout << "Reading input from: " << runpart << endl;
   cout << "Writing output to : " << outfile << endl;
 
-  reader.attach(analysis);
+  reader.attach(U1ana);
   reader.run();
   clock_t stop = clock();
   double elapsed = (double) (stop - start) / CLOCKS_PER_SEC;

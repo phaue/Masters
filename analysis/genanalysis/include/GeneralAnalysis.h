@@ -112,7 +112,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4,
                        aU1P1, aU2P2, aU3P3, aU4P4}) {
           tabulations->setImplantationDepth(implantation_depth);}
-
+        
+        pU1P1->setESignalThreshold(340.); aU1P1->setESignalThreshold(340.);  
         pU2P2->setESignalThreshold(340.); aU2P2->setESignalThreshold(340.);
         pU3P3->setESignalThreshold(180.); aU3P3->setESignalThreshold(180.);
         pU4P4->setESignalThreshold(350.); aU4P4->setESignalThreshold(350.);
