@@ -20,6 +20,21 @@
 #include <ausa/constants/Mass.h>
 #include <ausa/eloss/Ion.h>
 
+#include <ausa/json/MaterialParser.h>
+#include <ausa/json/TargetParser.h>
+#include <ausa/parser/UnitParser.h>
+#include <ausa/parser/ThicknessParser.h>
+#include <ausa/eloss/Material.h>
+#include <ausa/eloss/ListOfMaterials.h>
+#include <ausa/eloss/EnergyLossCalculator.h>
+#include <ausa/eloss/Default.h>
+
+#include <TVector3.h>
+
+#include <unistd.h>
+#include <getopt.h>
+#include <TF1.h>
+
 #define NAN_UINT 100
 #define NAN_TVECTOR3 TVector3(NAN, NAN, NAN)
 
@@ -36,16 +51,29 @@ using namespace AUSA::Constants;
 
 class GeneralAnalysis : public AbstractSortedAnalyzer{
     public:
-      GeneralAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-                      bool _exclude_hpges = false, bool _exclude_U5 = false,
-                      bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+      GeneralAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                      bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
                       bool _include_banana_cuts=false, bool _include_beta_region =false)
-          :setupSpecs(_setupSpecs), target(_target),
-            exclude_hpges(_exclude_hpges), exclude_U5(_exclude_U5), include_DSSSD_rim(_include_DSSSD_rim),
-            include_spurious_zone(_include_spurious_zone), include_banana_cuts(_include_banana_cuts), include_beta_region(_include_beta_region){
+          :setupSpecs(_setupSpecs), target(_target), isotopetype(_isotopetype),
+            exclude_hpges(_exclude_hpges), include_DSSSD_rim(_include_DSSSD_rim), include_spurious_zone(_include_spurious_zone),
+             include_banana_cuts(_include_banana_cuts), include_beta_region(_include_beta_region){
         //Constructor for the general analysis script
 
-        implantation_depth = 41/1e6 ; // 
+        if(isotopetype=="Si"){
+          implantation_depth = 17/1e6;
+      }
+      else if(isotopetype=="P"){
+          implantation_depth = 22.4/1e6;
+      }
+      else if(isotopetype=="Al"){
+          implantation_depth = 41/1e6;
+      }
+      else if(isotopetype=="Mg"){
+          implantation_depth=45.9/1e6;
+      }
+      else{
+        cout<<"No specification on the input isotope?? Hello?" << endl;
+      } 
         origin = target->getCenter() + (target->getThickness() / 2. - implantation_depth) * target->getNormal();
         cout << "target center=(" << target->getCenter().X() << ", " << target->getCenter().Y() << ", " << target->getCenter().Z() << ")" << endl
          << " implantation=(" << origin.X() << ", " << origin.Y() << ", " << origin.Z() << ")" << endl
@@ -521,12 +549,12 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
 
 
-
 TVector3 origin; // origin of the projectiles to be analyzed
 //parameters from the constructor
 shared_ptr<Setup> setupSpecs;
 shared_ptr<Target> target;
 double implantation_depth;
+string isotopetype;
 bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 //
 TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4;//, *pU6P6;

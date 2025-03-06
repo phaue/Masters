@@ -24,11 +24,10 @@ using namespace ROOT::Math::Interpolation;
 
 class BananaMaker : public GeneralAnalysis {
   public:
-  BananaMaker(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-                    bool _exclude_hpges = false, bool _exclude_U5 = false,
-                    bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+  BananaMaker(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
                     bool _include_banana_cuts=false, bool _include_beta_region =false)
-        : GeneralAnalysis(_setupSpecs, _target, output, _exclude_hpges, _exclude_U5,
+        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
                           _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
 
   void specificAnalysis() override {
@@ -101,11 +100,10 @@ class BananaMaker : public GeneralAnalysis {
 
 class SingleProton : public GeneralAnalysis{
   public:
-  SingleProton(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-                    bool _exclude_hpges = false, bool _exclude_U5 = false,
-                    bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+  SingleProton(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
                     bool _include_banana_cuts=false, bool _include_beta_region =false)
-        : GeneralAnalysis(_setupSpecs, _target, output, _exclude_hpges, _exclude_U5,
+        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
                           _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
 
   void specificAnalysis() override {
@@ -175,8 +173,8 @@ class SingleProton : public GeneralAnalysis{
 
 class AboveBananaAnalysis : public U1analysis{
   public : AboveBananaAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-    string _isotope)
-:U1analysis(_setupSpecs, _target, output, _isotope) {}
+    string _isotopetype)
+:U1analysis(_setupSpecs, _target, output, _isotopetype) {}
 
   void specificAnalysis() override {
   if (hits.empty()) return;
@@ -246,8 +244,7 @@ class AboveBananaAnalysis : public U1analysis{
         }//if telescope hit is a success
       }//if dsssd and pad is partnered
     }//for each pad hit in telescope backside candidates
-  }// for each dsssd hit in telescope frontside candidates
-
+  }  
 }//specificanalysis
 };//AboveBananaAnalysis
 
@@ -289,20 +286,15 @@ for(auto &runpart : input){
   shared_ptr<GeneralAnalysis> analysis;
   shared_ptr<U1analysis> U1ana;
   if(specificAnalysis == "BananaMaker"){
-    analysis = make_shared<BananaMaker>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
-                                        include_spurious_zone, include_banana_cuts, include_beta_region);
+    analysis = make_shared<BananaMaker>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
+                                          include_spurious_zone, include_banana_cuts, include_beta_region);
     }//type of analysis can add more else 
   else if(specificAnalysis == "SingleProton"){
-    analysis = make_shared<SingleProton>(setup, target, &output, exclude_hpges, exclude_U5, include_DSSSD_rim,
+    analysis = make_shared<SingleProton>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
   else if(specificAnalysis == "AboveBananaAnalysis"){
-    cout << "isotope type isssss " << isotopetype << endl;
     U1ana = make_shared<AboveBananaAnalysis>(setup, target, &output, isotopetype);
-    if (!U1ana) {
-      cerr << "Failed to initialize AboveBananaAnalysis!" << endl;
-      abort();
-  }
   }  
   else {
       cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;
@@ -314,7 +306,15 @@ for(auto &runpart : input){
   cout << "Reading input from: " << runpart << endl;
   cout << "Writing output to : " << outfile << endl;
 
-  reader.attach(U1ana);
+  if (analysis) {  // Checks if analysis is not nullptr
+    reader.attach(analysis);
+  } 
+  else if (U1ana) {  // Checks if U1ana is not nullptr
+    reader.attach(U1ana);
+  }   
+  else {
+    cout << "No analysis seems to be correctly initialized..." << endl;
+  }
   reader.run();
   clock_t stop = clock();
   double elapsed = (double) (stop - start) / CLOCKS_PER_SEC;
