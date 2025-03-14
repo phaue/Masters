@@ -187,8 +187,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //tree->Branch("Theta", &Theta); // wat the fuck is this
         //tree->Branch("Omega", &Omega);// what the fuck is this
 
-        //tree->Branch("Eg1", &Eg1); //gamma energies not relevant now
-        //tree->Branch("Eg2", &Eg2); //gamma energies not relevant now
+        tree->Branch("Eg1", &Eg1); 
+        tree->Branch("Eg2", &Eg2); 
 
         //tree->Branch("pg", &pg); //most likely this is proton gated gamma smth
         //tree->Branch("CLOCK", &CLOCK);
@@ -342,7 +342,23 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }//forloop
         }//findPadHit
 
-        void findGermaniumHit(Detector_frib *detector) {} ///to be done when its relevant, not right now
+        void findGermaniumHit(Detector_frib *detector) {
+          unsigned short id = detector->getId();
+          auto &out = output.getSingleOutput(detector->getName());
+          auto &d = out.detector();
+          auto MUL = AUSA::mul(out);
+          
+          for (int i=0;i<MUL; i++){
+            if (id == G1->getId()){
+              Eg1 = out.energy(i);
+              //g = true;
+            }
+            if (id == G2->getId()){
+              Eg2 = out.energy(i);
+              //g=true;
+            }
+          }
+        }
 
 /*This function essentially sets the energy of the DSSSD hits to its true value by accounting for losses
             in the dead layer of the detector and the target

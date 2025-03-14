@@ -1,1 +1,9 @@
--77.642761  0.82741082
+# Version: 1.0
+# Gamma Calibrator version: 1.0
+# Calibrator arguments: None, cause everything is inside a .cpp file.
+# First input file: /home/justus/devel/projects/FRIB/basicanalysis/data/GeneralAnalysis/EnergyAnalysis/152Eu/merged152EumEA.root
+# Second input file: /home/justus/devel/projects/FRIB/basicanalysis/data/GeneralAnalysis/EnergyAnalysis/152Eu/merged152EumEA.root
+# Calibration of detector G1
+# Performed @ Mon Mar 25 14:33:15 2024
+# Performed by justus
+-77.6193 0.826204
