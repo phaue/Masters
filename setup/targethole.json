@@ -1,0 +1,12 @@
+{
+    "center" : {"x":"-0.5mm", "y":"0mm", "z":"-5mm"},
+    "orientation" : {"x":"0mm", "y":"1mm", "z":"0mm"},
+    "normal" : {"x":"0mm", "y":"0mm", "z":"1mm"},
+    "transverseLength" : "5mm",
+    "upLength" : "5mm",
+   
+  
+    "layers" : [
+      {"material" : "Carbon", "thickness" : "32ug/cm2", "active":true}
+    ]
+  }
