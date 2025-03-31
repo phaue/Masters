@@ -16,7 +16,7 @@ using namespace AUSA;
 
 string setup_path, target_path, input_path, output_path_dir;
 string specificAnalysis, isotopetype;
-bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
+bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region, Only_U1;
 
 Config cfg;
 string path;
@@ -52,6 +52,8 @@ void prepareAnalysis(unsigned int run_number){
   include_beta_region = cfg.exists("include_beta_region") && cfg.lookup("include_beta_region");
   include_spurious_zone = cfg.exists("include_spurious_zone") && cfg.lookup("include_spurious_zone");
   include_banana_cuts = cfg.exists("include_banana_cuts") && cfg.lookup("include_banana_cuts");
+  Only_U1 = cfg.exists("Only_U1") && cfg.lookup("Only_U1");
+
 }//prepareAnalysis
 
 void printConfig() {

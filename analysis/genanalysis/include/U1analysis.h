@@ -54,8 +54,8 @@ using namespace AUSA::Parser;
 class U1analysis : public AbstractSortedAnalyzer{
     public:
       U1analysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-                      string _isotope)
-          :setupSpecs(_setupSpecs), target(_target), isotope(_isotope){
+                      string _isotope, bool _Only_U1)
+          :setupSpecs(_setupSpecs), target(_target), isotope(_isotope), Only_U1(_Only_U1){
         //Constructor for the general analysis script
 
         cout << "input ion is " << ion << endl;
@@ -82,18 +82,32 @@ class U1analysis : public AbstractSortedAnalyzer{
 
         //Define all the detectors in the setup using the Detector.h file
 
-        U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.);
-
+        if (!Only_U1){
+        U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
+        U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
+        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
+        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);
         P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
-
-        //Partner the dsssds and pads into telescopes
+        P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
+        P3 = new Detector_frib(8, "P3", Pad, Alpha, setupSpecs);
+        P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
         makePartners(U1, P1);
+        makePartners(U2, P2);
+        makePartners(U3, P3);
+        makePartners(U4, P4);
+        detectors.insert({U1,P1, U2, P2, U3, P3, U4, P4}); 
+        }
+        else{
+          U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
+          P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
+          makePartners(U1, P1);
+          U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/totcuts.root", "abovebanU1", include_region));
+          detectors.insert({U1,P1}); 
 
-        
-        U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/totcuts.root", "abovebanU1", include_region));
-  
-        detectors.insert({U1,P1}); 
+        }
+        //Partner the dsssds and pads into telescopes
 
+      
         output->cd(); //something about output file used for mid-analysis dumping
         tree = new TTree("a", "a");
         tree->Branch("num", &NUM);
@@ -267,24 +281,23 @@ class U1analysis : public AbstractSortedAnalyzer{
             calc -> getTotalEnergyLoss(initial_E,10e9,range);
             auto j = TF1("m", func, 0, range, 0);
             double thickness = j.GetMinimumX();
+            double traversed_thickness = front_det->getThickness()-front_det->getBackDeadLayer();
+            //cout << "Detector thickness" << front_det->getThickness() << "Traversed thickness " << traversed_thickness << "backdeadlayer " << front_det->getBackDeadLayer() << "Calculated thickness " << thickness << endl; 
 
-            double angle = acos(front_det->getThickness()/thickness); // set to zero
+            double angle = acos(traversed_thickness/thickness); // set to zero
             
             auto front_det_fdl = front_det->getFrontDeadLayer()/abs(cos(angle));
             auto front_det_bdl = front_det->getBackDeadLayer()/abs(cos(angle));
             auto back_det_dl = back_det->getFrontDeadLayer()/abs(cos(angle));
-            //SKAL ÆNDRES
             double E = pad_hit->Edep;
           if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
             E *= 1.016; 
           }//if statement
           
-          //HER SKAL DER ÆNDRES
           E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_dl);
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
           E+= dsssd_hit->Edep;
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
-          //HER SKAL DER ÆNDRES
           dsssd_hit->angle = angle;
           dsssd_hit->E = E;
           return true;
@@ -349,10 +362,10 @@ double implantation_depth;
 //
 TelescopeTabulation *pU1P1;
 string isotope;
-
+bool Only_U1;
 
 unordered_set<Detector_frib *> detectors;
-Detector_frib *U1, *P1;
+Detector_frib *U1, *P1, *U2, *P2,*U3, *P3, *U4, *P4;
 
 TTree *tree; //defines the tree in which we save the new parameters
 int NUM;

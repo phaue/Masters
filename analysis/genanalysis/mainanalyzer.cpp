@@ -173,8 +173,8 @@ class SingleProton : public GeneralAnalysis{
 
 class AboveBananaAnalysis : public U1analysis{
   public : AboveBananaAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-    string _isotopetype)
-:U1analysis(_setupSpecs, _target, output, _isotopetype) {}
+    string _isotopetype, bool _Only_U1)
+:U1analysis(_setupSpecs, _target, output, _isotopetype, _Only_U1) {}
 
   void specificAnalysis() override {
   if (hits.empty()) return;
@@ -248,6 +248,83 @@ class AboveBananaAnalysis : public U1analysis{
 }//specificanalysis
 };//AboveBananaAnalysis
 
+class Bananaexplorer : public U1analysis{
+  public : Bananaexplorer(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
+    string _isotopetype, bool _Only_U1)
+:U1analysis(_setupSpecs, _target, output, _isotopetype, _Only_U1) {}
+
+  void specificAnalysis() override {
+  if (hits.empty()) return;
+
+  unordered_set<Hit*> telescope_frontside_candidates;
+  unordered_set<Hit*> telescope_backside_candidates;
+
+  for(auto &hit : hits) {
+    auto det = hit.detector;
+    switch(det->getType()) {
+      case DSSSD:
+        if(det->hasPartner()){
+          telescope_frontside_candidates.emplace(&hit);
+        }
+        else { //U5 doesnt have a partner so we need to treat it aswell
+          break;
+        }
+          break;
+      case Pad:
+        telescope_backside_candidates.emplace(&hit);
+        break;
+      default: //treats the rest of the cases such as NoType and HPGe
+        break;
+  }//switch
+  }//for hit in hits
+  unordered_set<Hit*> telescope_frontside_successes;
+  unordered_set<Hit*> telescope_backside_successes;
+
+  for(auto dsssd_hit : telescope_frontside_candidates) {
+    auto dsssd_det = dsssd_hit->detector;
+    for(auto pad_hit : telescope_backside_candidates) {
+      auto pad_det = pad_hit->detector;
+      if(dsssd_det->getPartner() == pad_det){          
+          /// Jeg kan da lave et forloop over angivne peaks i kaldet, det ville være fedt
+          // og så indlæse fra cfg filen x antal peaks som jeg vil analysere
+          //pt for resultaternes skyld laver jeg det hardcoded
+          if(pad_hit->Edep+dsssd_hit->Edep <= 4120 && pad_hit->Edep+dsssd_hit->Edep >= 3920){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4093);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          }
+
+
+
+          /* For 22Al
+          if(pad_hit->Edep+dsssd_hit->Edep <= 3060 && pad_hit->Edep+dsssd_hit->Edep >= 2780){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 2990);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          }
+          else if(pad_hit->Edep+dsssd_hit->Edep <= 3920 && pad_hit->Edep+dsssd_hit->Edep >= 3750){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 3877);
+            if(telescope_success){
+              telescope_frontside_successes.emplace(dsssd_hit);
+              telescope_backside_successes.emplace(pad_hit);
+              addTelescopeHit(dsssd_hit, pad_hit);
+              }
+          */
+    
+          else{
+            continue;
+          }
+      }//if dsssd and pad is partnered
+    }//for each pad hit in telescope backside candidates
+  }  
+}//specificanalysis
+};//Bananaexplorer
 
 
 
@@ -294,7 +371,10 @@ for(auto &runpart : input){
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
   else if(specificAnalysis == "AboveBananaAnalysis"){
-    U1ana = make_shared<AboveBananaAnalysis>(setup, target, &output, isotopetype);
+    U1ana = make_shared<AboveBananaAnalysis>(setup, target, &output, isotopetype, Only_U1);
+  }  
+  else if(specificAnalysis == "Bananaexplorer"){
+    U1ana = make_shared<Bananaexplorer>(setup, target, &output, isotopetype, Only_U1);
   }  
   else {
       cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;
