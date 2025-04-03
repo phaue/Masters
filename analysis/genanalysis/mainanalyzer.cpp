@@ -250,8 +250,8 @@ class AboveBananaAnalysis : public U1analysis{
 
 class Bananaexplorer : public U1analysis{
   public : Bananaexplorer(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-    string _isotopetype, bool _Only_U1)
-:U1analysis(_setupSpecs, _target, output, _isotopetype, _Only_U1) {}
+    string _isotopetype, bool _Only_U1, vector<vector<int>> _peakSets)
+:U1analysis(_setupSpecs, _target, output, _isotopetype, _Only_U1), peakSets(_peakSets) {}
 
   void specificAnalysis() override {
   if (hits.empty()) return;
@@ -284,46 +284,28 @@ class Bananaexplorer : public U1analysis{
     auto dsssd_det = dsssd_hit->detector;
     for(auto pad_hit : telescope_backside_candidates) {
       auto pad_det = pad_hit->detector;
-      if(dsssd_det->getPartner() == pad_det){          
-          /// Jeg kan da lave et forloop over angivne peaks i kaldet, det ville være fedt
-          // og så indlæse fra cfg filen x antal peaks som jeg vil analysere
-          //pt for resultaternes skyld laver jeg det hardcoded
-          if(pad_hit->Edep+dsssd_hit->Edep <= 4120 && pad_hit->Edep+dsssd_hit->Edep >= 3920){
-            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4093);
+      if(dsssd_det->getPartner() == pad_det){
+        for (const auto& peak: peakSets){
+          int lowE = peak[0];
+          int upE = peak[1];
+          int iniE = peak[2];
+          if(pad_hit->Edep+dsssd_hit->Edep <= upE && pad_hit->Edep+dsssd_hit->Edep >= lowE){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, iniE);
             if(telescope_success){
               telescope_frontside_successes.emplace(dsssd_hit);
               telescope_backside_successes.emplace(pad_hit);
               addTelescopeHit(dsssd_hit, pad_hit);
-              }
-          }
-
-
-
-          /* For 22Al
-          if(pad_hit->Edep+dsssd_hit->Edep <= 3060 && pad_hit->Edep+dsssd_hit->Edep >= 2780){
-            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 2990);
-            if(telescope_success){
-              telescope_frontside_successes.emplace(dsssd_hit);
-              telescope_backside_successes.emplace(pad_hit);
-              addTelescopeHit(dsssd_hit, pad_hit);
-              }
-          }
-          else if(pad_hit->Edep+dsssd_hit->Edep <= 3920 && pad_hit->Edep+dsssd_hit->Edep >= 3750){
-            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 3877);
-            if(telescope_success){
-              telescope_frontside_successes.emplace(dsssd_hit);
-              telescope_backside_successes.emplace(pad_hit);
-              addTelescopeHit(dsssd_hit, pad_hit);
-              }
-          */
-    
+              } // if telescope success
+          }//if padhit
           else{
             continue;
-          }
+          }}
       }//if dsssd and pad is partnered
     }//for each pad hit in telescope backside candidates
-  }  
+  }//for each dsssd hit
 }//specificanalysis
+private:
+    vector<vector<int>> peakSets;
 };//Bananaexplorer
 
 
@@ -344,7 +326,8 @@ int run;
 
 run = stoi(argv[2]); //converts the second command line argument into an integer which is the run number
 prepareAnalysis(run); // extracts the specific analysis from the config and the bool values specified in the config
-findFilesMatchingWildcard(Form(input_path.c_str(), run), input);
+
+findFilesMatchingWildcard(Form(input_path.c_str(), isotopetype.c_str(),run), input);
       //finds all the run files for a single run number and puts them in input
 system(("mkdir -p " + output_path_dir).c_str());
 
@@ -374,7 +357,7 @@ for(auto &runpart : input){
     U1ana = make_shared<AboveBananaAnalysis>(setup, target, &output, isotopetype, Only_U1);
   }  
   else if(specificAnalysis == "Bananaexplorer"){
-    U1ana = make_shared<Bananaexplorer>(setup, target, &output, isotopetype, Only_U1);
+    U1ana = make_shared<Bananaexplorer>(setup, target, &output, isotopetype,Only_U1, peaks);
   }  
   else {
       cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;

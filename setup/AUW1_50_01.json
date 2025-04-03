@@ -1,6 +1,6 @@
 {
   "type" : "SquareDSSD",
-  "thickness" : "58 um",
+  "thickness" : "59 um",
   "deadLayer" : "100 nm",
   "deadLayer_back" : "500 nm",
   "nFrontStrips" : 16,

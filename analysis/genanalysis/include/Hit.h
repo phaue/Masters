@@ -13,7 +13,7 @@ struct Hit{
 
   unsigned short id; //what detector was hit?
 
-  TVector3 direction, position;
+  TVector3 direction, position, targetposition;
   double theta, phi, angle; //Angles associated with the hit, angle is the angle of incidence to the surface of the detector
 
   unsigned short FI, BI;

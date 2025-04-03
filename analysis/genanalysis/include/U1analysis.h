@@ -116,6 +116,9 @@ class U1analysis : public AbstractSortedAnalyzer{
         v_id = make_unique<DynamicBranchVector<unsigned short>>(*tree, "id", "mul");
 
         v_pos = make_unique<DynamicBranchVector<TVector3>>(*tree, "pos");
+        v_tarpos = make_unique<DynamicBranchVector<TVector3>>(*tree, "tarpos");
+        v_dir = make_unique<DynamicBranchVector<TVector3>>(*tree, "dir");
+
 
         v_angle = make_unique<DynamicBranchVector<double>>(*tree, "angle", "mul"); // angle of incidence w.r.t. detector surface
 
@@ -132,7 +135,7 @@ class U1analysis : public AbstractSortedAnalyzer{
 
         v_E = make_unique<DynamicBranchVector<double>>(*tree, "E", "mul");
 
-
+    pAlCalc = defaultRangeInverter("p", "Aluminum");
     pSiCalc = defaultRangeInverter("p", "Silicon"); //Eloss in detector material of protons
     for (auto &layer: target->getLayers()) {
       pTargetCalcs.push_back(defaultRangeInverter(Ion::predefined("p"), layer.getMaterial()));
@@ -204,9 +207,9 @@ class U1analysis : public AbstractSortedAnalyzer{
 
           TVector3 pos = d.getUniformPixelPosition(FI, BI);
           hit.position = pos;
-          //TVector3 dir = (hit.position - origin).Unit();
-          //hit.direction = dir;
-
+          TVector3 dir = d.getNormal();
+          hit.direction = dir;
+          hit.targetposition = NAN_TVECTOR3;
           auto incidenceangle = 0;
           hit.angle = incidenceangle;
           hits.emplace_back(std::move(hit));
@@ -233,9 +236,8 @@ class U1analysis : public AbstractSortedAnalyzer{
 
           TVector3 pos = d.getPosition(FI);
           hit.position = pos;
-          //TVector3 dir = (hit.position - origin).Unit();
-          //hit.direction = dir;
-
+          TVector3 dir = (hit.position).Unit();
+          hit.direction = dir;
           auto incidenceangle = 0;
           hit.angle = incidenceangle;
 
@@ -258,7 +260,6 @@ class U1analysis : public AbstractSortedAnalyzer{
             E *= 1.016; 
           }//if statement
           
-          //HER SKAL DER ÆNDRES
           E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_dl);
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
           E+= dsssd_hit->Edep;
@@ -281,30 +282,43 @@ class U1analysis : public AbstractSortedAnalyzer{
             calc -> getTotalEnergyLoss(initial_E,10e9,range);
             auto j = TF1("m", func, 0, range, 0);
             double thickness = j.GetMinimumX();
-            double traversed_thickness = front_det->getThickness()-front_det->getBackDeadLayer();
+            double traversed_thickness = front_det->getThickness()-front_det->getBackDeadLayer()-front_det->getBackContactThickness();
+            /// Should maybe actually include back contact thickness soon..
+            
             //cout << "Detector thickness" << front_det->getThickness() << "Traversed thickness " << traversed_thickness << "backdeadlayer " << front_det->getBackDeadLayer() << "Calculated thickness " << thickness << endl; 
 
             double angle = acos(traversed_thickness/thickness); // set to zero
             
             auto front_det_fdl = front_det->getFrontDeadLayer()/abs(cos(angle));
             auto front_det_bdl = front_det->getBackDeadLayer()/abs(cos(angle));
-            auto back_det_dl = back_det->getFrontDeadLayer()/abs(cos(angle));
+            auto front_det_bcont = front_det->getBackContactThickness()/abs(cos(angle));
+            auto back_det_dl = back_det->getFrontDeadLayer()/abs(cos(angle)); 
             double E = pad_hit->Edep;
           if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
             E *= 1.016; 
           }//if statement
           
           E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_dl);
+          E+= pAlCalc -> getTotalEnergyCorrection(E, front_det_bcont);
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
           E+= dsssd_hit->Edep;
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
           dsssd_hit->angle = angle;
           dsssd_hit->E = E;
+          if(isnan(angle)){
+          double somev = (origin.Z()-dsssd_hit->position.Z())/dsssd_hit->direction.Z();
+          double_t tarx = dsssd_hit->position.X()+somev*dsssd_hit->direction.X();
+          TVector3 tarpos(tarx,dsssd_hit->position.Y(),origin.Z());
+          dsssd_hit->targetposition = tarpos;
+          }
+
           return true;
         }
         void addTelescopeHit(Hit *dsssd_hit, Hit *pad_hit){
             v_id->add(dsssd_hit->id); //id of the dsssd determines the id of the telescope hit
             v_pos->add(dsssd_hit->position);
+            v_dir->add(dsssd_hit->direction);
+            v_tarpos->add(dsssd_hit->targetposition);
             v_angle->add(dsssd_hit->angle);
             v_Edep->add(NAN);
             v_fEdep->add(dsssd_hit->Edep);
@@ -334,7 +348,7 @@ class U1analysis : public AbstractSortedAnalyzer{
         Eg1, Eg2 = NAN;
         AUSA::clear(
         *v_id,
-        *v_pos,
+        *v_pos, *v_dir, *v_tarpos,
         *v_angle,
         *v_Edep, *v_fEdep, *v_bEdep,
         *v_FI, *v_BI, *v_FE, *v_BE, *v_FT, *v_BT,
@@ -375,7 +389,7 @@ SortedSignal clock; //tpattern, tprotons, are these tprotons the time related to
 
 Double_t Eg1, Eg2;
 unique_ptr<DynamicBranchVector<unsigned short>> v_id;
-unique_ptr<DynamicBranchVector<TVector3>> v_pos;
+unique_ptr<DynamicBranchVector<TVector3>> v_pos, v_dir, v_tarpos;
 unique_ptr<DynamicBranchVector<double>> v_angle;
 unique_ptr<DynamicBranchVector<double>> v_Edep, v_fEdep, v_bEdep;
 unique_ptr<DynamicBranchVector<unsigned short>> v_FI, v_BI;
@@ -386,7 +400,7 @@ unique_ptr<DynamicBranchVector<double>> v_E;
 
 
 vector<Hit> hits;
-unique_ptr<EnergyLossRangeInverter> pSiCalc;
+unique_ptr<EnergyLossRangeInverter> pSiCalc, pAlCalc;
 vector<unique_ptr<EnergyLossRangeInverter>> pTargetCalcs;
 
 }; //Class GeneralAnalysis

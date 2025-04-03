@@ -17,9 +17,29 @@ using namespace AUSA;
 string setup_path, target_path, input_path, output_path_dir;
 string specificAnalysis, isotopetype;
 bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region, Only_U1;
+vector<vector<int>> peaks;
 
 Config cfg;
 string path;
+
+vector<vector<int>> parsePeaks(const string& peaksStr) {
+  vector<vector<int>> peaksSets;
+  istringstream iss(peaksStr);
+  string set;
+
+  while (getline(iss, set, ';')) {
+      vector<int> peaks;
+      istringstream setStream(set);
+      string token;
+      while (getline(setStream, token, ',')) {
+          peaks.push_back(stoi(token));
+      }
+      peaksSets.push_back(peaks);
+  }
+
+  return peaksSets;
+}
+
 
 void prepareFileIO(const string& configfile){
   cfg.readFile(configfile.c_str());
@@ -42,6 +62,7 @@ void prepareFileIO(const string& configfile){
       output_path_dir = getProjectRoot() + "data/" + getStem(configfile) +"/" + cfg.lookup("isotopetype").c_str();}
   else{
       output_path_dir = getProjectRoot() + cfg.lookup("output_path_dir").c_str();}
+
   };//prepareFileIO
 
 void prepareAnalysis(unsigned int run_number){
@@ -53,6 +74,8 @@ void prepareAnalysis(unsigned int run_number){
   include_spurious_zone = cfg.exists("include_spurious_zone") && cfg.lookup("include_spurious_zone");
   include_banana_cuts = cfg.exists("include_banana_cuts") && cfg.lookup("include_banana_cuts");
   Only_U1 = cfg.exists("Only_U1") && cfg.lookup("Only_U1");
+  if (cfg.exists("peaks")) {
+    peaks = parsePeaks(cfg.lookup("peaks").c_str());}
 
 }//prepareAnalysis
 

@@ -45,6 +45,7 @@ namespace Detectors_ {
             // perhaps the naming of the original makes it more consistent with regards to the AUSA commands
             backside_DeadLayer = AUSA::getBackDeadLayer(*setup->getDSSD(this->name)); // same for backside
             Detector_thickness = AUSA::getThickness(*setup->getDSSD(this->name)); // same for thickness
+            backside_ContactThickness = AUSA::getBackContactThickness(*setup->getDSSD(this->name));
             break;
           case Pad:
             frontside_DeadLayer = AUSA::getFrontDeadLayer(*setup->getSingleSided(this->name));
@@ -76,6 +77,7 @@ namespace Detectors_ {
    double getThickness() const {return Detector_thickness;};
    double getFrontDeadLayer() const {return frontside_DeadLayer;};
    double getBackDeadLayer() const {return backside_DeadLayer;};
+   double getBackContactThickness() const {return backside_ContactThickness;};
    double getBetaCut() const {return BetaCut;};
    //get the banana cut for a specific detector
    gCut* getBananaCut() const {return banana;}
@@ -92,6 +94,7 @@ namespace Detectors_ {
    void setThickness(double thickness) {this->Detector_thickness = thickness;}
    void setFrontDeadLayer(double frontdeadlayer) {this->frontside_DeadLayer = frontdeadlayer;}
    void setBackDeadLayer(double backdeadlayer) {this->backside_DeadLayer = backdeadlayer;}
+   void setBackContactThickness(double backcontact) {this->backside_ContactThickness = backcontact;}
    //set banana cut
    void setBananaCut(gCut* cut) {this->banana = cut;}
    //add telescope tabulations
@@ -110,7 +113,7 @@ namespace Detectors_ {
     CalibrationType calibration{};
     Detector_frib* partner{};
     shared_ptr<AUSA::Setup> setup;
-    double frontside_DeadLayer{}, Detector_thickness{}, backside_DeadLayer{}; // = 0.0 by default
+    double frontside_DeadLayer{}, Detector_thickness{}, backside_DeadLayer{}, backside_ContactThickness{}; // = 0.0 by default
     double BetaCut{};
     bool withPartner = false;
     gCut* banana;
