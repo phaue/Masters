@@ -2,11 +2,9 @@
 data/*
 #setup/*
 calibrations/*
-simdata/*
 !data/.gitkeep
 #!setup/.gitkeep
 !calibrations/.gitkeep
-!simdata/.gitkeep
 #Excluding all build files from the git, the repository is to be build locally.
 **/build/
 #Excluding figure output from python
