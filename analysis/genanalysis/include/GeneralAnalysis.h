@@ -129,28 +129,21 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         pU4P4 = new TelescopeTabulation(setupSpecs, target, "U4", "P4", "p");
         //pU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "p");
 
-        aU1P1 = new TelescopeTabulation(setupSpecs, target, "U1", "P1", "a");
-        aU2P2 = new TelescopeTabulation(setupSpecs, target, "U2", "P2", "a");
-        aU3P3 = new TelescopeTabulation(setupSpecs, target, "U3", "P3", "a");
-        aU4P4 = new TelescopeTabulation(setupSpecs, target, "U4", "P4", "a");
-        //aU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "a");
-
 
         //Sets the implantation depth for all the tabulations missing , pU6P6, aU6P6
-          for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4,
-                       aU1P1, aU2P2, aU3P3, aU4P4}) {
+          for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4}) {
           tabulations->setImplantationDepth(implantation_depth);}
         
-        pU1P1->setESignalThreshold(340.); aU1P1->setESignalThreshold(340.);  
-        pU2P2->setESignalThreshold(340.); aU2P2->setESignalThreshold(340.);
-        pU3P3->setESignalThreshold(180.); aU3P3->setESignalThreshold(180.);
-        pU4P4->setESignalThreshold(350.); aU4P4->setESignalThreshold(350.);
+        pU1P1->setESignalThreshold(340.);   
+        pU2P2->setESignalThreshold(340.); 
+        pU3P3->setESignalThreshold(180.); 
+        pU4P4->setESignalThreshold(350.); 
         //pU6P6->setESignalThreshold(220.); aU6P6->setESignalThreshold(220.);
 
-        U1->addTelescopeTabulation(pU1P1); U1->addTelescopeTabulation(aU1P1);
-        U2->addTelescopeTabulation(pU2P2); U2->addTelescopeTabulation(aU2P2);
-        U3->addTelescopeTabulation(pU3P3); U3->addTelescopeTabulation(aU3P3);
-        U4->addTelescopeTabulation(pU4P4); U4->addTelescopeTabulation(aU4P4);
+        U1->addTelescopeTabulation(pU1P1);
+        U2->addTelescopeTabulation(pU2P2);
+        U3->addTelescopeTabulation(pU3P3);
+        U4->addTelescopeTabulation(pU4P4);
         //U6->addTelescopeTabulation(pU6P6); U6->addTelescopeTabulation(aU6P6);
 
 //missing U5, U6, P5, P6
@@ -182,7 +175,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         v_BT = make_unique<DynamicBranchVector<double>>(*tree, "BT", "mul");
 
         v_E = make_unique<DynamicBranchVector<double>>(*tree, "E", "mul");
-        v_Ea = make_unique<DynamicBranchVector<double>>(*tree, "Ea", "mul");
 
         //tree->Branch("Theta", &Theta); // wat the fuck is this
         //tree->Branch("Omega", &Omega);// what the fuck is this
@@ -199,12 +191,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       //eloss of protons in target material
     }
 
-    aSiCalc = defaultRangeInverter("a", "Silicon"); //Eloss in detector material of alphas
+    pAlCalc = defaultRangeInverter("p", "Aluminum"); //Eloss in detector material of protons
     for (auto &layer: target->getLayers()) {
-      aTargetCalcs.push_back(defaultRangeInverter(Ion::predefined("a"), layer.getMaterial()));
-    //eloss of alphas in target material --->> addition of alphas in this analysis might be superflouos.
+      pTargetCalcs.push_back(defaultRangeInverter(Ion::predefined("p"), layer.getMaterial()));
+      //eloss of protons in target material
     }
-
     }//General analysis class
 
     virtual void specificAnalysis() =0;
@@ -378,24 +369,17 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }//forloop for E energy correction
           hit->E = E; // set the energy of the hit to this energy corrected value
 
-          double Ea = hit->Edep; //alpha energy correction from the front dead layer and target layers
-          Ea += aSiCalc -> getTotalEnergyCorrection(Ea, fdl);
-          for (auto &intersection: target->getIntersections(from, origin)) {
-            auto &calc = aTargetCalcs[intersection.index];
-            Ea += calc->getTotalEnergyCorrection(Ea, intersection.transversed);
-            }//forloop for Ea energy correction
-          hit->Ea = Ea; // set the energy of the hit to this energy corrected value
-
-
         }//treatDSSSDHit
 
         void treatPadHit(Hit *hit){
           auto det = hit->detector;
           double angle = hit->angle;
+          double fct = det->getFrontContactThickness()/abs(cos(angle));
           double fdl = det->getFrontDeadLayer()/abs(cos(angle));
 
           double E = hit->Edep;
-        E += pSiCalc -> getTotalEnergyCorrection(E, fdl);
+          E += pAlCalc -> getTotalEnergyCorrection(E, fct);
+          E += pSiCalc -> getTotalEnergyCorrection(E, fdl);
         auto &from = hit->position;
         for (auto &intersection: target->getIntersections(from, origin)) {
           auto &calc = pTargetCalcs[intersection.index];
@@ -414,15 +398,18 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
           auto front_det_fdl = front_det->getFrontDeadLayer()/abs(cos(angle));
           auto front_det_bdl = front_det->getBackDeadLayer()/abs(cos(angle));
-          auto back_det_dl = back_det->getFrontDeadLayer()/abs(cos(angle));
-
+          auto front_det_bct = front_det->getBackContactThickness()/abs(cos(angle));
+          auto back_det_fct = back_det->getBackContactThickness()/abs(cos(angle));
+          auto back_det_fdl = back_det->getFrontDeadLayer()/abs(cos(angle));
           double E = pad_hit->Edep;
           if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
             E *= 1.016; // This value is extracted from Eriks thesis as a multiplier to somewhat account
                 //for the poorer calibrations of the pad detectors.
           }//if statement
           //Energy correction for protons in the
-          E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_dl);
+          E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_fdl);
+          E+= pAlCalc -> getTotalEnergyCorrection(E, back_det_fct);
+          E+= pAlCalc -> getTotalEnergyCorrection(E, front_det_bct);
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
           E+= dsssd_hit->Edep;
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
@@ -431,17 +418,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             auto &calc = pTargetCalcs[intersection.index];
             E += calc->getTotalEnergyCorrection(E, intersection.transversed);
           }//forloop for E energy correction
-
-          double Ea = pad_hit->Edep;
-          Ea += aSiCalc -> getTotalEnergyCorrection(Ea, back_det_dl);
-          Ea += aSiCalc -> getTotalEnergyCorrection(Ea, front_det_bdl);
-          Ea += dsssd_hit->Edep;
-          Ea += aSiCalc -> getTotalEnergyCorrection(Ea, front_det_fdl);
-          for (auto &intersection: target->getIntersections(from, origin)) {
-            auto &calc = aTargetCalcs[intersection.index];
-            Ea += calc->getTotalEnergyCorrection(Ea, intersection.transversed);
-          }//forloop for Ea energy correction
-
           //correction with regards to spurious zones
           if (!include_spurious_zone) {
             auto FI = dsssd_hit->FI;
@@ -464,7 +440,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           //is this a problem when determining thicknesses?
           }//if spurious zones
           dsssd_hit->E = E;
-          dsssd_hit->Ea = Ea;
           return true;
           }//treatTelescopeHit
 
@@ -486,8 +461,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             v_BT->add(hit->BT);
 
             v_E->add(hit->E);
-            v_Ea->add(hit->Ea);
-
             mul++;
             //p = true
             }//addDSSSDHit
@@ -508,8 +481,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             v_BT->add(dsssd_hit->BT);
 
             v_E->add(dsssd_hit->E);
-            v_Ea->add(dsssd_hit->Ea);
-
             mul++;
             }//addTelescopeHit
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -530,8 +501,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           v_BT->add(hit->BT);
 
           v_E->add(hit->E);
-          v_Ea->add(NAN);
-
           mul++;
           //p = true
         }//addPadHit
@@ -554,7 +523,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         *v_theta, *v_phi, *v_angle,
         *v_Edep, *v_fEdep, *v_bEdep,
         *v_FI, *v_BI, *v_FE, *v_BE, *v_FT, *v_BT,
-        *v_E, *v_Ea
+        *v_E
             );
         hits.clear();
         }//clear
@@ -574,7 +543,6 @@ string isotopetype;
 bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 //
 TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4;//, *pU6P6;
-TelescopeTabulation *aU1P1, *aU2P2, *aU3P3, *aU4P4;//, *aU6P6;
 
 
 unordered_set<Detector_frib *> detectors;
@@ -594,13 +562,12 @@ unique_ptr<DynamicBranchVector<double>> v_Edep, v_fEdep, v_bEdep;
 unique_ptr<DynamicBranchVector<unsigned short>> v_FI, v_BI;
 unique_ptr<DynamicBranchVector<double>> v_FE, v_BE;
 unique_ptr<DynamicBranchVector<double>> v_FT, v_BT;
-unique_ptr<DynamicBranchVector<double>> v_E, v_Ea;
+unique_ptr<DynamicBranchVector<double>> v_E;
 
 vector<Hit> hits;
 unique_ptr<EnergyLossRangeInverter> pSiCalc;
-unique_ptr<EnergyLossRangeInverter> aSiCalc;
+unique_ptr<EnergyLossRangeInverter> pAlCalc;
 vector<unique_ptr<EnergyLossRangeInverter>> pTargetCalcs;
-vector<unique_ptr<EnergyLossRangeInverter>> aTargetCalcs;
 
 }; //Class GeneralAnalysis
 #endif

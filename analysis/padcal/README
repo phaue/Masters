@@ -1,0 +1,17 @@
+What has been done here is first the CalibrationMatcher is run using any of the isotopes Mg or Si 
+using their dummy-pad-sorted data. This creates a histogram for each pad for U1,U2 and U3 telescopes.
+The reasoning being these detectors are thin enough such that their backing pad detectors have a good signal.
+
+The resulting data are then compiled using hadd -f "specifiedfilename".root *{run numbers}*
+to add all the individual run histograms into a single one. This file is then run in the fitter analysis.
+This produces 4 fits to the peaks present in the pad spectrum. For Si all 4 are used, 
+for Mg the first one is omitted.
+
+These values are then hardcoded into the ForwardCalculation class and this class is now run on the 
+dummy-pad-sorted data. This produces calculated pad-spectra for each of P1, P2 and P3.
+
+These are then manually fitted using the ROOT software and used for the calibration which is carried out
+in a python file called PadCalibration.ipynb. 
+
+The code is not made general and i would like, at some point, to improve it with more dynamic casts.
+Forexample loading in of the fitted values, make such that the fitter can fit the calculated pad-spectra. And make it so a config file can be used to choose between analysis methods in PadCalibration. I would also like to make the file paths and specifications not hardcoded but variable.
