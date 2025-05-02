@@ -4,7 +4,7 @@
     {
       "name": "U1",
       "file": "AUW1_50_00.json",
-      "calibration": "U1.cal",
+      "calibration": "U1_sical.cal",
       "reverseFront": false,
       "reverseBack": false,
       "position": {
@@ -40,7 +40,7 @@
     {
       "name": "U2",
       "file": "AUW1_60_02.json",
-      "calibration": "U2.cal",
+      "calibration": "U2_sical.cal",
       "reverseFront": false,
       "reverseBack": false,
       "position": {
@@ -76,7 +76,7 @@
     {
       "name": "U3",
       "file": "AUW1_50_01.json",
-      "calibration": "U3.cal",
+      "calibration": "U3_sical.cal",
       "reverseFront": false,
       "reverseBack": false,
       "position": {
@@ -112,7 +112,7 @@
     {
       "name": "U4",
       "file": "AUW1_300_00.json",
-      "calibration": "U4.cal",
+      "calibration": "U4_sical.cal",
       "reverseFront": false,
       "reverseBack": false,
       "position": {
@@ -220,7 +220,7 @@
     {
       "name": "P1",
       "file": "AUPAD_500_00.json",
-      "calibration": "P1.cal",
+      "calibration": "P1_alfa.cal",
       "position": {
         "x": "-31.9mm",
         "y": "-0.4mm",
@@ -244,7 +244,7 @@
     {
       "name": "P2",
       "file": "AUPAD_500_00.json",
-      "calibration": "P2.cal",
+      "calibration": "P2_alfa.cal",
       "position": {
         "x": "-31.9mm",
         "y": "-0.4mm",
@@ -268,7 +268,7 @@
     {
       "name": "P3",
       "file": "AUPAD_500_01.json",
-      "calibration": "P3.cal",
+      "calibration": "P3_sical.cal",
       "position": {
         "x": "31.9mm",
         "y": "-0.4mm",
@@ -292,7 +292,7 @@
     {
       "name": "P4",
       "file": "AUPAD_1458_00.json",
-      "calibration": "P4.cal",
+      "calibration": "P4_alfa.cal",
       "position": {
         "x": "31.9mm",
         "y": "-0.9mm",
@@ -316,7 +316,7 @@
     {
       "name": "P5",
       "file": "AUPAD_1458_00.json",
-      "calibration": "P1.cal",
+      "calibration": "P1_sical.cal",
       "position": {
         "x": "0mm",
         "y": "49mm",

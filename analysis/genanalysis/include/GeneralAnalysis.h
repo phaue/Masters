@@ -90,7 +90,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
-        P3 = new Detector_frib(8, "P3", Pad, Alpha, setupSpecs);
+        P3 = new Detector_frib(8, "P3", Pad, Proton, setupSpecs);
         P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
         //P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); // this pad detector is dead
         //P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
@@ -403,7 +403,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           auto back_det_fdl = back_det->getFrontDeadLayer()/abs(cos(angle));
           double E = pad_hit->Edep;
           if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
-            E *= 1.016; // This value is extracted from Eriks thesis as a multiplier to somewhat account
+            E *= 1.014; // This value is extracted from Eriks thesis as a multiplier to somewhat account
                 //for the poorer calibrations of the pad detectors.
           }//if statement
           //Energy correction for protons in the

@@ -11,7 +11,7 @@
       "back"  : {"disable" : [16]}
     },
     "U4": {
-      "front"  : {"disable" : [1, 2]}
+      "front"  : {"disable" : [1]}
     },
     "U5": {
       "front"  : {"disable" : [2]}

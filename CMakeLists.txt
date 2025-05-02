@@ -16,7 +16,7 @@ include_directories(include)
 # Add each analysis subdirectory
 add_subdirectory(analysis/genanalysis)
 add_subdirectory(analysis/padcal)
-#add_subdirectory(analysis/peakfinder)
-#add_subdirectory(analysis/specificanalysis2)
+add_subdirectory(calibration/ucal)
+
 #This makes it so i can build from the Masters, and simply build all of the analyses at once
 # seems quite convenient, however i can still do it the old way inside the specific analysis

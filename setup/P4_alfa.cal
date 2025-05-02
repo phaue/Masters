@@ -1,0 +1,10 @@
+# AUSAlib version: 17.1
+# Calibrator version: 2.0
+# Calibrator arguments: Calibrator -s ../../../../setup/setup.json -k ../../../../setup/3a_U3-U4.json -dP4 --eloss --gui
+# Input files: 
+#	130_000.root
+# Calibration of P4
+# Performed @ 2025-05-01 12:28
+# Performed by haue on DESKTOP-GH97AE3
+# SSD
+-283.202 2.98023

@@ -179,16 +179,26 @@ if (iso=="Mg"){
   real_peaks ={3843, 4675, 6231};
   }
 else if (iso=="Si"){
-  peaks1_means ={702.102, 981.697, 1177.82, 1422.2};
-  peaks1_sig ={41.6016, 26.1971, 28.3199, 20.7001};
-  peaks2_means ={641.157, 987.765, 1223.12, 1511.87};
-  peaks2_sig ={49.657,  31.2646, 26.6186, 24.3743};
-  peaks3_means = {724.738, 1039.4,  1257.86, 1531.15};
-  peaks3_sig = {42.2379, 22.9041, 29.3639, 21.6494};
-  real_peaks = {3338, 4089, 4652, 5403};
+  peaks1_means ={702.256,	981.696	,1422.16};
+  peaks1_sig ={41.7565,	26.1958,	20.6553};
+  peaks2_means ={641.548,	987.736,	1511.94};
+  peaks2_sig ={47.048	,31.2358,24.4434};
+  peaks3_means = {724.888,	1039.41,	1531.1};
+  peaks3_sig = {43.3883,	22.9149	,21.5968};
+  real_peaks = {3337.75, 4089.18, 5402.61}; // 3327 4080.5, 4641, 5394 values based on peaks used from Justus' thesis, different choice than Erik's ... 
   }
+else if (iso=="nSi"){
+  peaks1_means ={707.034,	985.402	,1423.67};
+  peaks1_sig ={42.5338,	24.902,	21.1695};
+  peaks2_means ={646.192	,992.998,	1514.26};
+  peaks2_sig ={53.6922,	29.4978,	26.7586};
+  peaks3_means = {727.305,	1042.13,	1533.26};
+  peaks3_sig = {36.8052	,20.6299,	21.7632};
+  real_peaks = {3337.75, 4089.18, 5402.61}; 
+
+}
 else {
-  cout << "How did you get this far? the program should terminate if no isotopetype is specifed..." << endl;
+  cout << "How did you get this far? the program should have terminated if no isotopetype is specifed..." << endl;
   }
 
 }//specificanalysis

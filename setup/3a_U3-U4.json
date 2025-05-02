@@ -1,0 +1,24 @@
+{
+  "position"  : {"x": "5 mm", "y": "0 mm", "z": "0 mm"},
+  "normal" : {"x": "1 mm", "y": "0 mm", "z": "0 mm"},
+  "thickness" : "0 mm",
+  "transverse_size" : "5 mm",
+  "isotopes" : [
+    {
+      "name": "239Pu",
+      "energies" : [5105.5, 5144.3, 5156.59],
+      "intensities" : [0.115, 0.151, 0.733]
+    },
+    {
+      "name": "241Am",
+      "energies" : [5442.80, 5485.56],
+      "intensities" : [0.128, 0.852]
+    },
+    {
+      "name": "244Cm",
+      "energies" : [5762.64, 5804.77],
+      "intensities" : [0.236, 0.764]
+    }
+  ]
+}
+

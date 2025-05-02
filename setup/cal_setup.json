@@ -4,7 +4,7 @@
       {
         "name": "U1",
         "file": "AUW1_50_00.json",
-        "calibration": "U1.cal",
+        "calibration": "U1_sical.cal",
         "reverseFront": false,
         "reverseBack": false,
         "position": {
@@ -40,7 +40,7 @@
       {
         "name": "U2",
         "file": "AUW1_60_02.json",
-        "calibration": "U2.cal",
+        "calibration": "U2_sical.cal",
         "reverseFront": false,
         "reverseBack": false,
         "position": {
@@ -76,7 +76,7 @@
       {
         "name": "U3",
         "file": "AUW1_50_01.json",
-        "calibration": "U3.cal",
+        "calibration": "U3_sical.cal",
         "reverseFront": false,
         "reverseBack": false,
         "position": {
@@ -112,7 +112,7 @@
       {
         "name": "U4",
         "file": "AUW1_300_00.json",
-        "calibration": "U4.cal",
+        "calibration": "U4_sical.cal",
         "reverseFront": false,
         "reverseBack": false,
         "position": {

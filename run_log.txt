@@ -1,0 +1,1594 @@
+2023/06/20/ 22:54:10
+STARTING RUN 001 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P6
+Triggers: PADS(0)
+Shifters: EJ, LS, AA, JD, OT
+Comments: 241Am (~1900 Hz) 244Cm (~428 Hz) 239Pu (~6371 Hz) -- source from 1987, rates corrected for half-life from safety office source log
+2023/06/20/ 23:14:56
+STOPPING RUN 001
+Shifters: EJ, LS, AA, JD, OT
+
+2023/06/20/ 23:15:37
+STARTING RUN 002 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P3, P4
+Triggers: PADS(0)
+Shifters: EJ, LS, JD, OT
+2023/06/20/ 23:25:33
+STOPPING RUN 002
+Shifters: EJ, LS, JD, OT
+
+2023/06/20/ 23:26:14
+STARTING RUN 003 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P2
+Triggers: PADS(0)
+Shifters: EJ, LS, OT
+2023/06/20/ 23:30:55
+STOPPING RUN 003
+Shifters: EJ, LS, OT
+
+2023/06/21/ 22:01:52
+STARTING RUN 004 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P1, U2
+Triggers: DET2(0), PADS(0)
+Shifters: EJ, JD, LS, OT
+2023/06/21/ 22:49:00
+STOPPING RUN 004
+Shifters: EJ, JD, LS, OT
+Comments: germaniums plugged in during run. may have to redo, but now a gamma source is placed close to the germaniums and we can record that as well
+
+2023/06/21/ 23:06:32
+STARTING RUN 005 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P1
+Triggers: PADS(0)
+Shifters: EJ, AA, LS, OT
+2023/06/21/ 23:11:58
+STOPPING RUN 005
+Shifters: EJ, AA, LS, OT
+
+2023/06/22/ 00:48:23
+STARTING RUN 006 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U1, U2
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, AA, LS, OT
+2023/06/22/ 02:32:15
+STOPPING RUN 006
+Shifters: EJ, AA, LS, OT
+
+2023/06/22/ 02:32:48
+STARTING RUN 007 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U3, U4
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, AA, LS, OT
+2023/06/22/ 02:48:05
+STOPPING RUN 007
+Shifters: EJ, AA, LS, OT
+Comments: forgot about gain, shaping time, pole zero. stopping
+
+2023/06/22/ 03:37:56
+STARTING RUN 008 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U1, U2
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, AA, OT
+Comments: All shapes except for germaniums have now been configured. See elog entry #51
+2023/06/22/ 03:57:36
+STOPPING RUN 008
+Shifters: EJ, AA, OT
+
+2023/06/22/ 03:58:28
+STARTING RUN 009 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U3, U4
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, OT
+2023/06/22/ 04:17:44
+STOPPING RUN 009
+Shifters: EJ, OT
+
+2023/06/22/ 04:19:54
+STARTING RUN 010 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U5
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, OT
+2023/06/22/ 04:54:36
+STOPPING RUN 010
+Shifters: EJ, OT
+
+2023/06/22/ 04:56:13
+STARTING RUN 011 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U6
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, OT
+2023/06/22/ 05:18:22
+STOPPING RUN 011
+Shifters: EJ, OT
+
+2023/06/22/ 05:27:23
+STARTING RUN 012 - RUNTYPE=PULSER
+Facility: FRIB		Experiment: 21010
+Beam: Pulser		Beam energy: -		Target: U6
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: EJ, OT
+2023/06/22/ 05:42:15
+STOPPING RUN 012
+Shifters: EJ, OT
+Comments: 3a source in chamber also, pointing at U6
+
+2023/06/22/ 23:01:59
+STARTING RUN 013 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 152Eu		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, JD, OT
+Comments: Energy calibration. Source placed on top of chamber between two germaniums
+2023/06/22/ 23:05:13
+STOPPING RUN 013
+Shifters: EJ, LS, JD, OT
+
+2023/06/22/ 23:20:16
+STARTING RUN 014 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 152Eu		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, OT
+Comments: Resuming energy calibration -- stopped briefly due to gas cell guys wanting to discuss iminent stable beam tuning. Source placed on top of chamber between two germaniums.
+2023/06/22/ 23:23:08
+MID-RUN COMMENTS FOR RUN 014
+Shifters: EJ, LS, OT
+Comments: Pulser had been left on throughout previous two germanium calibration runs
+2023/06/22/ 23:57:38
+STOPPING RUN 014
+Shifters: EJ, LS, OT
+
+2023/06/23/ 00:01:07
+STARTING RUN 015 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 152Eu		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, OT
+Comments: Increased the gain on the HPGE shaper to optimize the dynamic range to go roughly to 3 MeV. 121 keV 152Eu line is now equally intense in both detectors.
+2023/06/23/ 00:32:07
+STOPPING RUN 015
+Shifters: EJ, LS, OT
+
+2023/06/23/ 00:37:29
+STARTING RUN 016 - RUNTYPE=TEST
+Facility: FRIB		Experiment: 21010
+Beam: -		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, OT
+Comments: Lowered ADC thresholds to 10 on all channels on all modules to find individual ADC thresholds.
+2023/06/23/ 00:38:43
+STOPPING RUN 016
+Shifters: EJ, OT
+Comments: Lowered ADC thresholds to 10 on all channels on all modules to find individual ADC thresholds.
+
+2023/06/23/ 01:19:56
+STARTING RUN 017 - RUNTYPE=TEST
+Facility: FRIB		Experiment: 21010
+Beam: -		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, OT
+Comments: Preliminary ADC thresholds set. Some still need a bit of tweaking
+2023/06/23/ 01:20:15
+STOPPING RUN 017
+Shifters: EJ, OT
+Comments: Preliminary ADC thresholds set. Some still need a bit of tweaking
+
+2023/06/23/ 02:22:19
+IN-BETWEEN RUN COMMENTS
+Shifters: EJ, LS, OT
+Comments: Disregard the previous run and the comments on it! The ADC thresholds were determined from unpacked data, and the unpacked data mixes up the channel orderings (by design)
+
+2023/06/23/ 02:23:04
+STARTING RUN 018 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, OT
+Comments: Done optimizing ADC thresholds and trigger thresholds on all detectors.[LINEBREAK]Starting a background run.
+2023/06/23/ 02:23:06
+STOPPING RUN 018
+Shifters: EJ, LS, OT
+Comments: Done optimizing ADC thresholds and trigger thresholds on all detectors.[LINEBREAK]Starting a background run.
+
+2023/06/23/ 02:23:21
+STARTING RUN 019 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, OT
+Comments: Done optimizing ADC thresholds and trigger thresholds on all detectors.[LINEBREAK]Starting a background run.
+2023/06/23/ 02:46:47
+STOPPING RUN 019
+Shifters: EJ, LS, OT
+Comments: Done optimizing ADC thresholds and trigger thresholds on all detectors.[LINEBREAK]Starting a background run.
+
+2023/06/23/ 02:49:26
+IN-BETWEEN RUN COMMENTS
+Shifters: EJ, LS, OT
+Comments: We refrain from leaving the germaniums unsupervised overnight. Stopping the background run
+
+2023/06/23/ 22:27:35
+STARTING RUN 020 - RUNTYPE=PULSER
+Facility: FRIB		Experiment: 21010
+Beam: Pulser		Beam energy: -		Target: Silicons
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: CW, LS, JD, LW, MM, JSN, EJ, HF
+2023/06/23/ 22:28:45
+MID-RUN COMMENTS FOR RUN 020
+Shifters: CW, LS, JD, LW, MM, JSN, EJ, HF
+Comments: TDC alignment run with pulser on all detectors. 1 kHz, Amplitude 0.2 V (1000), rise time 10 ns, tau 40 us. Delay between ch0 and ch1 16 ns.
+2023/06/23/ 22:29:30
+STOPPING RUN 020
+Shifters: CW, LS, JD, LW, MM, JSN, EJ, HF
+
+2023/06/23/ 22:37:10
+STARTING RUN 021 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 152Eu		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: CW, LS, JD, LW, MM, JSN, EJ, HF
+Comments: Source on top of tube (to very high precision!) between two germaniums
+2023/06/23/ 23:26:39
+STOPPING RUN 021
+Shifters: CW, LS, JD, LW, MM, JSN, EJ, HF
+
+2023/06/23/ 23:27:56
+STARTING RUN 022 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, LW, MM, JSN, EJ, HF
+Comments: long run overnight
+2023/06/24/ 15:55:47
+STOPPING RUN 022
+Shifters: MM, JSN, EJ, HF
+
+2023/06/24/ 21:14:19
+STARTING RUN 023 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: HPGES
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: MM, JSN, EJ, HF
+2023/06/24/ 21:15:19
+MID-RUN COMMENTS FOR RUN 023
+Shifters: MM, JSN, EJ, HF
+Comments: work on network connectivity has been carried out and we are now resuming a background run on the germaniums (all triggers enabled)
+2023/06/25/ 05:57:52
+STOPPING RUN 023
+Shifters: MM, JSN, EJ, HF
+
+2023/06/25/ 06:00:24
+STARTING RUN 024 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 25Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, CS, SS
+Comments: Chandana and Stefan has optimised the beam to a point where they want to try to get it into the chamber.[LINEBREAK]26Si contimant in beam also. Our Faraday cup is in the chamber and is intended to stay there for the entire experiment.
+2023/06/25/ 06:12:18
+STOPPING RUN 024
+Shifters: EJ, CS, SS
+
+2023/06/25/ 06:27:48
+IN-BETWEEN RUN COMMENTS
+Shifters: EJ, CS, SS
+Comments: Stopped the run after 12 minutes.[LINEBREAK]We were looking specifically for gamma lines with energies 829 (26Si), 1611 (25Al) and 1622 (26Si) keV in our online analysis, as Stefan and Chandana have seen these lines in their gamma detector just after the mass separating magnet.[LINEBREAK]The lines were not sufficiently intense in our gamma singles spectra.[LINEBREAK]We can do beta-gated gammas on the recorded data offline tomorrow, give Stefan and Chandana a rough measure of the yield and then implement the offline analysis in our online analysis so we have this type of measure ready when 22Al comes around.
+
+2023/06/25/ 15:58:45
+STARTING RUN 025 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, MM
+Comments: Background run
+2023/06/25/ 16:19:05
+MID-RUN COMMENTS FOR RUN 025
+Shifters: JSN, HF, MM
+Comments: Background run
+2023/06/26/ 00:55:55
+STOPPING RUN 025
+Shifters: LS, EJ
+Comments: Stop file to unbias and rebias germaniums due to remote control comms issue
+
+2023/06/26/ 01:14:53
+STARTING RUN 026 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN
+Comments: Background
+2023/06/26/ 03:12:02
+STOPPING RUN 026
+Shifters: LS, EJ, JSN
+Comments: Background
+
+2023/06/26/ 04:00:30
+STARTING RUN 027 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW,
+2023/06/26/ 04:00:49
+MID-RUN COMMENTS FOR RUN 027
+Shifters: LS, EJ, JSN, CW, HF
+Comments: .
+2023/06/26/ 04:45:11
+STOPPING RUN 027
+Shifters: LS, EJ, JSN, CW, HF
+
+2023/06/26/ 04:54:49
+STARTING RUN 028 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF
+Comments: Beam optimised to estimated 500 pps inside chamber based on 335 keV gamma line
+2023/06/26/ 05:16:42
+STOPPING RUN 028
+Shifters: LS, EJ, JSN, CW, HF
+
+2023/06/26/ 05:18:23
+STARTING RUN 029 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF
+2023/06/26/ 05:18:40
+MID-RUN COMMENTS FOR RUN 029
+Shifters: LS, EJ, JSN, CW, HF
+Comments: measuring on "beam off"
+2023/06/26/ 05:19:54
+STOPPING RUN 029
+Shifters: LS, EJ, JSN, CW, HF
+Comments: measuring on "beam off"
+
+2023/06/26/ 05:32:55
+STARTING RUN 030 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF
+2023/06/26/ 05:44:37
+STOPPING RUN 030
+Shifters: LS, EJ, JSN, CW, HF
+
+2023/06/26/ 05:44:44
+STARTING RUN 031 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF
+2023/06/26/ 05:46:10
+MID-RUN COMMENTS FOR RUN 031
+Shifters: LS, EJ, JSN, CW, HF
+Comments: trying to optimise on the chemistry of the gas cell. 22Al comes out with some multiple of water molecules attached. we go from 3 water molecules to four and see if it improves matters
+2023/06/26/ 05:50:14
+STOPPING RUN 031
+Shifters: LS, EJ, JSN, CW, HF
+
+2023/06/26/ 05:50:31
+IN-BETWEEN RUN COMMENTS
+Shifters: LS, EJ, JSN, CW, HF
+Comments: going from 4 water molecules to 5
+
+2023/06/26/ 05:54:04
+STARTING RUN 032 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+2023/06/26/ 05:54:23
+MID-RUN COMMENTS FOR RUN 032
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: scratch that. going from 4 water molecules to 6
+2023/06/26/ 05:57:19
+STOPPING RUN 032
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+
+2023/06/26/ 05:57:47
+IN-BETWEEN RUN COMMENTS
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: trying aluminum oxide now -- mass 38
+
+2023/06/26/ 05:58:01
+IN-BETWEEN RUN COMMENTS
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: "now" means "in a minute"
+
+2023/06/26/ 06:00:37
+STARTING RUN 033 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: aluminum oxide
+2023/06/26/ 06:05:08
+STOPPING RUN 033
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: aluminum oxide
+
+2023/06/26/ 06:06:19
+IN-BETWEEN RUN COMMENTS
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: trying with "pure aluminum", mass 22, in a minute
+
+2023/06/26/ 06:06:24
+STARTING RUN 034 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+2023/06/26/ 06:06:39
+STOPPING RUN 034
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: bad run
+
+2023/06/26/ 06:07:25
+STARTING RUN 035 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: trying with "pure aluminum", mass 22, in a minute
+2023/06/26/ 06:08:44
+STOPPING RUN 035
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: trying with "pure aluminum", mass 22, in a minute
+
+2023/06/26/ 06:11:22
+IN-BETWEEN RUN COMMENTS
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: 22Al yields were at its maximum with roughly 0.5 pps during [Al + 3 water molecules + 1 Hydrogen]. We switch to 21Mg for the night -- we saw an estimated 500 pps previously. Will be good for telescope and germanium calibrations.
+
+2023/06/26/ 06:11:40
+STARTING RUN 036 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+2023/06/26/ 06:14:16
+STOPPING RUN 036
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+
+2023/06/26/ 06:14:23
+IN-BETWEEN RUN COMMENTS
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+Comments: bad run
+
+2023/06/26/ 06:14:30
+STARTING RUN 037 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, JSN, CW, HF, LW, MM
+2023/06/26/ 13:37:33
+STOPPING RUN 037
+Shifters: LW, MM
+
+2023/06/26/ 13:38:36
+STARTING RUN 038 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, MM
+Comments: We run background while Chandanna optimizes 22Al in cryo gass cell
+2023/06/26/ 14:36:45
+STOPPING RUN 038
+Shifters: LW, MM
+Comments: We run background while Chandanna optimizes 22Al in cryo gass cell
+
+2023/06/26/ 14:37:30
+STARTING RUN 039 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF
+Comments: aluminum with 3 water
+2023/06/26/ 14:37:51
+MID-RUN COMMENTS FOR RUN 039
+Shifters: EJ, JD, HF
+Comments: aluminum with 3 water. beam is 22Al!
+2023/06/26/ 14:46:40
+STOPPING RUN 039
+Shifters: EJ, JD, HF
+Comments: aluminum with 3 water. beam is 22Al!
+
+2023/06/26/ 15:00:43
+STARTING RUN 040 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF
+2023/06/26/ 15:07:39
+STOPPING RUN 040
+Shifters: EJ, JD, HF
+
+2023/06/26/ 15:36:46
+STARTING RUN 041 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA
+Comments: background while Chandana and co. tune on the cryogenic gas cell
+2023/06/26/ 16:11:00
+STOPPING RUN 041
+Shifters: EJ, JD, HF, AA
+Comments: background while Chandana and co. tune on the cryogenic gas cell
+
+2023/06/26/ 16:27:20
+STARTING RUN 042 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA
+Comments: background while Chandana and co. tune on the cryogenic gas cell. had to disconnect network briefly, resuming
+2023/06/26/ 17:24:54
+STOPPING RUN 042
+Shifters: EJ, JD, HF, AA
+Comments: background while Chandana and co. tune on the cryogenic gas cell. had to disconnect network briefly, resuming
+
+2023/06/26/ 20:16:00
+STARTING RUN 043 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+2023/06/26/ 20:27:52
+STOPPING RUN 043
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+
+2023/06/26/ 20:28:01
+STARTING RUN 044 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 21Mg		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+2023/06/26/ 20:52:17
+MID-RUN COMMENTS FOR RUN 044
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+Comments: beam tuning throughout
+2023/06/26/ 20:52:18
+STOPPING RUN 044
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+Comments: beam tuning throughout
+
+2023/06/26/ 20:55:09
+STARTING RUN 045 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+Comments: 22Al out of the cryogenic gas cell (previously the room temp gas cell) at mass 22 -- no water molecules or similar
+2023/06/26/ 21:24:21
+IN-BETWEEN RUN COMMENTS
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+Comments: lost power on the PC running the data taking - file may have been corrupted
+
+2023/06/26/ 21:26:20
+STARTING RUN 046 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA, LS, JSN, CW
+2023/06/26/ 21:26:28
+MID-RUN COMMENTS FOR RUN 046
+Shifters: EJ, JD, HF, AA, LS, JSN, CW, MM
+Comments: .
+2023/06/26/ 21:40:24
+STOPPING RUN 046
+Shifters: EJ, JD, HF, AA, LS, JSN, CW, MM
+
+2023/06/26/ 21:40:53
+STARTING RUN 047 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, JD, HF, AA, LS, JSN, CW, MM
+2023/06/26/ 22:12:54
+MID-RUN COMMENTS FOR RUN 047
+Shifters: EJ, JD, HF, AA, LS, JSN, CW, MM
+Comments: At 30 min in this file (16:12 local time, 22:12 DK time) Chandanna is checking the yield, therefore drop in rate
+2023/06/26/ 23:14:16
+STOPPING RUN 047
+Shifters: EJ, JD, HF, AA, LS, JSN, CW, MM
+
+2023/06/26/ 23:14:36
+STARTING RUN 048 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, HF, LS, JSN, CW
+2023/06/27/ 00:22:34
+STOPPING RUN 048
+Shifters: EJ, HF, LS, JSN, CW
+
+2023/06/27/ 00:22:48
+STARTING RUN 049 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, HF, LS, JSN
+2023/06/27/ 02:07:42
+STOPPING RUN 049
+Shifters: EJ, MM, LS, JSN
+
+2023/06/27/ 02:07:48
+STARTING RUN 050 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, MM, LS, JSN
+2023/06/27/ 02:27:09
+STOPPING RUN 050
+Shifters: EJ, MM, LS, JSN
+
+2023/06/27/ 02:29:11
+STARTING RUN 051 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, JSN
+2023/06/27/ 03:58:31
+STOPPING RUN 051
+Shifters: EJ, LS, JSN
+
+2023/06/27/ 03:58:40
+STARTING RUN 052 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, JSN
+2023/06/27/ 04:05:07
+STOPPING RUN 052
+Shifters: EJ, LS, JSN
+Comments: cavity tripped, few minutes to fix, stopping
+
+2023/06/27/ 04:24:30
+STARTING RUN 053 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, JSN
+Comments: background run
+2023/06/27/ 04:29:39
+MID-RUN COMMENTS FOR RUN 053
+Shifters: EJ, LS, JSN
+Comments: someone has to come in and look at fixing the tripped cavity - he will arrive in 30 minutes, and the beam should be back shortly after that -- message from beam ops
+2023/06/27/ 05:55:43
+STOPPING RUN 053
+Shifters: EJ, LS, JSN
+Comments: someone has to come in and look at fixing the tripped cavity - he will arrive in 30 minutes, and the beam should be back shortly after that -- message from beam ops
+
+2023/06/27/ 05:56:55
+STARTING RUN 054 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, LW, HF
+2023/06/27/ 05:58:00
+STOPPING RUN 054
+Shifters: EJ, LS, LW, HF
+
+2023/06/27/ 06:00:30
+STARTING RUN 055 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, LW, HF
+2023/06/27/ 07:18:48
+STOPPING RUN 055
+Shifters: EJ, LS, LW, HF
+
+2023/06/27/ 07:19:24
+STARTING RUN 056 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: EJ, LS, LW, HF
+2023/06/27/ 07:19:36
+MID-RUN COMMENTS FOR RUN 056
+Shifters: EJ, LS, LW, HF
+Comments: short stop
+2023/06/27/ 11:49:52
+STOPPING RUN 056
+Shifters: HF, LW
+
+2023/06/27/ 11:50:17
+STARTING RUN 057 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, LW
+Comments: beam back after 4-5 h break
+2023/06/27/ 15:25:43
+STOPPING RUN 057
+Shifters: HF, LW
+Comments: beam off at 06.17 for a short while
+
+2023/06/27/ 15:25:57
+STARTING RUN 058 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, LW
+Comments: Restart after 3 hours
+2023/06/27/ 15:26:20
+MID-RUN COMMENTS FOR RUN 058
+Shifters: JSN, JD, CW, MM
+Comments: Restart after 3 hours
+2023/06/27/ 18:06:28
+STOPPING RUN 058
+Shifters: JSN, JD, CW, MM
+Comments: Restart after 3 hours
+
+2023/06/27/ 18:06:42
+STARTING RUN 059 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, CW, MM
+Comments: Restart after 2.4 hours
+2023/06/27/ 18:06:45
+MID-RUN COMMENTS FOR RUN 059
+Shifters: JSN, JD, CW, MM
+Comments: Restart after 2.4 hours
+2023/06/27/ 18:19:15
+STOPPING RUN 059
+Shifters: JSN, JD, CW, MM
+Comments: Beam stopped
+
+2023/06/27/ 18:19:35
+STARTING RUN 060 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, CW, MM
+2023/06/27/ 18:20:13
+MID-RUN COMMENTS FOR RUN 060
+Shifters: JSN, HF, MM
+Comments: Restart immediatly after beam loss to measure daughters
+2023/06/27/ 18:53:54
+STOPPING RUN 060
+Shifters: JSN, HF, MM
+Comments: Restart immediatly after beam loss to measure daughters
+
+2023/06/27/ 18:54:06
+STARTING RUN 061 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, MM
+Comments: We have beam again
+2023/06/27/ 19:39:17
+STOPPING RUN 061
+Shifters: JSN, HF, MM
+Comments: We have beam again
+
+2023/06/27/ 19:39:42
+STARTING RUN 062 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, MM
+Comments: No Beam
+2023/06/27/ 20:16:59
+STOPPING RUN 062
+Shifters: JSN, HF, MM
+Comments: No Beam
+
+2023/06/27/ 20:17:19
+STARTING RUN 063 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, MM
+Comments: Beam has returned
+2023/06/27/ 22:51:39
+STOPPING RUN 063
+Shifters: JSN, HF, MM
+Comments: Beam has returned
+
+2023/06/27/ 22:51:52
+STARTING RUN 064 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, MM
+2023/06/28/ 02:56:39
+STOPPING RUN 064
+Shifters: LS, EJ
+
+2023/06/28/ 02:56:48
+STARTING RUN 065 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ
+2023/06/28/ 03:27:45
+MID-RUN COMMENTS FOR RUN 065
+Shifters: LS, EJ
+Comments: NOTE ON RUN 064: There may have been a small spike or three in triggers somewhere between 20:30 and 21:00 as bias was briefly turned off on all channels of the bias module containing P6, U5 and U6 due to some RC issues
+2023/06/28/ 04:16:32
+STOPPING RUN 065
+Shifters: LS, EJ
+
+2023/06/28/ 04:16:56
+STARTING RUN 066 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ
+2023/06/28/ 04:17:23
+STOPPING RUN 066
+Shifters: LS, EJ
+
+2023/06/28/ 04:17:34
+STARTING RUN 067 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ
+2023/06/28/ 04:27:25
+STOPPING RUN 067
+Shifters: LS, EJ
+
+2023/06/28/ 04:29:13
+STARTING RUN 068 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ
+2023/06/28/ 05:34:38
+STOPPING RUN 068
+Shifters: LS, EJ
+
+2023/06/28/ 05:34:46
+STARTING RUN 069 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ
+2023/06/28/ 05:34:53
+MID-RUN COMMENTS FOR RUN 069
+Shifters: LS, EJ, LW
+Comments: .
+2023/06/28/ 05:47:17
+STARTING RUN 070 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, LW
+2023/06/28/ 06:49:22
+STOPPING RUN 070
+Shifters: LS, EJ, LW
+
+2023/06/28/ 06:49:52
+STARTING RUN 071 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LS, EJ, LW
+2023/06/28/ 07:01:22
+STARTING RUN 072 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, JSN
+2023/06/28/ 08:40:15
+STARTING RUN 073 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, JSN
+Comments: Restarting after regaining access to AU services. DAQ also crashed (?)
+2023/06/28/ 11:48:56
+STOPPING RUN 073
+Shifters: LW, JSN
+Comments: Restarting after regaining access to AU services. DAQ also crashed (?)
+
+2023/06/28/ 11:49:40
+STARTING RUN 074 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 22Al		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, JSN
+Comments: Restarting run after 3 hours without incident
+2023/06/28/ 14:12:26
+STOPPING RUN 074
+Shifters: LW, JSN
+Comments: Restarting run after 3 hours without incident
+
+2023/06/28/ 14:13:09
+STARTING RUN 075 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, JSN
+Comments: Beginning to switch beams
+2023/06/28/ 18:40:44
+STOPPING RUN 075
+Shifters: LW, JSN
+Comments: Beginning to switch beams
+
+2023/06/28/ 18:41:42
+STARTING RUN 076 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 28P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, JSN
+2023/06/28/ 18:47:16
+STOPPING RUN 076
+Shifters: LW, JSN
+
+2023/06/28/ 18:47:42
+STARTING RUN 077 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, JSN
+2023/06/28/ 20:14:28
+STOPPING RUN 077
+Shifters: LW, JSN
+
+2023/06/28/ 20:14:57
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ
+Comments: stopping background run to optimise trigger thresholds (and maybe ADC thresholds)
+
+2023/06/28/ 21:08:32
+STARTING RUN 078 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, JD
+2023/06/28/ 22:47:03
+STOPPING RUN 078
+Shifters: HF, MM, CW, EJ, JD
+
+2023/06/28/ 22:47:14
+STARTING RUN 079 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, JD
+2023/06/28/ 23:12:35
+STOPPING RUN 079
+Shifters: HF, MM, CW, EJ, JD
+
+2023/06/28/ 23:12:54
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ, JD
+Comments: Pure 26P -- mass 26 -- in run 079
+
+2023/06/28/ 23:13:52
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ, JD
+Comments: 26P oxide -- mass 42 -- up next
+
+2023/06/28/ 23:15:59
+STARTING RUN 080 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, JD
+2023/06/28/ 23:19:26
+STOPPING RUN 080
+Shifters: HF, MM, CW, EJ, JD
+
+2023/06/28/ 23:19:58
+STARTING RUN 081 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, JD
+2023/06/28/ 23:39:09
+STOPPING RUN 081
+Shifters: HF, MM, CW, EJ, JD
+
+2023/06/28/ 23:41:34
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ, JD
+Comments: previous run was PO (mass 42), next run will be PO2 (mass 58)
+
+2023/06/28/ 23:44:33
+STARTING RUN 082 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, JD
+2023/06/28/ 23:55:12
+STOPPING RUN 082
+Shifters: HF, MM, CW, EJ, JD
+
+2023/06/28/ 23:56:48
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ, JD
+Comments: going back to PO (highest rate) while we assess the purity (25Si contamination risk) in offline analyses
+
+2023/06/29/ 00:00:48
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ, JD
+Comments: scrath that -- we are doing SiO2 (mass 57) to have an actual signature of a potential contaminant. for 10 minutes.
+then we go back to PO
+
+2023/06/29/ 00:01:07
+STARTING RUN 083 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 25Si		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, JD
+2023/06/29/ 00:06:22
+STOPPING RUN 083
+Shifters: HF, MM, CW, EJ, JD
+
+2023/06/29/ 00:06:45
+IN-BETWEEN RUN COMMENTS
+Shifters: HF, MM, CW, EJ, JD
+Comments: NOW we go back to PO (highest rate) while we assess the purity (25Si contamination risk) in offline analyses
+
+2023/06/29/ 00:10:44
+STARTING RUN 084 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, LS
+Comments: PO mass 42
+2023/06/29/ 00:11:48
+STOPPING RUN 084
+Shifters: HF, MM, CW, EJ, LS
+Comments: PO mass 42
+
+2023/06/29/ 00:11:54
+STARTING RUN 085 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, LS
+Comments: PO mass 42
+2023/06/29/ 00:23:02
+STOPPING RUN 085
+Shifters: HF, MM, CW, EJ, LS
+
+2023/06/29/ 00:23:10
+STARTING RUN 086 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, LS
+2023/06/29/ 01:41:22
+STOPPING RUN 086
+Shifters: HF, MM, CW, EJ, LS
+
+2023/06/29/ 01:41:29
+STARTING RUN 087 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, LS
+2023/06/29/ 02:57:30
+STOPPING RUN 087
+Shifters: HF, MM, CW, EJ, LS
+
+2023/06/29/ 02:57:40
+STARTING RUN 088 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, CW, EJ, LS
+2023/06/29/ 04:16:28
+STOPPING RUN 088
+Shifters: HF, MM, JSN
+
+2023/06/29/ 04:16:39
+STARTING RUN 089 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, JSN
+2023/06/29/ 06:04:57
+MID-RUN COMMENTS FOR RUN 089
+Shifters: HF, MM, JSN
+Comments: From 21:30 to 00:00 on June 29th (EDT time zone) trigger rates in U1 and U2 continually got larger to the point where it leaked into our accepted trigger rates.[LINEBREAK]It has sorted itself out, seemingly, around 00:00. Should keep an eye on it
+2023/06/29/ 06:05:03
+STOPPING RUN 089
+Shifters: HF, MM, JSN
+Comments: From 21:30 to 00:00 on June 29th (EDT time zone) trigger rates in U1 and U2 continually got larger to the point where it leaked into our accepted trigger rates.[LINEBREAK]It has sorted itself out, seemingly, around 00:00. Should keep an eye on it
+
+2023/06/29/ 06:05:09
+STARTING RUN 090 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF, MM, JSN
+Comments: From 21:30 to 00:00 on June 29th (EDT time zone) trigger rates in U1 and U2 continually got larger to the point where it leaked into our accepted trigger rates.
+It has sorted itself out, seemingly, around 00:00. Should keep an eye on it
+2023/06/29/ 08:17:00
+STOPPING RUN 090
+Shifters: HF, MM, JSN
+
+2023/06/29/ 08:17:25
+STARTING RUN 091 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, LS, EJ
+2023/06/29/ 09:05:22
+STOPPING RUN 091
+Shifters: LW, LS, EJ
+
+2023/06/29/ 09:06:03
+IN-BETWEEN RUN COMMENTS
+Shifters: LW, LS, EJ
+Comments: beam control having a bit of trouble with one of their dipoles. "will be just a few minutes"
+
+2023/06/29/ 09:24:56
+STARTING RUN 092 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, LS, EJ
+2023/06/29/ 09:28:26
+MID-RUN COMMENTS FOR RUN 092
+Shifters: LW, LS, EJ
+Comments: beam is back
+2023/06/29/ 11:27:11
+STOPPING RUN 092
+Shifters: LW, EJ
+
+2023/06/29/ 11:27:19
+STARTING RUN 093 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+ --- DAQ OUTAGE ---
+2023/06/29/ 12:14:29
+STARTING RUN 094 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+Comments: brief daq outage
+2023/06/29/ 13:13:51
+STOPPING RUN 094
+Shifters: LW, EJ
+
+2023/06/29/ 13:14:00
+STARTING RUN 095 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+2023/06/29/ 14:27:45
+STOPPING RUN 095
+Shifters: LW, EJ
+
+2023/06/29/ 14:28:02
+STARTING RUN 096 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD
+Comments: Starting new run after 75 min
+2023/06/29/ 14:30:33
+STOPPING RUN 096
+Shifters: JSN, JD
+
+2023/06/29/ 14:32:01
+STARTING RUN 097 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD
+2023/06/29/ 15:47:02
+STOPPING RUN 097
+Shifters: JSN, JD
+
+2023/06/29/ 15:53:56
+STARTING RUN 098 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 25Si		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+2023/06/29/ 16:58:58
+STOPPING RUN 098
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+
+2023/06/29/ 16:59:08
+STARTING RUN 099 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 25Si		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+2023/06/29/ 17:59:09
+STOPPING RUN 099
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+
+2023/06/29/ 17:59:21
+STARTING RUN 100 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 25Si		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+2023/06/29/ 18:59:22
+STOPPING RUN 100
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+
+2023/06/29/ 18:59:30
+STARTING RUN 101 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 25Si		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Taking mass 57 (25Si + 2*O) for background measurement
+2023/06/29/ 19:54:34
+STOPPING RUN 101
+Shifters: JSN, JD, HF, CW
+Comments: Ending 25Si run
+
+2023/06/29/ 20:05:14
+STARTING RUN 102 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 27S		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Taking 27S at mass 43
+2023/06/29/ 21:02:48
+STOPPING RUN 102
+Shifters: JSN, JD, HF, CW
+Comments: Taking 27S at mass 43
+
+2023/06/29/ 21:07:30
+STARTING RUN 103 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Back to taking 26P at mass 42
+2023/06/29/ 22:13:21
+STOPPING RUN 103
+Shifters: JSN, JD, HF, CW
+Comments: Back to taking 26P at mass 42
+
+2023/06/29/ 22:13:46
+STARTING RUN 104 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Restarting file to do yield analysis
+2023/06/29/ 23:16:12
+STOPPING RUN 104
+Shifters: JSN, JD, HF, CW
+Comments: Restarting file to do yield analysis
+
+2023/06/29/ 23:16:21
+STARTING RUN 105 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Restarting file to do yield analysis
+2023/06/30/ 00:21:34
+STOPPING RUN 105
+Shifters: JSN, JD, HF, CW
+Comments: Restarting file to do yield analysis
+
+2023/06/30/ 00:21:41
+STARTING RUN 106 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, HF, CW
+Comments: Restarting file to do yield analysis
+2023/06/30/ 01:21:43
+STOPPING RUN 106
+Shifters: HF
+
+2023/06/30/ 01:21:52
+STARTING RUN 107 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF
+2023/06/30/ 02:21:53
+STOPPING RUN 107
+Shifters: HF
+
+2023/06/30/ 02:22:02
+STARTING RUN 108 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF
+2023/06/30/ 03:22:08
+STOPPING RUN 108
+Shifters: HF
+
+2023/06/30/ 03:22:16
+STARTING RUN 109 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF
+2023/06/30/ 04:22:18
+STOPPING RUN 109
+Shifters: HF
+
+2023/06/30/ 04:22:25
+STARTING RUN 110 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF
+2023/06/30/ 05:22:27
+STOPPING RUN 110
+Shifters: HF
+
+2023/06/30/ 05:22:34
+STARTING RUN 111 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF
+2023/06/30/ 05:48:25
+IN-BETWEEN RUN COMMENTS
+Shifters: HF
+Comments: previous run not gracefully stopped due to vpn drop
+
+2023/06/30/ 05:48:36
+IN-BETWEEN RUN COMMENTS
+Shifters: HF
+Comments: previous run not gracefully stopped due to vpn drop -- run 111
+
+2023/06/30/ 05:48:39
+STARTING RUN 112 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: HF
+2023/06/30/ 05:48:53
+MID-RUN COMMENTS FOR RUN 112
+Shifters: AA, TW, EJ
+Comments: .
+2023/06/30/ 05:50:50
+STOPPING RUN 112
+Shifters: AA, TW, EJ
+
+2023/06/30/ 05:50:57
+STARTING RUN 113 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: AA, TW, EJ
+2023/06/30/ 07:04:09
+STOPPING RUN 113
+Shifters: AA, TW, EJ
+
+2023/06/30/ 07:04:17
+STARTING RUN 114 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: AA, TW, EJ
+2023/06/30/ 08:11:37
+STOPPING RUN 114
+Shifters: AA, TW, EJ
+
+2023/06/30/ 08:11:52
+STARTING RUN 115 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+2023/06/30/ 09:23:17
+STOPPING RUN 115
+Shifters: LW, EJ
+
+2023/06/30/ 09:23:28
+STARTING RUN 116 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+2023/06/30/ 10:22:18
+STOPPING RUN 116
+Shifters: LW, EJ
+
+2023/06/30/ 10:22:43
+STARTING RUN 117 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+2023/06/30/ 11:33:13
+STOPPING RUN 117
+Shifters: LW, EJ
+
+2023/06/30/ 11:33:21
+STARTING RUN 118 - RUNTYPE=RUN
+Facility: FRIB		Experiment: 21010
+Beam: 26P		Beam energy: 30 keV		Target: C
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: LW, EJ
+2023/06/30/ 12:47:22
+STOPPING RUN 118
+Shifters: LW, EJ
+Comments: final radioactive beam of the experiment. measuring on the beam off part as well. Friday June 30th at 6:45 am beam is off
+
+2023/06/30/ 14:22:49
+STARTING RUN 119 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: HPGE(0)
+Shifters: HF, EJ
+Comments: Background, only with germanium trigger. Foil removed from chamber
+2023/06/30/ 14:25:09
+STARTING RUN 120 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: Background		Beam energy: -		Target: -
+Triggers: HPGE(0)
+Shifters: HF, EJ
+Comments: Background, only with germanium trigger. Foil removed from chamber
+2023/06/30/ 14:25:21
+MID-RUN COMMENTS FOR RUN 120
+Shifters: HF, EJ
+Comments: Run 119 is bad
+2023/06/30/ 15:26:11
+STOPPING RUN 120
+Shifters: HF, EJ
+
+2023/06/30/ 16:02:14
+STARTING RUN 121 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 152Eu		Beam energy: -		Target: HPGES
+Triggers: HPGE(0)
+Shifters: HF, EJ
+Comments: 152Eu efficiency calibration. Placed as close to implantation point as possible
+2023/06/30/ 17:31:03
+STOPPING RUN 121
+Shifters: HF, EJ
+Comments: 152Eu efficiency calibration. Placed as close to implantation point as possible
+
+2023/06/30/ 17:56:16
+STARTING RUN 122 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 226Ra		Beam energy: -		Target: HPGES
+Triggers: HPGE(0)
+Shifters: JSN, JD, EJ
+Comments: 226Ra gamma calibration
+2023/06/30/ 18:32:46
+STOPPING RUN 122
+Shifters: JSN, JD, EJ
+Comments: 226Ra gamma calibration
+
+2023/06/30/ 18:58:05
+STARTING RUN 123 - RUNTYPE=PULSER
+Facility: FRIB		Experiment: 21010
+Beam: -		Beam energy: -		Target: Silicons
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0)
+Shifters: JSN, JD, EJ, HF
+Comments: ramping pulser sequence from "zero" to ADC channel 700~1000
+2023/06/30/ 19:01:32
+STOPPING RUN 123
+Shifters: JSN, JD, EJ, HF
+Comments: ramping pulser sequence from "zero" to ADC channel 700~1000
+
+2023/06/30/ 19:41:59
+STARTING RUN 124 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U6
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U6
+2023/06/30/ 19:57:04
+STOPPING RUN 124
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U6
+
+2023/06/30/ 19:57:54
+STARTING RUN 125 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U3, U4
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U3,U4
+2023/06/30/ 20:06:26
+STOPPING RUN 125
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U3,U4
+
+2023/06/30/ 20:06:44
+STARTING RUN 126 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U3, U4
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U3,U4, restart because stopped writing to file
+2023/06/30/ 20:32:20
+STOPPING RUN 126
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U3,U4, restart because stopped writing to file
+
+2023/06/30/ 20:32:52
+STARTING RUN 127 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U5
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U5
+2023/06/30/ 20:43:48
+MID-RUN COMMENTS FOR RUN 127
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U5
+Front strip 7 appears to have died. When attempting to see if there was a loose connection, we pushed on the cables after which the peaks shifted in Go4.
+2023/06/30/ 20:50:49
+STOPPING RUN 127
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U5
+Front strip 7 appears to have died. When attempting to see if there was a loose connection, we pushed on the cables after which the peaks shifted in Go4.
+
+2023/06/30/ 20:51:41
+STARTING RUN 128 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: U1, U2
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U1, U2
+2023/06/30/ 21:10:13
+STOPPING RUN 128
+Shifters: JSN, JD, LS, AA, HF
+Comments: 3a source calibration of U1, U2
+
+2023/07/01/ 15:55:54
+STARTING RUN 129 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P1, P2
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, EJ
+Comments: 3a source calibration of P1, P2
+2023/07/01/ 16:04:29
+STOPPING RUN 129
+Shifters: JSN, HF, EJ
+Comments: 3a source calibration of P1, P2
+
+2023/07/01/ 16:06:01
+STARTING RUN 130 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P3, P4
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, EJ
+Comments: 3a source calibration of P3, P4
+2023/07/01/ 16:13:15
+STOPPING RUN 130
+Shifters: JSN, HF, EJ
+Comments: 3a source calibration of P3, P4
+
+2023/07/01/ 17:08:39
+STARTING RUN 131 - RUNTYPE=CALIBRATION
+Facility: FRIB		Experiment: 21010
+Beam: 3a		Beam energy: -		Target: P6
+Triggers: DET1(0), DET2(0), DET3(0), DET4(0), DET5(0), DET6(0), PADS(0), HPGE(0)
+Shifters: JSN, HF, EJ
+Comments: 3a source calibration of P6
+2023/07/01/ 17:15:39
+STOPPING RUN 131
+Shifters: JSN, HF, EJ
+Comments: 3a source calibration of P6
+
