@@ -316,7 +316,7 @@
     {
       "name": "P5",
       "file": "AUPAD_1458_00.json",
-      "calibration": "P1_sical.cal",
+      "calibration": "P1_alfa.cal",
       "position": {
         "x": "0mm",
         "y": "49mm",

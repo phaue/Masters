@@ -74,10 +74,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       else{
         cout<<"No specification on the input isotope?? Hello?" << endl;
       } 
-        origin = target->getCenter() + (target->getThickness() / 2. - implantation_depth) * target->getNormal();
-        cout << "target center=(" << target->getCenter().X() << ", " << target->getCenter().Y() << ", " << target->getCenter().Z() << ")" << endl
-         << " implantation=(" << origin.X() << ", " << origin.Y() << ", " << origin.Z() << ")" << endl
-         << "target thickness=" << target->getThickness() << endl;
+        
+      origin = target->getCenter() + (target->getThickness() / 2. - implantation_depth) * target->getNormal();
+      //  cout << "target center=(" << target->getCenter().X() << ", " << target->getCenter().Y() << ", " << target->getCenter().Z() << ")" << endl
+      //   << " implantation=(" << origin.X() << ", " << origin.Y() << ", " << origin.Z() << ")" << endl
+      //   << "target thickness=" << target->getThickness() << endl;
 
         //Define all the detectors in the setup using the Detector.h file
               //betacutoff can now be determined for U1 U2 U3 U4
@@ -92,7 +93,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, Proton, setupSpecs);
         P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
-        //P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); // this pad detector is dead
+        //P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); 
         //P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
 
         G1 = new Detector_frib(12, "G1", HPGe, Gamma, setupSpecs);
@@ -175,6 +176,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         v_BT = make_unique<DynamicBranchVector<double>>(*tree, "BT", "mul");
 
         v_E = make_unique<DynamicBranchVector<double>>(*tree, "E", "mul");
+        v_Ea = make_unique<DynamicBranchVector<double>>(*tree, "Ea", "mul");
+
 
         //tree->Branch("Theta", &Theta); // wat the fuck is this
         //tree->Branch("Omega", &Omega);// what the fuck is this
@@ -196,7 +199,15 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       pTargetCalcs.push_back(defaultRangeInverter(Ion::predefined("p"), layer.getMaterial()));
       //eloss of protons in target material
     }
+
+    aSiCalc = defaultRangeInverter("a", "Silicon");
+    for (auto &layer: target->getLayers()) {
+      aTargetCalcs.push_back(defaultRangeInverter(Ion::predefined("a"), layer.getMaterial()));
+    }
+
+
     }//General analysis class
+
 
     virtual void specificAnalysis() =0;
 
@@ -368,6 +379,14 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             E += calc->getTotalEnergyCorrection(E, intersection.transversed);
           }//forloop for E energy correction
           hit->E = E; // set the energy of the hit to this energy corrected value
+          
+          double Ea = hit->Edep/1.014;
+          Ea += aSiCalc->getTotalEnergyCorrection(Ea, fdl);
+          for (auto &intersection: target->getIntersections(from, origin)) {
+              auto &calc = aTargetCalcs[intersection.index];
+              Ea += calc->getTotalEnergyCorrection(Ea, intersection.transversed);
+          }
+          hit->Ea = Ea;
 
         }//treatDSSSDHit
 
@@ -461,6 +480,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             v_BT->add(hit->BT);
 
             v_E->add(hit->E);
+            v_Ea->add(hit->Ea);
             mul++;
             //p = true
             }//addDSSSDHit
@@ -523,7 +543,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         *v_theta, *v_phi, *v_angle,
         *v_Edep, *v_fEdep, *v_bEdep,
         *v_FI, *v_BI, *v_FE, *v_BE, *v_FT, *v_BT,
-        *v_E
+        *v_E, *v_Ea
             );
         hits.clear();
         }//clear
@@ -562,12 +582,14 @@ unique_ptr<DynamicBranchVector<double>> v_Edep, v_fEdep, v_bEdep;
 unique_ptr<DynamicBranchVector<unsigned short>> v_FI, v_BI;
 unique_ptr<DynamicBranchVector<double>> v_FE, v_BE;
 unique_ptr<DynamicBranchVector<double>> v_FT, v_BT;
-unique_ptr<DynamicBranchVector<double>> v_E;
+unique_ptr<DynamicBranchVector<double>> v_E, v_Ea;
 
 vector<Hit> hits;
 unique_ptr<EnergyLossRangeInverter> pSiCalc;
 unique_ptr<EnergyLossRangeInverter> pAlCalc;
+unique_ptr<EnergyLossRangeInverter> aSiCalc;
 vector<unique_ptr<EnergyLossRangeInverter>> pTargetCalcs;
+vector<unique_ptr<EnergyLossRangeInverter>> aTargetCalcs;
 
 }; //Class GeneralAnalysis
 #endif
