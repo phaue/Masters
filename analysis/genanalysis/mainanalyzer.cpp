@@ -144,11 +144,7 @@ class SingleProton : public GeneralAnalysis{
           if(telescope_success){
 
             if(dsssd_det->getBananaCut()->isSatisfied(pad_hit->Edep, dsssd_hit->Edep)){
-            /// troubleshooting 
-            //my script doesnt work with the isSatisfied call
 
-
-            ///
             
             telescope_frontside_successes.emplace(dsssd_hit);
             telescope_backside_successes.emplace(pad_hit);
@@ -170,6 +166,70 @@ class SingleProton : public GeneralAnalysis{
   }//specificanalysis
 };//singleproton
 
+class GammaSpec : public GeneralAnalysis {
+  public:
+  GammaSpec(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+                    bool _include_banana_cuts=false, bool _include_beta_region =false)
+        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
+                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
+
+  void specificAnalysis() override {
+    if (hits.empty()) return;
+
+    unordered_set<Hit*> telescope_frontside_candidates;
+    unordered_set<Hit*> telescope_backside_candidates;
+
+    for(auto &hit : hits) {
+      auto det = hit.detector;
+      switch(det->getType()) {
+        case DSSSD:
+          if(det->hasPartner()){
+            telescope_frontside_candidates.emplace(&hit);
+            }
+            else { //U5 doesnt have a partner so we need to treat it aswell
+              treatDSSSDHit(&hit);
+              addDSSSDHit(&hit);
+              }
+        case Pad:
+          telescope_backside_candidates.emplace(&hit);
+          break;
+      default: //treats the rest of the cases such as NoType and HPGe
+        break;
+      }//switch
+    }//for hit in hits
+
+    unordered_set<Hit*> telescope_frontside_successes;
+    unordered_set<Hit*> telescope_backside_successes;
+    for(auto dsssd_hit : telescope_frontside_candidates) {
+      auto dsssd_det = dsssd_hit->detector;
+      for(auto pad_hit : telescope_backside_candidates) {
+        auto pad_det = pad_hit->detector;
+        if(dsssd_det->getPartner() == pad_det){
+          bool telescope_success = treatTelescopeHit(dsssd_hit, pad_hit);
+          if(telescope_success){
+            telescope_frontside_successes.emplace(dsssd_hit);
+            telescope_backside_successes.emplace(pad_hit);
+            addTelescopeHit(dsssd_hit, pad_hit);
+/*
+            Each hit in the DSSSD is paired with all pad hits and this is done for each hit in the DSSSD
+            This creates multiple pairings between the two
+ */
+          }//if telescope hit is a success
+        }//if dsssd and pad is partnered
+      }//for each pad hit in telescope backside candidates
+    }// for each dsssd hit in telescope frontside candidates
+
+    for(auto hit : telescope_frontside_successes){
+      telescope_frontside_candidates.erase(hit);
+      }//removes all hits that were a success from the frontside candidates
+      
+    for(auto hit : telescope_frontside_candidates){
+      treatDSSSDHit(hit);
+      addDSSSDHit(hit);
+      }//treats the leftover non-matched dsssd hits.
+  }//specificanalysis
+};//Gammaspec
 
 class AboveBananaAnalysis : public U1analysis{
   public : AboveBananaAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
@@ -351,6 +411,10 @@ for(auto &runpart : input){
     }//type of analysis can add more else 
   else if(specificAnalysis == "SingleProton"){
     analysis = make_shared<SingleProton>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
+                                          include_spurious_zone, include_banana_cuts, include_beta_region);
+    }
+  else if(specificAnalysis == "GammaSpec"){
+    analysis = make_shared<GammaSpec>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
   else if(specificAnalysis == "AboveBananaAnalysis"){

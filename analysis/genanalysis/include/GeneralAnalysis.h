@@ -83,18 +83,18 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //Define all the detectors in the setup using the Detector.h file
               //betacutoff can now be determined for U1 U2 U3 U4
         U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
-        U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
-        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
-        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);// should change according to thicknesses
-        //U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 500.);
-        //U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 500.);
+        U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 400.);
+        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 350.);
+        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 750.);// should change according to thicknesses
+        U5 = new Detector_frib(4, "U5", DSSSD, Alpha, setupSpecs, 1500.);
+        U6 = new Detector_frib(5, "U6", DSSSD, Alpha, setupSpecs, 400.);
 
         P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, Proton, setupSpecs);
         P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
-        //P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); 
-        //P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
+        P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); 
+        P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
 
         G1 = new Detector_frib(12, "G1", HPGe, Gamma, setupSpecs);
         G2 = new Detector_frib(13, "G2", HPGe, Gamma, setupSpecs);
@@ -104,8 +104,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         makePartners(U2, P2);
         makePartners(U3, P3);
         makePartners(U4, P4);
-        //makePartners(U5, P5); pad 5 is dead so no reason to do this
-        //makePartners(U6, P6);
+        makePartners(U6, P6);
 
         if (include_banana_cuts) {
         // need to set the banana cuts here when they are done example of how this is done is seen below
@@ -114,7 +113,10 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
               U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU2", include_region));
               U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU3", include_region));
               U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU4", include_region));
-          } catch (const runtime_error &e) {
+              
+              U6->setBananaCut(new gCut(getProjectRoot() + "data/cuts/U6cut.root", "CUTG", include_region));
+
+            } catch (const runtime_error &e) {
               cerr << "Error initializing banana cuts: " << e.what() << endl;
               throw;
           }
@@ -128,27 +130,28 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         pU2P2 = new TelescopeTabulation(setupSpecs, target, "U2", "P2", "p");
         pU3P3 = new TelescopeTabulation(setupSpecs, target, "U3", "P3", "p");
         pU4P4 = new TelescopeTabulation(setupSpecs, target, "U4", "P4", "p");
-        //pU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "p");
+        pU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "p");
 
 
         //Sets the implantation depth for all the tabulations missing , pU6P6, aU6P6
-          for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4}) {
+          for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4, pU6P6}) {
           tabulations->setImplantationDepth(implantation_depth);}
         
-        pU1P1->setESignalThreshold(340.);   
+        pU1P1->setESignalThreshold(280.);   
         pU2P2->setESignalThreshold(340.); 
         pU3P3->setESignalThreshold(180.); 
         pU4P4->setESignalThreshold(350.); 
-        //pU6P6->setESignalThreshold(220.); aU6P6->setESignalThreshold(220.);
+        pU6P6->setESignalThreshold(220.);
 
         U1->addTelescopeTabulation(pU1P1);
         U2->addTelescopeTabulation(pU2P2);
         U3->addTelescopeTabulation(pU3P3);
         U4->addTelescopeTabulation(pU4P4);
-        //U6->addTelescopeTabulation(pU6P6); U6->addTelescopeTabulation(aU6P6);
+        U6->addTelescopeTabulation(pU6P6);
 
 //missing U5, U6, P5, P6
-        detectors.insert({U1, U2, U3, U4, P1, P2, P3, P4, G1, G2}); 
+        detectors.insert({U1, U2, U3, U4, U5, U6, P1, P2, P3, P4, P5, P6, G1, G2}); 
+        //detectors.insert({U1, U2, U3, U4, P1, P2, P3, P4, G1, G2}); 
 
         output->cd(); //something about output file used for mid-analysis dumping
         tree = new TTree("a", "a");
@@ -185,7 +188,9 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         tree->Branch("Eg1", &Eg1); 
         tree->Branch("Eg2", &Eg2); 
 
-        //tree->Branch("pg", &pg); //most likely this is proton gated gamma smth
+        tree->Branch("pg1", &pg1); 
+        tree->Branch("pg2", &pg2); 
+        //tree->Branch("bg", &bg);
         //tree->Branch("CLOCK", &CLOCK);
 
     pSiCalc = defaultRangeInverter("p", "Silicon"); //Eloss in detector material of protons
@@ -226,7 +231,9 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //CLOCK = clock.getValue();
         findHits();
         specificAnalysis();
-        //pg = p && g; perhaps useable for some proton gamma coincidences
+        pg1 = p && g1;
+        pg2 = p && g2;
+        //bg = b && g;
         tree->Fill();
         NUM++; //counts number of events
       }//analyze
@@ -239,8 +246,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
     void findHits() {
         for(const auto &det: detectors) {
           if (exclude_hpges && det->getType() == HPGe) continue;
-          if (exclude_U5 && det->getName() == "U5") continue;
-
           auto type = det->getType();
           switch (type) {
             case DSSSD:
@@ -353,11 +358,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           for (int i=0;i<MUL; i++){
             if (id == G1->getId()){
               Eg1 = out.energy(i);
-              //g = true;
+              g1 = true;
             }
             if (id == G2->getId()){
               Eg2 = out.energy(i);
-              //g=true;
+              g2=true;
             }
           }
         }
@@ -380,7 +385,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }//forloop for E energy correction
           hit->E = E; // set the energy of the hit to this energy corrected value
           
-          double Ea = hit->Edep/1.014;
+          double Ea = hit->Edep;
           Ea += aSiCalc->getTotalEnergyCorrection(Ea, fdl);
           for (auto &intersection: target->getIntersections(from, origin)) {
               auto &calc = aTargetCalcs[intersection.index];
@@ -410,6 +415,10 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         bool treatTelescopeHit(Hit *dsssd_hit, Hit *pad_hit) {
           // if there is no energy recorded in either then there is no telescope hit therefore return false
           if (dsssd_hit->Edep == 0 || pad_hit->Edep == 0) return false;
+          if (dsssd_hit->detector->getName()=="U4"){
+          if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
+            b = true;
+          }}
 
           auto front_det = dsssd_hit->detector;
           auto back_det = pad_hit->detector;
@@ -422,8 +431,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           auto back_det_fdl = back_det->getFrontDeadLayer()/abs(cos(angle));
           double E = pad_hit->Edep;
           if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
-            E *= 1.014; // This value is extracted from Eriks thesis as a multiplier to somewhat account
-                //for the poorer calibrations of the pad detectors.
+              E*= 1.014;
           }//if statement
           //Energy correction for protons in the
           E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_fdl);
@@ -482,7 +490,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             v_E->add(hit->E);
             v_Ea->add(hit->Ea);
             mul++;
-            //p = true
+            p = true;
             }//addDSSSDHit
 
         void addTelescopeHit(Hit *dsssd_hit, Hit *pad_hit){
@@ -502,6 +510,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
             v_E->add(dsssd_hit->E);
             mul++;
+            p = true;
             }//addTelescopeHit
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -536,6 +545,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //We need to clear the memory - done manually in cpp
         //must clear all assigned variables used in analysis before going again
         mul = 0;
+        p = g1 = g2 = pg1 = pg2 = b = bg = false;
         Eg1, Eg2 = NAN;
         AUSA::clear(
         *v_id,
@@ -560,13 +570,13 @@ shared_ptr<Setup> setupSpecs;
 shared_ptr<Target> target;
 double implantation_depth;
 string isotopetype;
-bool exclude_hpges, exclude_U5, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
-//
-TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4;//, *pU6P6;
+bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
+Bool_t p, g1, g2, pg1, pg2, b, bg;
+TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
 
 
 unordered_set<Detector_frib *> detectors;
-Detector_frib *U1, *U2, *U3, *U4, *P1, *P2, *P3, *P4, *G1, *G2;//, *U5, *U6, *P5, *P6
+Detector_frib *U1, *U2, *U3, *U4, *U5, *U6, *P1, *P2, *P3, *P4, *P5, *P6, *G1, *G2;//, *U5, *U6, *P5, *P6
 
 TTree *tree; //defines the tree in which we save the new parameters
 int NUM;

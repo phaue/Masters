@@ -17,7 +17,7 @@ include_directories(include)
 add_subdirectory(analysis/genanalysis)
 add_subdirectory(calibration/pad_calibration)
 add_subdirectory(calibration/dssd_calibration)
-add_subdirectory(sim)
+add_subdirectory(angle_effect)
 
 #This makes it so i can build from the Masters, and simply build all of the analyses at once
 # seems quite convenient, however i can still do it the old way inside the specific analysis
