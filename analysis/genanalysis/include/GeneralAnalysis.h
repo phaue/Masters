@@ -190,6 +190,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         tree->Branch("pg1", &pg1); 
         tree->Branch("pg2", &pg2); 
+        tree->Branch("peak", &peakval);
+        tree->Branch("Egated", &Egated);
         //tree->Branch("bg", &bg);
         //tree->Branch("CLOCK", &CLOCK);
 
@@ -534,6 +536,9 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           //p = true
         }//addPadHit
 
+        static bool GammaGate(double E, double Emin, double Emax){
+          return Emin <= E && E <= Emax;
+        }
 
         //code that runs after all events have been analyzed
       void terminate() override { //after analyzing we need to terminate the program
@@ -546,7 +551,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //must clear all assigned variables used in analysis before going again
         mul = 0;
         p = g1 = g2 = pg1 = pg2 = b = bg = false;
-        Eg1, Eg2 = NAN;
+        Eg1, Eg2, peakval, Egated= NAN;
         AUSA::clear(
         *v_id,
         *v_dir, *v_pos,
@@ -584,7 +589,7 @@ int NUM;
 UInt_t mul{}, CLOCK{}; //TPATTERN{}, TPROTONS{},
 SortedSignal clock; //tpattern, tprotons, are these tprotons the time related to the measurements?
 
-Double_t Eg1, Eg2;
+Double_t Eg1, Eg2, peakval, Egated;
 unique_ptr<DynamicBranchVector<unsigned short>> v_id;
 unique_ptr<DynamicBranchVector<TVector3>> v_dir, v_pos;
 unique_ptr<DynamicBranchVector<double>> v_theta, v_phi, v_angle;

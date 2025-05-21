@@ -191,6 +191,7 @@ class GammaSpec : public GeneralAnalysis {
               treatDSSSDHit(&hit);
               addDSSSDHit(&hit);
               }
+              break;
         case Pad:
           telescope_backside_candidates.emplace(&hit);
           break;
@@ -230,6 +231,98 @@ class GammaSpec : public GeneralAnalysis {
       }//treats the leftover non-matched dsssd hits.
   }//specificanalysis
 };//Gammaspec
+
+class GammaGatedProtons : public GeneralAnalysis {
+  public:
+  GammaGatedProtons(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+                    bool _include_banana_cuts=false, bool _include_beta_region =false, vector<vector<int>> _peakSets = {})
+        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
+                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region), peakSets(_peakSets) {}
+
+  void specificAnalysis() override {
+    if (hits.empty()) return;
+  
+
+      //cout << "peak: " << "Emin" << peak[0] << "Emax" << peak[1] << "nr. peak" << peak[2]<< endl;
+    bool success = false;
+    bool accepted_gamma = false;
+    for (auto &hit : hits){
+      if (g1 || g2){ // if either G1 or G2 is hit
+        //cout << "Eg1 =  " << Eg1 << "   Eg2 =    " << Eg2 << endl;
+        //for (const auto &peak : peakSets){ // check each peak region if the gamma energy falls in that region
+        if (GammaGate(Eg1, peakSets[0][0], peakSets[0][1])) { // check whether or not Eg1 falls in the gamma peak region
+            accepted_gamma = true;
+            //peakval = peak[2];
+            Egated = Eg1; // if so add its energy to "gated energies"
+        }
+        else if (GammaGate(Eg2, peakSets[0][0], peakSets[0][1])){ // same for Eg2
+            accepted_gamma = true;
+            //peakval = peak[2];
+            Egated = Eg2;
+        }
+      //}// for peak in peaks
+      }} // i do believe that Eg1 and Eg2 displays what peaks comes in coincidence with a specific Egate since only evetns where accepted_gamma is true are saved
+    if(!accepted_gamma) return;
+
+    unordered_set<Hit*> telescope_frontside_candidates;
+    unordered_set<Hit*> telescope_backside_candidates;
+
+
+    for(auto &hit : hits) {
+      auto det = hit.detector;
+      switch(det->getType()) {
+        case DSSSD:
+          if(det->hasPartner()){
+            telescope_frontside_candidates.emplace(&hit);
+            }
+            else { //U5 doesnt have a partner so we need to treat it aswell
+              treatDSSSDHit(&hit);
+              addDSSSDHit(&hit);
+              }
+            break;
+        case Pad:
+          telescope_backside_candidates.emplace(&hit);
+          break;
+      default: //treats the rest of the cases such as NoType and HPGe
+        break;
+      }//switch
+    }//for hit in hits
+
+    unordered_set<Hit*> telescope_frontside_successes;
+    unordered_set<Hit*> telescope_backside_successes;
+    for(auto dsssd_hit : telescope_frontside_candidates) {
+      auto dsssd_det = dsssd_hit->detector;
+      for(auto pad_hit : telescope_backside_candidates) {
+        auto pad_det = pad_hit->detector;
+        if(dsssd_det->getPartner() == pad_det){
+          bool telescope_success = treatTelescopeHit(dsssd_hit, pad_hit);
+          if(telescope_success){
+            telescope_frontside_successes.emplace(dsssd_hit);
+            telescope_backside_successes.emplace(pad_hit);
+            addTelescopeHit(dsssd_hit, pad_hit);
+/*
+            Each hit in the DSSSD is paired with all pad hits and this is done for each hit in the DSSSD
+            This creates multiple pairings between the two
+ */
+          }//if telescope hit is a success
+        }//if dsssd and pad is partnered
+      }//for each pad hit in telescope backside candidates
+    }// for each dsssd hit in telescope frontside candidates
+
+    for(auto hit : telescope_frontside_successes){
+      telescope_frontside_candidates.erase(hit);
+      }//removes all hits that were a success from the frontside candidates
+      
+    for(auto hit : telescope_frontside_candidates){
+      treatDSSSDHit(hit);
+      addDSSSDHit(hit);
+      }//treats the leftover non-matched dsssd hits.
+  }//specificanalysis
+  private:
+    vector<vector<int>> peakSets;
+};//GammaGatedProtons
+
 
 class AboveBananaAnalysis : public U1analysis{
   public : AboveBananaAnalysis(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
@@ -416,6 +509,10 @@ for(auto &runpart : input){
   else if(specificAnalysis == "GammaSpec"){
     analysis = make_shared<GammaSpec>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
+    }
+  else if(specificAnalysis == "GammaGatedProtons"){
+    analysis = make_shared<GammaGatedProtons>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
+                                          include_spurious_zone, include_banana_cuts, include_beta_region, peaks);
     }
   else if(specificAnalysis == "AboveBananaAnalysis"){
     U1ana = make_shared<AboveBananaAnalysis>(setup, target, &output, isotopetype, Only_U1);

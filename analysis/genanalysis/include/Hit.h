@@ -21,7 +21,7 @@ struct Hit{
   double FT, BT;
   double Edep; //average energy of FE and BE --> FE+BE /2
 
-  double E, Ea, Eg; // energy? alpha energy and gamma energy.
+  double E, Ea, Eg; // energy
   };
 
  #endif
