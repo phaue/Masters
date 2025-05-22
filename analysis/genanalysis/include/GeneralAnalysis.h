@@ -190,9 +190,10 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         tree->Branch("pg1", &pg1); 
         tree->Branch("pg2", &pg2); 
-        tree->Branch("peak", &peakval);
         tree->Branch("Egated", &Egated);
-        //tree->Branch("bg", &bg);
+        tree->Branch("bg1", &bg1);
+        tree->Branch("bg2", &bg2);
+        
         //tree->Branch("CLOCK", &CLOCK);
 
     pSiCalc = defaultRangeInverter("p", "Silicon"); //Eloss in detector material of protons
@@ -235,7 +236,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         specificAnalysis();
         pg1 = p && g1;
         pg2 = p && g2;
-        //bg = b && g;
+        bg1 = b && g1;
+        bg2 = b && g2;
         tree->Fill();
         NUM++; //counts number of events
       }//analyze
@@ -279,6 +281,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.id = id;
           hit.Edep = energy(out, i); // from AUSA
 
+          if(hit.Edep < 300) continue;
           if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
 
           auto FI = fSeg(out, i); // from AUSA
@@ -550,7 +553,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //We need to clear the memory - done manually in cpp
         //must clear all assigned variables used in analysis before going again
         mul = 0;
-        p = g1 = g2 = pg1 = pg2 = b = bg = false;
+        p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = false;
         Eg1, Eg2, peakval, Egated= NAN;
         AUSA::clear(
         *v_id,
@@ -576,7 +579,7 @@ shared_ptr<Target> target;
 double implantation_depth;
 string isotopetype;
 bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
-Bool_t p, g1, g2, pg1, pg2, b, bg;
+Bool_t p, g1, g2, pg1, pg2, b, bg1, bg2;
 TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
 
 
