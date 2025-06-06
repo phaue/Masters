@@ -1,10 +1,10 @@
 # AUSAlib version: 17.1
 # Calibrator version: 2.0
-# Calibrator arguments: Calibrator --eloss --gui -d P6 -k FRIB3a.json
+# Calibrator arguments: Calibrator --eloss -s ../../../../setup/setup.json -k ../../../../setup/3a_U6.json -d P6 --gui
 # Input files: 
-#	P6.root
+#	131_000.root
 # Calibration of P6
-# Performed @ 2023-06-23 23:24
-# Performed by jeppe on S540
+# Performed @ 2025-05-26 14:04
+# Performed by haue on DESKTOP-GH97AE3
 # SSD
--333.281 3.14393
+-317.845 3.1332

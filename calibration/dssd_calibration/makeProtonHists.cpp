@@ -41,8 +41,9 @@ int main(int argc, char* argv[]) {
   int strips = 16;
   Double_t xlow = 90.; Double_t xup = 2000.;
   map<string, TH1D*> hists;
-  for (const string& num : {"4"}) {
+  for (const string& num : {"4", "5"}) {
     if (num == "4") xlow = 90.;
+    if (num == "5") xlow = 200.;
     for (const string& side : {"F", "B"}) {
       for (int i = 0; i < strips; i++) {
         string name = "U" + num + side + to_string(i+1);
@@ -51,10 +52,14 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  UInt_t U4F, U4B;
+  UInt_t U4F, U4B, U5F, U5B;
   UInt_t U4F_E[strips], U4FI[strips], U4B_E[strips], U4BI[strips];
+  UInt_t U5F_E[strips], U5FI[strips], U5B_E[strips], U5BI[strips];
+
   c->SetBranchAddress("U4F", &U4F); c->SetBranchAddress("U4FI", U4FI); c->SetBranchAddress("U4F_E", U4F_E);
   c->SetBranchAddress("U4B", &U4B); c->SetBranchAddress("U4BI", U4BI); c->SetBranchAddress("U4B_E", U4B_E);
+  c->SetBranchAddress("U5F", &U5F); c->SetBranchAddress("U5FI", U5FI); c->SetBranchAddress("U5F_E", U5F_E);
+  c->SetBranchAddress("U5B", &U5B); c->SetBranchAddress("U5BI", U5BI); c->SetBranchAddress("U5B_E", U5B_E);
 
   system(("mkdir -p " + output_dir).c_str());
   std::unique_ptr<TFile> out = make_unique<TFile>((output_dir + "/ph.root").c_str(), "recreate");
@@ -63,6 +68,9 @@ int main(int argc, char* argv[]) {
   vector<detector_side> detector_sides = {
       {&U4F, U4FI, U4F_E, "U4F"},
       {&U4B, U4BI, U4B_E, "U4B"},
+      {&U5F, U5FI, U5F_E, "U5F"},
+      {&U5B, U5BI, U5B_E, "U5B"}
+
   };
   UInt_t mul, index, energy;
   string name;

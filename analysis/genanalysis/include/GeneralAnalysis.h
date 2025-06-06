@@ -84,9 +84,9 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
               //betacutoff can now be determined for U1 U2 U3 U4
         U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
         U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 400.);
-        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 350.);
+        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
         U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 750.);// should change according to thicknesses
-        U5 = new Detector_frib(4, "U5", DSSSD, Alpha, setupSpecs, 1500.);
+        U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 1500.);
         U6 = new Detector_frib(5, "U6", DSSSD, Alpha, setupSpecs, 400.);
 
         P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
@@ -109,12 +109,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         if (include_banana_cuts) {
         // need to set the banana cuts here when they are done example of how this is done is seen below
           try {
-              U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU1", include_region));
-              U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU2", include_region));
-              U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU3", include_region));
-              U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/banana_cuts.root", "bananaU4", include_region));
-              
-              U6->setBananaCut(new gCut(getProjectRoot() + "data/cuts/U6cut.root", "CUTG", include_region));
+              U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id0cut", include_region));
+              U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id1cut", include_region));
+              U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id2cut", include_region));
+              U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id3cut", include_region));
+              U6->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id5cut", include_region));
 
             } catch (const runtime_error &e) {
               cerr << "Error initializing banana cuts: " << e.what() << endl;
@@ -184,13 +183,14 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         //tree->Branch("Theta", &Theta); // wat the fuck is this
         //tree->Branch("Omega", &Omega);// what the fuck is this
-
+        
+        //This structure only saves 1 gamma event pr gamma detector pr hit
         tree->Branch("Eg1", &Eg1); 
         tree->Branch("Eg2", &Eg2); 
 
         tree->Branch("pg1", &pg1); 
         tree->Branch("pg2", &pg2); 
-        tree->Branch("Egated", &Egated);
+        
         tree->Branch("bg1", &bg1);
         tree->Branch("bg2", &bg2);
         
@@ -281,7 +281,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.id = id;
           hit.Edep = energy(out, i); // from AUSA
 
-          if(hit.Edep < 300) continue;
+          //if(hit.Edep < 150) continue;
           if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
 
           auto FI = fSeg(out, i); // from AUSA
@@ -334,6 +334,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.detector = detector;
           hit.id = id;
           hit.Edep = out.energy(i); // from AUSA
+          //if(hit.Edep < 150) continue;
 
           auto FI = out.segment(i);
           hit.FI = short(FI);
@@ -354,23 +355,25 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }//forloop
         }//findPadHit
 
+
+        
         void findGermaniumHit(Detector_frib *detector) {
           unsigned short id = detector->getId();
           auto &out = output.getSingleOutput(detector->getName());
           auto &d = out.detector();
           auto MUL = AUSA::mul(out);
-          
-          for (int i=0;i<MUL; i++){
-            if (id == G1->getId()){
-              Eg1 = out.energy(i);
-              g1 = true;
-            }
-            if (id == G2->getId()){
-              Eg2 = out.energy(i);
-              g2=true;
-            }
+          for (int i = 0; i < MUL; i++) {
+                  double energy = out.energy(i);
+                  if (id == G1->getId()) {
+                      Eg1 = energy;
+                      g1 = true;
+                  }
+                  if (id == G2->getId()) {
+                      Eg2 = energy;
+                      g2 = true;
+                  }
+              }
           }
-        }
 
 /*This function essentially sets the energy of the DSSSD hits to its true value by accounting for losses
             in the dead layer of the detector and the target
@@ -381,7 +384,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           //finds the front dead layer accounting for the thickness change with changing angle of incidence
           double fdl = det->getFrontDeadLayer()/abs(cos(angle));
 
-          double E = hit->Edep; // proton energy correction from the front dead layer and target layers
+          double E = hit->Edep;
+          if(det->getCalibration() == Alpha) {
+              E*= 1.012;
+          }//if statement
+          //double E = hit->Edep; // proton energy correction from the front dead layer and target layers
           E += pSiCalc -> getTotalEnergyCorrection(E, fdl);
           auto &from = hit->position;
           for (auto &intersection: target->getIntersections(from, origin)) {
@@ -420,9 +427,10 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         bool treatTelescopeHit(Hit *dsssd_hit, Hit *pad_hit) {
           // if there is no energy recorded in either then there is no telescope hit therefore return false
           if (dsssd_hit->Edep == 0 || pad_hit->Edep == 0) return false;
+
           if (dsssd_hit->detector->getName()=="U4"){
-          if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
-            b = true;
+              if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
+                  b = true;
           }}
 
           auto front_det = dsssd_hit->detector;
@@ -435,7 +443,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           auto back_det_fct = back_det->getBackContactThickness()/abs(cos(angle));
           auto back_det_fdl = back_det->getFrontDeadLayer()/abs(cos(angle));
           double E = pad_hit->Edep;
-          if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
+          if(back_det->getCalibration() == Alpha) {
               E*= 1.014;
           }//if statement
           //Energy correction for protons in the
@@ -443,7 +451,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           E+= pAlCalc -> getTotalEnergyCorrection(E, back_det_fct);
           E+= pAlCalc -> getTotalEnergyCorrection(E, front_det_bct);
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
-          E+= dsssd_hit->Edep;
+          double Edepped = dsssd_hit->Edep;
+          if(front_det->getCalibration() == Alpha) {
+              Edepped*= 1.012;
+          }//if statement
+          E+= Edepped;
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
           auto &from = dsssd_hit->position;
           for (auto &intersection: target->getIntersections(from, origin)) {
@@ -554,7 +566,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //must clear all assigned variables used in analysis before going again
         mul = 0;
         p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = false;
-        Eg1, Eg2, peakval, Egated= NAN;
+        Eg1, Eg2, Eg1mul, Eg2mul= NAN;
         AUSA::clear(
         *v_id,
         *v_dir, *v_pos,
@@ -592,7 +604,7 @@ int NUM;
 UInt_t mul{}, CLOCK{}; //TPATTERN{}, TPROTONS{},
 SortedSignal clock; //tpattern, tprotons, are these tprotons the time related to the measurements?
 
-Double_t Eg1, Eg2, peakval, Egated;
+Double_t Eg1, Eg2, Eg1mul, Eg2mul;
 unique_ptr<DynamicBranchVector<unsigned short>> v_id;
 unique_ptr<DynamicBranchVector<TVector3>> v_dir, v_pos;
 unique_ptr<DynamicBranchVector<double>> v_theta, v_phi, v_angle;

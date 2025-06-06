@@ -23,7 +23,7 @@ const vector<string> dead_strips = {
 
 int main(int argc, char* argv[]) {
   vector<string> hist_names;
-  for (const string& num : {"1", "2", "3"}) {
+  for (const string& num : {"1", "2", "3", "6"}) {
     for (const string& side : {"F", "B"}) {
       for (int i = 0; i < 16; i++) {
         string name = "U" + num + side + to_string(i+1);
@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
     h1->Write();
 
     Int_t scale = 1;
+    if (hist_name == "U6B7") scale = 2; // strip has half amplitude for some reason, need finer peak search
     const Int_t N = (Int_t) (h1->GetNbinsX() - 2)/scale; // first index is 'underflow', last index is 'overflow'
     Double_t spec_in[N];
     for (Int_t i = 0; i < N; i++) {

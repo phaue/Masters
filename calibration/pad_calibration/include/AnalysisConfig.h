@@ -14,7 +14,7 @@ using namespace EUtil;
 using namespace AUSA;
 
 bool events_matched;
-string setup_path, target_path, input_path, output_path_dir;
+string setup_path, target_path, input_path, output_path_dir, peak_path;
 string specificAnalysis, isotopetype;
 
 Config cfg;
@@ -43,6 +43,8 @@ void prepareFileIO(const string& configfile){
   else{
       output_path_dir = getProjectRoot() + cfg.lookup("output_path_dir").c_str();}
 
+  if (cfg.exists("peak_file")) {
+    peak_path = getProjectRoot() + cfg.lookup("peak_file").c_str();}
   };//prepareFileIO
 
 void prepareAnalysis(){

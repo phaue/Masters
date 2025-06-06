@@ -76,13 +76,16 @@ class CalibrationAnalysis : public AbstractSortedAnalyzer{
         U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
         U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
         U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
+        U6 = new Detector_frib(2, "U6", DSSSD, Alpha, setupSpecs, 500.);
         P1 = new Detector_frib(6, "P1", Pad, NoCalibration, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, NoCalibration, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, NoCalibration, setupSpecs);
+        P6 = new Detector_frib(8, "P6", Pad, NoCalibration, setupSpecs);
         makePartners(U1, P1);
         makePartners(U2, P2);
         makePartners(U3, P3);
-        detectors.insert({U1, U2, U3, P1, P2, P3}); 
+        makePartners(U6, P6);
+        detectors.insert({U1, U2, U3, U6, P1, P2, P3, P6}); 
 
         outFile->cd(); //something about output file used for mid-analysis dumping
         tree = new TTree("a", "a");
@@ -118,11 +121,13 @@ class CalibrationAnalysis : public AbstractSortedAnalyzer{
         histP1 = make_unique<TH1D>("P1ch", "P1ch", 2500,0,2500);
         histP2 = make_unique<TH1D>("P2ch", "P2ch", 2500,0,2500);
         histP3 = make_unique<TH1D>("P3ch", "P3ch", 2500,0,2500);
+        histP6 = make_unique<TH1D>("P6ch", "P6ch", 2500,0,2500);
         }
         else {
         histP1 = make_unique<TH1D>("P1cal", "P1cal", 700,0,7000);
         histP2 = make_unique<TH1D>("P2cal", "P2cal", 700,0,7000);
         histP3 = make_unique<TH1D>("P3cal", "P3cal", 700,0,7000);
+        histP6 = make_unique<TH1D>("P6cal", "P6cal", 700,0,7000);
         }
 
 
@@ -243,10 +248,14 @@ class CalibrationAnalysis : public AbstractSortedAnalyzer{
           auto &from = dsssd_hit->position;
           for (auto &intersection: target->getIntersections(origin, from)) {
             auto &calc = pTargetCalcs[intersection.index];
-            pad_E += calc->getTotalEnergyLoss(peak_E, intersection.transversed);
+            pad_E -= calc->getTotalEnergyLoss(pad_E, intersection.transversed);
           }//forloop for finding the original particle energy
           pad_E -= pSiCalc -> getTotalEnergyLoss(pad_E, front_det_fdl);
-          pad_E -= dsssd_hit->Edep;
+          if(front_det->getCalibration() == Alpha){
+              pad_E -= dsssd_hit->Edep*1.012;
+          }
+          else{
+            pad_E -= dsssd_hit->Edep;}
           pad_E -= pSiCalc -> getTotalEnergyLoss(pad_E, front_det_bdl);
           pad_E -= pAlCalc -> getTotalEnergyLoss(pad_E, front_det_bct);
           pad_E -= pAlCalc -> getTotalEnergyLoss(pad_E, back_det_fct);
@@ -327,6 +336,7 @@ class CalibrationAnalysis : public AbstractSortedAnalyzer{
       histP1->Write();
       histP2->Write();
       histP3->Write();
+      histP6->Write();
       outFile->Close();
       }//terminate
 
@@ -347,14 +357,14 @@ class CalibrationAnalysis : public AbstractSortedAnalyzer{
 
 
 bool events_matched;
-unique_ptr<TH1D> histP1, histP2, histP3;
+unique_ptr<TH1D> histP1, histP2, histP3, histP6;
 shared_ptr<Setup> setupSpecs;
 shared_ptr<Target> target;
 double implantation_depth;
 string isotopetype;
 //
 unordered_set<Detector_frib *> detectors;
-Detector_frib *U1, *U2, *U3, *P1, *P2, *P3;//, *U5, *U6, *P5, *P6
+Detector_frib *U1, *U2, *U3, *U6, *P1, *P2, *P3, *P6;//, *U5, *U6, *P5, *P6
 
 TVector3 origin;
 TTree *tree; //defines the tree in which we save the new parameters

@@ -76,6 +76,9 @@ class CalibrationMatcher : public CalibrationAnalysis {
           else if (pad_det->getName()=="P3"){
              histP3->Fill(pad_hit->Edep);
              addPadHit(pad_hit);}
+          else if (pad_det->getName()=="P6"){
+             histP6->Fill(pad_hit->Edep);
+             addPadHit(pad_hit);}
           else continue;
         }//if dsssd and pad is partnered
       }//for each pad hit in telescope backside candidates
@@ -86,10 +89,29 @@ class CalibrationMatcher : public CalibrationAnalysis {
 class BackwardCalculation : public CalibrationAnalysis {
   public:
   BackwardCalculation(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output,
-                    string _isotopetype, bool _events_matched)
-        : CalibrationAnalysis(_setupSpecs, _target, output, _isotopetype,_events_matched), iso(_isotopetype){}
+                    string _isotopetype, bool _events_matched, const string& _peak_path)
+        : CalibrationAnalysis(_setupSpecs, _target, output, _isotopetype,_events_matched), peak_path(_peak_path)
+        {
+    ifstream infile(peak_path);
+    if (!infile.is_open()) {
+        cerr << "Could not open peak file: " << peak_path << endl;
+        return;
+    }
+
+    string detector;
+    int ch;
+    double peak, sigma;
+
+    while (infile >> detector >> ch >> peak >> sigma) {
+        string detID = detector.substr(0, 3); // Get "P1", "P2", etc.
+        detectorPeaks[detID].means.push_back(peak);
+        detectorPeaks[detID].sigmas.push_back(sigma);
+        cout << "detector" << detector << "   ch" << ch << "    peak" << peak << "    sigma" << sigma << endl;  
+    }
+    }
+
   
-        void specificAnalysis() override {
+    void specificAnalysis() override {
     if (hits.empty()) return;
 
     unordered_set<Hit*> telescope_frontside_candidates;
@@ -114,99 +136,63 @@ class BackwardCalculation : public CalibrationAnalysis {
       }//switch
     }//for hit in hits
 
-    for(auto dsssd_hit : telescope_frontside_candidates) {
-      auto dsssd_det = dsssd_hit->detector;
-      for(auto pad_hit : telescope_backside_candidates) {
+for (auto dsssd_hit : telescope_frontside_candidates) {
+    auto dsssd_det = dsssd_hit->detector;
+
+    for (auto pad_hit : telescope_backside_candidates) {
         auto pad_det = pad_hit->detector;
-        if(dsssd_det->getPartner() == pad_det && pad_hit->Edep>500){
-          if(pad_det->getName()=="P1"){
-            for (size_t i =0;i<peaks1_means.size(); i++){
-              if(pad_hit->Edep > peaks1_means[i]-2*peaks1_sig[i] && pad_hit->Edep < peaks1_means[i]+2*peaks1_sig[i]){
-                bool success = treatBackwardHit(dsssd_hit, pad_hit ,real_peaks[i]);
-                if (success){
-                  histP1->Fill(pad_hit->Ecal);
-                  addTelescopeHit(dsssd_hit,pad_hit);
-                  
+
+        // 1) Check partner and energy threshold
+        if (dsssd_det->getPartner() != pad_det || pad_hit->Edep <= 500){
+            continue;}
+
+        // 2) Look up “P1”, “P2” or “P3” in your map
+        string detName = pad_det->getName();
+        auto it = detectorPeaks.find(detName);
+        if (it == detectorPeaks.end())
+            continue;
+
+        // 3) Reference that detector’s peak data
+        PeakData &peaks = it->second;
+
+        // 4) Loop over all peaks for this detector
+        for (size_t i = 0; i < peaks.means.size(); ++i) {
+            double mean = peaks.means[i];
+            double sig  = peaks.sigmas[i];
+            //cout << "mean" << mean << "    sig" << sig << "    realpeak " << real_peaks[i] << endl;
+            if (pad_hit->Edep > mean - 1.*sig &&
+                pad_hit->Edep < mean + 1.*sig)
+            {
+                bool success = treatBackwardHit(dsssd_hit, pad_hit, real_peaks[i]);
+                if (success) {
+                    // 5) Fill the correct histogram based on detName
+                    if (detName == "P1")      histP1->Fill(pad_hit->Ecal);
+                    else if (detName == "P2") histP2->Fill(pad_hit->Ecal);
+                    else if (detName == "P3") histP3->Fill(pad_hit->Ecal);
+                    else if (detName == "P6") histP3->Fill(pad_hit->Ecal);
+
+                    addTelescopeHit(dsssd_hit, pad_hit);
                 }
-
-              }
-              else continue;
             }
-          }//if P2
-          if(pad_det->getName()=="P2"){
-            for (size_t i =0;i<peaks2_means.size(); i++){
-              if(pad_hit->Edep > peaks2_means[i]-2*peaks2_sig[i] && pad_hit->Edep < peaks2_means[i]+2*peaks2_sig[i]){
-                bool success = treatBackwardHit(dsssd_hit, pad_hit ,real_peaks[i]);
-                if (success){
-                  histP2->Fill(pad_hit->Ecal);
-                  addTelescopeHit(dsssd_hit,pad_hit);
-                  
-                }
-
-              }
-              else continue;
-            }
-          }//if P3
-          if(pad_det->getName()=="P3"){
-            for (size_t i =0;i<peaks3_means.size(); i++){
-              if(pad_hit->Edep > peaks3_means[i]-2*peaks3_sig[i] && pad_hit->Edep < peaks3_means[i]+2*peaks3_sig[i]){
-                bool success = treatBackwardHit(dsssd_hit, pad_hit ,real_peaks[i]);
-                if (success){
-                  histP3->Fill(pad_hit->Ecal);
-                  addTelescopeHit(dsssd_hit,pad_hit);
-                  
-                }
-
-              }
-              else continue;
-            }
-          }//if P3
-
-        }//if dsssd and pad is partnered
-      }//for each pad hit in telescope backside candidates
-    }// for each dsssd hit in telescope frontside candidates
-  
-        ///These peaks are for Mg
-        //They are found by running the CalibrationMatcher on pad-dummy calibrated data and running the fitter
-        //A dynamic read of the file would be a great addition such that it is easy to make changes
-if (iso=="Mg"){
-  peaks1_means= {895.567, 1175.43, 1677.54};
-  peaks1_sig ={41.0669 ,26.9267, 20.0444};
-  peaks2_means= {879.403, 1223.8,  1815.38};
-  peaks2_sig ={49.9033 ,27.3036 ,12.8827};
-  peaks3_means= {943.037 ,1259.37, 1821.78};
-  peaks3_sig ={45.537 , 25.8725 ,12.2788};
-  real_peaks ={3843, 4675, 6231};
-  }
-else if (iso=="Si"){
-  peaks1_means ={702.256,	981.696	,1422.16};
-  peaks1_sig ={41.7565,	26.1958,	20.6553};
-  peaks2_means ={641.548,	987.736,	1511.94};
-  peaks2_sig ={47.048	,31.2358,24.4434};
-  peaks3_means = {724.888,	1039.41,	1531.1};
-  peaks3_sig = {43.3883,	22.9149	,21.5968};
-  real_peaks = {3337.75, 4089.18, 5402.61}; // 3327 4080.5, 4641, 5394 values based on peaks used from Justus' thesis, different choice than Erik's ... 
-  }
-else if (iso=="nSi"){
-  peaks1_means ={707.034,	985.402	,1423.67};
-  peaks1_sig ={42.5338,	24.902,	21.1695};
-  peaks2_means ={646.192	,992.998,	1514.26};
-  peaks2_sig ={53.6922,	29.4978,	26.7586};
-  peaks3_means = {727.305,	1042.13,	1533.26};
-  peaks3_sig = {36.8052	,20.6299,	21.7632};
-  real_peaks = {3337.75, 4089.18, 5402.61}; 
-
+        }
+    }
 }
-else {
-  cout << "How did you get this far? the program should have terminated if no isotopetype is specifed..." << endl;
-  }
+        }
+private:
+  struct PeakData {
+    vector<double> means;
+    vector<double> sigmas;
+  };
 
-}//specificanalysis
-
-string iso;
-vector<double> peaks1_means, peaks1_sig,peaks2_means, peaks2_sig, peaks3_means,peaks3_sig, real_peaks;
-
-};//BackwardsCalculation
+  map<string, PeakData> detectorPeaks;
+  string peak_path;
+  const vector<double> real_peaks = {
+    3337.75,
+    4089.18,
+    4651.19,
+    5402.61
+  };
+};
 
 
 
@@ -216,8 +202,8 @@ vector<double> peaks1_means, peaks1_sig,peaks2_means, peaks2_sig, peaks3_means,p
 int main(int argc, char *argv[]) {
 
 
-  cout << "Config file path: " << getProjectRoot() + "analysis/padcal/" + getBasename(argv[1]) << endl;
-  prepareFileIO(getProjectRoot() + "analysis/padcal/" + getBasename(argv[1]));
+  cout << "Config file path: " << getProjectRoot() + "calibration/pad_calibration/" + getBasename(argv[1]) << endl;
+  prepareFileIO(getProjectRoot() + "calibration/pad_calibration/" + getBasename(argv[1]));
   auto setup = JSON::readSetupFromJSON(setup_path);
   auto target = make_shared<Target>(JSON::readTargetFromJSON(target_path));
 
@@ -253,7 +239,10 @@ for (auto &in : input) {
     analysis = make_shared<CalibrationMatcher>(setup, target, &output, isotopetype, events_matched);
   }
   else if (specificAnalysis == "BackwardCalculation"){
-    analysis = make_shared<BackwardCalculation>(setup, target, &output, isotopetype, events_matched);
+    if (peak_path.empty()){
+      cerr << "No peak path run CalibrationMatcher first and then finder before continuing" << endl;
+    }
+    analysis = make_shared<BackwardCalculation>(setup, target, &output, isotopetype, events_matched, peak_path);
   }
   else {
     cerr << "Type of analysis not recognizable -- recheck config file -- Aborting analysis." << endl;

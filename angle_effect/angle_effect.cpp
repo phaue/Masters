@@ -117,12 +117,12 @@ int main(){
 
     //some values that could be read in through the argument instead for hardcoded if one wants to do multiple analyses
     double implantation_depth = 17/1e6; //implantation for Si
-    double Epeak = 4089; //kev; most intense peak in Si
+    double Epeak = 4089.18; //kev; most intense peak in Si
     vector<double> radius = {1,3,5}; // mm; radius of the desired emission circle
     int N = 1000000;
-    auto det = setup->getDSSD("U1");
-    string d = "U1";
-    string p = "P1";
+    auto det = setup->getDSSD("U2");
+    string d = "U2";
+    string p = "P2";
     /*
     Here one should introduce a dynamic read of that specific detector's different thicknesses for energy correction
     */
@@ -156,12 +156,13 @@ int main(){
     cout << "   bouns: " << "x "<< bouns.X() << "   y: " << bouns.Y() << "   z: " << bouns.Z() << endl;
     cout << "   bounss: " << "x "<< bounss.X() << "   y: " << bounss.Y() << "   z: " << bounss.Z() << endl;
 */
+/*
     cout << "   bound1: " << "x "<< bound1.X() << "   y: " << bound1.Y() << "   z: " << bound1.Z() << endl;
     cout << "   bound2: " << "x "<< bound2.X() << "   y: " << bound2.Y() << "   z: " << bound2.Z() << endl;
     cout << "   bound3: " << "x "<< bound3.X() << "   y: " << bound3.Y() << "   z: " << bound3.Z() << endl;
     cout << "   bound4: " << "x "<< bound4.X() << "   y: " << bound4.Y() << "   z: " << bound4.Z() << endl;
     //cout << "Normal: " << "x" << normal.X() << "   y" << normal.Y() << "   z" << normal.Z() << endl;
-    
+  */  
     out->cd();
     map<string, TH1D*> hists;
     vector<string> rads = {"S", "M", "L"};

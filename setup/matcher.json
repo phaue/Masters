@@ -15,6 +15,9 @@
     },
     "U5": {
       "front"  : {"disable" : [2]}
+    },
+    "U6": {
+      "back"  : {"disable" : [7]}
     }
   },
   "SSD" : {

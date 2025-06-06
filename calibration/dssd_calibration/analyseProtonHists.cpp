@@ -24,7 +24,7 @@ const vector<string> dead_strips = {
 
 int main(int argc, char* argv[]) {
   vector<string> hist_names;
-  for (const string& num : {"4"}) {
+  for (const string& num : {"4", "5"}) {
     for (const string& side : {"F", "B"}) {
       for (int i = 0; i < 16; i++) {
         string name = "U" + num + side + to_string(i+1);

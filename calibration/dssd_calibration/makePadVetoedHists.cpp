@@ -38,7 +38,8 @@ int main(int argc, char* argv[]) {
   int strips = 16;
   Double_t xlow = 50.; Double_t xup = 1000.;
   map<string, TH1D*> hists;
-  for (const string& num : {"1", "2", "3"}) { // U4 is 300 um, U5 is 1000 um - no pad vetoing
+  for (const string& num : {"1", "2", "3", "6"}) { // U4 is 300 um, U5 is 1000 um - no pad vetoing
+    //if (num == "6") xlow = 80.;
     for (const string& side : {"F", "B"}) {
       for (int i = 0; i < strips; i++) {
         string name = "U" + num + side + to_string(i+1);
@@ -47,18 +48,22 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  UInt_t U1F, U1B, U2F, U2B, U3F, U3B, P1E, P2E, P3E;
+  UInt_t U1F, U1B, U2F, U2B, U3F, U3B, U6F, U6B, P1E, P2E, P3E, P6E;
   UInt_t U1F_E[strips], U1FI[strips], U1B_E[strips], U1BI[strips];
   UInt_t U2F_E[strips], U2FI[strips], U2B_E[strips], U2BI[strips];
   UInt_t U3F_E[strips], U3FI[strips], U3B_E[strips], U3BI[strips];
+  UInt_t U6F_E[strips], U6FI[strips], U6B_E[strips], U6BI[strips];
   c->SetBranchAddress("U1F", &U1F); c->SetBranchAddress("U1FI", U1FI); c->SetBranchAddress("U1F_E", U1F_E);
   c->SetBranchAddress("U1B", &U1B); c->SetBranchAddress("U1BI", U1BI); c->SetBranchAddress("U1B_E", U1B_E);
   c->SetBranchAddress("U2F", &U2F); c->SetBranchAddress("U2FI", U2FI); c->SetBranchAddress("U2F_E", U2F_E);
   c->SetBranchAddress("U2B", &U2B); c->SetBranchAddress("U2BI", U2BI); c->SetBranchAddress("U2B_E", U2B_E);
   c->SetBranchAddress("U3F", &U3F); c->SetBranchAddress("U3FI", U3FI); c->SetBranchAddress("U3F_E", U3F_E);
   c->SetBranchAddress("U3B", &U3B); c->SetBranchAddress("U3BI", U3BI); c->SetBranchAddress("U3B_E", U3B_E);
+  c->SetBranchAddress("U6F", &U6F); c->SetBranchAddress("U6FI", U6FI); c->SetBranchAddress("U6F_E", U6F_E);
+  c->SetBranchAddress("U6B", &U6B); c->SetBranchAddress("U6BI", U6BI); c->SetBranchAddress("U6B_E", U6B_E);
   c->SetBranchAddress("P1E", &P1E); c->SetBranchAddress("P2E", &P2E);
-  c->SetBranchAddress("P3E", &P3E);
+  c->SetBranchAddress("P3E", &P3E); c->SetBranchAddress("P6E", &P6E);
+
 
   system(("mkdir -p " + output_dir).c_str());
   std::unique_ptr<TFile> out = make_unique<TFile>((output_dir + "/pvh.root").c_str(), "recreate");
@@ -71,6 +76,9 @@ int main(int argc, char* argv[]) {
       {&U2B, &P2E, U2BI, U2B_E, "U2B"},
       {&U3F, &P3E, U3FI, U3F_E, "U3F"},
       {&U3B, &P3E, U3BI, U3B_E, "U3B"},
+      {&U6F, &P6E, U6FI, U6F_E, "U6F"},
+      {&U6B, &P6E, U6BI, U6B_E, "U6B"},
+
   };
   UInt_t mul, pad_energy, index, energy;
   string name;

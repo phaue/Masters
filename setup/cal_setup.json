@@ -148,7 +148,7 @@
       {
         "name": "U5",
         "file": "AUW1_1000_00.json",
-        "calibration": "U5.cal",
+        "calibration": "U5_sical.cal",
         "reverseFront": false,
         "reverseBack": false,
         "position": {
