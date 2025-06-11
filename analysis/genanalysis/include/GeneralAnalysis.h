@@ -87,14 +87,14 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
         U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 750.);// should change according to thicknesses
         U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 1500.);
-        U6 = new Detector_frib(5, "U6", DSSSD, Alpha, setupSpecs, 400.);
+        U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 400.);
 
-        P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
-        P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
+        P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
+        P2 = new Detector_frib(7, "P2", Pad, Proton, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, Proton, setupSpecs);
         P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
         P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); 
-        P6 = new Detector_frib(11, "P6", Pad, Alpha, setupSpecs);
+        P6 = new Detector_frib(11, "P6", Pad, Proton, setupSpecs);
 
         G1 = new Detector_frib(12, "G1", HPGe, Gamma, setupSpecs);
         G2 = new Detector_frib(13, "G2", HPGe, Gamma, setupSpecs);

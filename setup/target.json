@@ -1,5 +1,5 @@
 {
-  "center" : {"x":"0mm", "y":"0mm", "z":"-0.3mm"},
+  "center" : {"x":"0mm", "y":"0mm", "z":"-0.5mm"},
   "orientation" : {"x":"0mm", "y":"1mm", "z":"0mm"},
   "normal" : {"x":"0mm", "y":"0mm", "z":"-1mm"},
   "transverseLength" : "10mm",

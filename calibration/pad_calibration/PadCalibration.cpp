@@ -100,13 +100,13 @@ class BackwardCalculation : public CalibrationAnalysis {
 
     string detector;
     int ch;
-    double peak, sigma;
+    double peak, sigma, fitmean;
 
-    while (infile >> detector >> ch >> peak >> sigma) {
-        string detID = detector.substr(0, 3); // Get "P1", "P2", etc.
-        detectorPeaks[detID].means.push_back(peak);
+    while (infile >> detector >> ch >> peak >> fitmean >> sigma) {
+        string detID = detector.substr(0, 2); // Get "P1", "P2", etc.
+        detectorPeaks[detID].means.push_back(fitmean);
         detectorPeaks[detID].sigmas.push_back(sigma);
-        cout << "detector" << detector << "   ch" << ch << "    peak" << peak << "    sigma" << sigma << endl;  
+        //cout << "detector " << detector << "   ch " << ch << "    peak " << fitmean << "    sigma " << sigma << endl;  
     }
     }
 
@@ -159,7 +159,7 @@ for (auto dsssd_hit : telescope_frontside_candidates) {
         for (size_t i = 0; i < peaks.means.size(); ++i) {
             double mean = peaks.means[i];
             double sig  = peaks.sigmas[i];
-            //cout << "mean" << mean << "    sig" << sig << "    realpeak " << real_peaks[i] << endl;
+            //out << "mean" << mean << "    sig" << sig << "    realpeak " << real_peaks[i] << endl;
             if (pad_hit->Edep > mean - 1.*sig &&
                 pad_hit->Edep < mean + 1.*sig)
             {
@@ -169,7 +169,7 @@ for (auto dsssd_hit : telescope_frontside_candidates) {
                     if (detName == "P1")      histP1->Fill(pad_hit->Ecal);
                     else if (detName == "P2") histP2->Fill(pad_hit->Ecal);
                     else if (detName == "P3") histP3->Fill(pad_hit->Ecal);
-                    else if (detName == "P6") histP3->Fill(pad_hit->Ecal);
+                    else if (detName == "P6") histP6->Fill(pad_hit->Ecal);
 
                     addTelescopeHit(dsssd_hit, pad_hit);
                 }

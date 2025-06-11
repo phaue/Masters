@@ -91,57 +91,153 @@ bool FindIntersection(const TVector3& source, const TVector3& direction, const T
     // Vector from bound1 to the intersection point
     TVector3 toIntersection = intersection - bound1;
 
-    // Project the intersection point onto the plane's local coordinate system
-    double u = toIntersection.Dot(edge1) / edge1.Mag2();
-    double v = toIntersection.Dot(edge2) / edge2.Mag2();
+       // Project the intersection point onto the plane's local coordinate system
+   double u = toIntersection.Dot(edge1) / edge1.Mag2();
+   double v = toIntersection.Dot(edge2) / edge2.Mag2();
 
-    return true; // Intersection is valid and within bounds
+   // This check is crucial and should be enabled
+   if (u >= 0 && u <= 1 && v >= 0 && v <= 1) {
+       return true; // Intersection is valid and within bounds
+   }
+
+   return false; // Intersection is outside the bounds
 }
 
-bool IsFrameHit(const TVector3& dir, double ringRadius, double ringThickness) {
-    double vz = dir.Z();
-    if (vz == 0) return false; // Parallel to ring plane → never intersects z-slab
-
-    // s at which vector enters and exits ring slab in z
-    double s1 = (-ringThickness / 2.0) / vz;
-    double s2 = (+ringThickness / 2.0) / vz;
-    if (s1 > s2) std::swap(s1, s2); // Ensure s1 < s2
-
-    // Only consider forward-going vectors
-    if (s2 < 0) return false;
-
-    // Clamp s1 to positive
-    if (s1 < 0) s1 = 0;
-
-    // Pick midpoint s in this slab
-    double smid = (s1 + s2) / 2.0;
-
-    // Compute radius at this s
-    double x = smid * dir.X();
-    double y = smid * dir.Y();
-    double r = std::sqrt(x*x + y*y);
-
-    // Check if within ring radius ± tolerance
-    double tolerance = ringThickness/2; // Half of 0.6 mm width
-    return (r >= ringRadius - tolerance && r <= ringRadius + tolerance);
+bool IsFrameHit(const TVector3& source, const TVector3& direction, 
+                double ringRadius, double ringThickness) {
+    
+    // Ring is centered at (0,0,0) with radius ringRadius
+    // Ring extends from Z = -ringThickness/2 to Z = +ringThickness/2
+    
+    double sx = source.X(), sy = source.Y(), sz = source.Z();
+    double dx = direction.X(), dy = direction.Y(), dz = direction.Z();
+    
+    double halfThickness = ringThickness / 2.0;
+    double ringBottomZ = -halfThickness;  // -0.3mm
+    double ringTopZ = halfThickness;     // +0.3mm
+    
+    // We need to find where the ray intersects the cylindrical surface at radius = ringRadius
+    // Ray equation: P(t) = source + t * direction
+    // Cylindrical surface: x² + y² = ringRadius²
+    // Substituting: (sx + t*dx)² + (sy + t*dy)² = ringRadius²
+    
+    // Expand to quadratic: at² + bt + c = 0
+    double a = dx*dx + dy*dy;
+    double b = 2.0 * (sx*dx + sy*dy);
+    double c = sx*sx + sy*sy - ringRadius*ringRadius;
+    
+    // Special case: ray is parallel to Z-axis (dx = dy = 0)
+    if (a < 1e-12) {
+        // Ray has constant radial distance
+        double constantRadius = sqrt(sx*sx + sy*sy);
+        double tolerance = 0.1; // mm - adjust as needed for ring thickness
+        
+        if (abs(constantRadius - ringRadius) > tolerance) {
+            return false; // Ray never comes close to ring radius
+        }
+        
+        // Ray is at the right radius, check if it passes through Z-slab
+        if (abs(dz) < 1e-12) {
+            // Ray is completely parallel to XY plane
+            return (sz >= ringBottomZ && sz <= ringTopZ);
+        }
+        
+        // Ray is parallel to Z-axis, check if it intersects Z-slab
+        double t_bottom = (ringBottomZ - sz) / dz;
+        double t_top = (ringTopZ - sz) / dz;
+        
+        // Ray intersects Z-slab if either intersection is in the future (t >= 0)
+        // or if source is already within the slab
+        return (sz >= ringBottomZ && sz <= ringTopZ) || 
+               (t_bottom >= 0) || (t_top >= 0);
+    }
+    
+    // General case: solve quadratic equation
+    double discriminant = b*b - 4.0*a*c;
+    if (discriminant < 0) {
+        return false; // No intersection with cylindrical surface
+    }
+    
+    // Two intersection points with the cylindrical surface
+    double sqrt_disc = sqrt(discriminant);
+    double t1 = (-b - sqrt_disc) / (2.0*a);
+    double t2 = (-b + sqrt_disc) / (2.0*a);
+    
+    // Check if either intersection point is within the ring's Z-slab
+    for (double t : {t1, t2}) {
+        // Calculate Z-coordinate at this intersection
+        double z_intersection = sz + t * dz;
+        
+        // Check if this intersection is within the ring's Z-slab
+        if (z_intersection >= ringBottomZ && z_intersection <= ringTopZ) {
+            return true; // Ray hits the ring material
+        }
+    }
+    
+    // Additional check: does the ray pass through the Z-slab at a radius close to ringRadius?
+    // This handles cases where the ray might graze the ring
+    if (abs(dz) > 1e-12) {
+        // Find where ray enters and exits the Z-slab
+        double t_enter_slab = (ringBottomZ - sz) / dz;
+        double t_exit_slab = (ringTopZ - sz) / dz;
+        
+        if (t_enter_slab > t_exit_slab) {
+            std::swap(t_enter_slab, t_exit_slab);
+        }
+        
+        // Check radial distance at slab entry and exit points
+        double tolerance = 0.1; // mm
+        
+        for (double t : {t_enter_slab, t_exit_slab}) {
+            double x = sx + t * dx;
+            double y = sy + t * dy;
+            double r = sqrt(x*x + y*y);
+            
+            if (abs(r - ringRadius) <= tolerance) {
+                return true;
+            }
+        }
+        
+        // Check if minimum radial distance occurs within the Z-slab
+        // The minimum occurs at t = -b/(2a) if this is within the slab
+        double t_min_radius = -b / (2.0*a);
+        double z_min = sz + t_min_radius * dz;
+        
+        if (z_min >= ringBottomZ && z_min <= ringTopZ) {
+            double x_min = sx + t_min_radius * dx;
+            double y_min = sy + t_min_radius * dy;
+            double r_min = sqrt(x_min*x_min + y_min*y_min);
+            
+            if (abs(r_min - ringRadius) <= tolerance) {
+                return true;
+            }
+        }
+    }
+    
+    return false; // No intersection with ring material
 }
 
 
 int main(){
     string setup_dir = getProjectRoot() + "/setup/";
     shared_ptr<Target> target = make_shared<Target>(JSON::readTargetFromJSON(setup_dir+"target.json"));
-    auto setup = JSON::readSetupFromJSON(setup_dir+"setup.json");
-    string output_dir = getProjectRoot() + "/simdata";
-    std::unique_ptr<TFile> out = make_unique<TFile>((output_dir + "/angleeffect.root").c_str(), "recreate");
+    auto setup = JSON::readSetupFromJSON(setup_dir+"setupEE.json");
 
 
     double implantation_depth = 17/1e6; //implantation for Si
-    vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45}; //kev; 
-    vector<double> radius = {0.1}; // mm; radius of the desired emission circle
+    vector<double> radius = {1e-6}; // mm; radius of the desired emission circle
     vector<string> sides = {"front", "back"};
     
-    double Øframe = 6;
-    double tframe = 0.6;
+    
+    vector<string> detectors = {"U1", "U2", "U3", "U6"}; // for padvetoed calibration
+    //vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45}; //kev - for padvetoed calibration 
+    //vector<string> detectors = {"U5"}; // for padvetoed calibration
+    //vector<double> peakenergies = {904.02,1843.18,2076.74,2217.45,3337.75,4089.18,5402.61}; //kev - for padvetoed calibration 
+    vector<double> peakenergies = {4089.18};
+    
+    int N = 100000;
+    double rframe = 6; // mm
+    double tframe = 1; // mm
 
 
 
@@ -153,9 +249,9 @@ int main(){
         //eloss of protons in target material
       }
 
-    int N = 100000;
-    auto det = setup->getDSSD("U6");
-    string d = "U6";
+    for(const string& d : detectors){
+    auto det = setup->getDSSD(d);
+    
     /*
     Here one should introduce a dynamic read of that specific detector's different thicknesses for energy correction
     */
@@ -164,14 +260,14 @@ int main(){
 
 
 
-    TVector3 origin(0,0,-0.3);// = target->getCenter() + (target->getThickness()/2. - implantation_depth)*target->getNormal(); // origin of the point source
+    TVector3 origin = target->getCenter() + (target->getThickness()/2. - implantation_depth)*target->getNormal(); // origin of the point source
+    //cout << "target:  "<< target->getThickness() << endl; 
     TVector3 normal = det->getNormal().Unit();
     //define detector bounds of the inner most strips:
     
-
     /*Need to define here a loop over strip boundaries --------*/
     for(const string& side : sides){
-        cout << "#" << side << endl;
+        cout << "# Detector=" << d <<  "\t" << side << " strips 2..15" << endl;
     for(int  s=1; s<15; ++s){ // if i = 1 return strip 2 if i==14 return strip 15
     TVector3 bound1, bound2, bound3, bound4;
     //TVector3 bound1 = det->getContinuousPixelPosition(1.5,1.5); // position between pixel 1 and 2 for both front strip and back strip, should return the corner pos of the  
@@ -179,17 +275,25 @@ int main(){
     //TVector3 bound3 = det->getContinuousPixelPosition(15.5,15.5);
     //TVector3 bound4 = det->getContinuousPixelPosition(1.5,15.5);
 
+    /*
+    Define borders for each strip in a loop over strips in a loop over sides.
+    fx. if the side is "front" and strip is 7 then the bounds returns the 4 corners of the strip and the loop then checks whether or not the particle hits this strip
+
+    Im a bit unsure here whether or not the limits should be 1.5 and 15.5 instead of 0.5 and 16.5. 
+    Using 16.5 and 0.5 a given strip E is calculated by allowing events being recorded in 1-16 on the oppsosite side. 
+    fx the front strip 6 energy is an average of all the energy deposited in backstrip 1-16
+    */
     if(side=="front"){
-    bound1 = det->getContinuousPixelPosition(s+0.5,1.5); 
-    bound2 = det->getContinuousPixelPosition(s+1+0.5,1.5); 
-    bound3 = det->getContinuousPixelPosition(s+1+0.5,15.5);
-    bound4 = det->getContinuousPixelPosition(s+0.5,15.5);    
+    bound1 = det->getContinuousPixelPosition(s+0.5,0.5); 
+    bound2 = det->getContinuousPixelPosition(s+1+0.5,0.5); 
+    bound3 = det->getContinuousPixelPosition(s+1+0.5,16.5);
+    bound4 = det->getContinuousPixelPosition(s+0.5,16.5);    
     }
     else if(side=="back"){
-    bound1 = det->getContinuousPixelPosition(1.5,s+0.5); 
-    bound2 = det->getContinuousPixelPosition(15.5,s+0.5); 
-    bound3 = det->getContinuousPixelPosition(15.5,s+1+0.5);
-    bound4 = det->getContinuousPixelPosition(1.5,s+1+0.5);    
+    bound1 = det->getContinuousPixelPosition(0.5,s+0.5); 
+    bound2 = det->getContinuousPixelPosition(16.5,s+0.5); 
+    bound3 = det->getContinuousPixelPosition(16.5,s+1+0.5);
+    bound4 = det->getContinuousPixelPosition(0.5,s+1+0.5);    
     }
     else cerr << "Error in sides" << endl;
     
@@ -205,40 +309,51 @@ int main(){
     for(size_t j =0; j<radius.size(); j++){
     for(int i=0; i<N; i++){
 
-    TVector3 EmissionPoint = PointGenerator(origin, radius[j]); // randomly generated point within a circle
-    TVector3 source = EmissionPoint;
+    TVector3 source = PointGenerator(origin, radius[j]); // randomly generated point within a circle
     TVector3 direction = DirectionGenerator(); // randomly generated direction from the emission point
 
-    if(!IsFrameHit(direction, Øframe, tframe)){
+    /*
+    Do we hit the target frame?
+    Relevant for U5 & U6
+    */
+    if(!IsFrameHit(source,direction, rframe, tframe)){
         //cout << "frame is not hit! yay  " << endl;
-
+    /*
+    What is the intersection point between the randomly generated direction vector and the detector plane
+    */
     if (FindIntersection(source, direction, bound1, bound2, bound4, normal, intersection)){
-        if(IsDetectorHit(intersection, bound1,bound2,bound3,bound4)){
-            //SUCCES
-            //real angle analysis
+            //cout << "intersection.X  " << intersection.X() << "   intersection.Y" << intersection.Y() << "    intersection.Z" << intersection.Z() << endl;
             //cout << "E  " << e << endl;
             double E = e;
-            //cout << "source: " << "   x" << source.X() << "   y" <<  source.Y() << "   z" << source.Z() << endl;
-            //cout << "intersection: " <<  intersection.X() << intersection.Y()<<intersection.Z() << endl;
-            //cout << "origin: " <<  "   x" <<origin.X() << "   y" <<origin.Y()<<"   z" <<origin.Z() << endl;
+            /* Debugging statements
+            double loss = 0;
+            double loss2 = 0;
+            double dist = 0;
+            */
             double angle = (intersection-source).Angle(-det->getNormal()); // angle with respect to emission location
-            //cout << "RealAngle "<< TMath::RadToDeg()*abs(RealAngle) << "   FakeAngle " << TMath::RadToDeg()*abs(FakeAngle) << endl;
+            //cout << "Angle "<< TMath::RadToDeg()*abs(angle) << endl;
             auto &to = intersection;
             for (auto &intersection: target->getIntersections(source, to)) {
             auto &calc = pTargetCalcs[intersection.index];
-             E -= calc->getTotalEnergyLoss(E, intersection.transversed);
+            //    loss += calc->getTotalEnergyLoss(E, intersection.transversed);
+                E -= calc->getTotalEnergyLoss(E, intersection.transversed);
+            //    dist += intersection.transversed;
             }//forloop for energy correction in target
-
+            //cout << "Eloss from target   " << loss << endl;
+            //cout << "target material traversed   " << dist*1e6 << "nm" << endl;
             //front dead layer
             double cor_dfdl = dfdl/abs(cos(angle));
+            //loss2 = pSiCalc->getTotalEnergyLoss(E, cor_dfdl);
             E -= pSiCalc->getTotalEnergyLoss(E, cor_dfdl);
             //cout << "E  " << E << endl;
+            //cout << "Eloss from frontdeadlayer  " << loss2 << endl;
             Etot+=E;
             if(E!=0) counter++;
-        }//is the active detector area hit?
+          
+    
     }//does the source hit the infitie plane extended by the detector surface?
-}//Is the frame hit?
-}//for i in N
+}//is the frame hit?
+    }//for i in N
 Etot/=counter;/* Sum up E's and divide by N?*/
 
 cout << Etot << " ";
@@ -248,6 +363,7 @@ cout << Etot << " ";
 cout << "#Strip " << s+1 << endl;
 }//for i in strips 
 }//for side in sides
+}
 return 0;
 }//main
 

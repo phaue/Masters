@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         auto* s = new TSpectrum();
         vector<Double_t> spec_out(N, 0.0);
         Int_t nfound = s->SearchHighRes(spec_in.data(), spec_out.data(), N,
-                                        8, 2, kTRUE, 3, kTRUE, 3);
+                                        12, 2, kTRUE, 3, kTRUE, 3);
 
         const int max_peaks = 4; // Set your desired maximum number of peaks
         if (nfound > max_peaks) {
@@ -139,6 +139,8 @@ int main(int argc, char* argv[]) {
 
 vector<double> xpeaks_vec(nfound);
 vector<double> sigmas_vec(nfound);
+vector<double> fitmeans_vec(nfound);
+double sigmaGuess;
 
 for (int i = 0; i < nfound; ++i) {
     xpeaks_vec[i] = xpeaks[i]*h1->GetBinWidth(1);
@@ -146,7 +148,11 @@ for (int i = 0; i < nfound; ++i) {
     double peakX = xpeaks[i]*h1->GetBinWidth(1);
     int bin = h1->FindBin(peakX);
     double height = h1->GetBinContent(bin);
-    double sigmaGuess = 15 * h1->GetBinWidth(1);
+    if (subdir == "padmatcher") {
+        sigmaGuess = 12;}
+    else if (subdir == "padcalc"){
+        sigmaGuess = 25;
+    }
 
     TF1* fit = new TF1(Form("gaus_%s_%d", name.c_str(), i), "gaus", peakX - 3 * sigmaGuess, peakX + 3 * sigmaGuess);
     fit->SetParameters(height, peakX, sigmaGuess);
@@ -156,7 +162,7 @@ for (int i = 0; i < nfound; ++i) {
     fitHist->Fit(fit, "RQ+");
 
     sigmas_vec[i] = fit->GetParameter(2); // store fitted sigma
-
+    fitmeans_vec[i] = fit->GetParameter(1);
     delete fit;
 }
 
@@ -173,6 +179,7 @@ for (size_t rank = 0; rank < indices.size(); ++rank) {
     size_t i = indices[rank];
     Pout << name << " " << rank + 1 << " "
          << xpeaks_vec[i] << " "
+         << fitmeans_vec[i] << " "
          << sigmas_vec[i] << "\n";
 }
 
