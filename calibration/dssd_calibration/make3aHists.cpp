@@ -18,7 +18,30 @@ map<string, vector<string>> det_run_map = {
     {"U4", {"009_000.root", "009_001.root", "009_002.root", "009_003.root"}},
     {"U5", {"010_000.root", "010_001.root", "010_002.root", "010_003.root", "010_004.root", "010_005.root"}},
     {"U6", {"011_000.root", "011_001.root", "011_002.root", "011_003.root", "011_004.root"}}
+};/*
+map<string, vector<string>> det_run_map = {
+    {"U1", {"128_000.root", "128_001.root"}},
+    {"U2", {"128_000.root", "128_001.root"}},
+    {"U3", {"126_000.root", "126_001.root"}},
+    {"U4", {"126_000.root", "126_001.root"}},
+    {"U5", {"127_000.root", "127_001.root"}},
+    {"U6", {"124_000.root", "124_001.root"}}
+};*/
+map<string, vector<string>> pad_run_map = { //pad runs taken after experiment
+    {"P1", {"129_000.root"}},
+    {"P2", {"129_000.root"}},
+    {"P3", {"130_000.root"}},
+    {"P4", {"130_000.root"}},
+    {"P6", {"131_000.root"}}
 };
+/*
+map<string, vector<string>> pad_run_map = { //pad runs taken after experiment
+    {"P1", {"005_000.root", "005_001.root"}},
+    {"P2", {"003_000.root"}},
+    {"P3", {"002_000.root", "002_001.root"}},
+    {"P4", {"002_000.root", "002_001.root"}},
+    {"P6", {"001_000.root", "001_001.root"}}
+};*/
 
 // TODO: only looking at pre-experiment 3a for now. look also at post-experiment 3a and compare.
 
@@ -27,7 +50,7 @@ typedef struct detector_side {
   string name;
 } detector_side;
 
-string input_dir  = getProjectRoot() + "/data/unpacked";
+string input_dir  = getProjectRoot() + "/data/unpacked/calfiles/";
 string output_dir = getProjectRoot() + "/data/cal";
 
 int main(int argc, char* argv[]) {
@@ -88,12 +111,47 @@ int main(int argc, char* argv[]) {
 
     for (const auto& hist : hists) hist.second->Write();
   }
+    // ===================================================================
+    // NEW: Loop for Pad Detectors
+    // ===================================================================
+    cout << "--- Now processing Pad Detectors ---" << endl;
+    for (const auto& [pad_name, runs] : pad_run_map) {
+        auto* c = new TChain("h101");
+        for (const auto& run : runs) {
+            cout << "Chaining " << run << " for pad detector " << pad_name << endl;
+            c->Add((input_dir + "/" + run).c_str());
+        }
 
-  out->Close();
+        // Create one histogram for this pad
+        Double_t xlow = 0.; Double_t xup = 4000.; // General purpose energy range
+        auto* pad_hist = new TH1D(pad_name.c_str(), pad_name.c_str(), (Int_t)xup, xlow, xup);
 
-  clock_t stop = clock();
-  double elapsed = (double) (stop - start) / CLOCKS_PER_SEC;
-  printf("\nTime elapsed: %.5f seconds\n", elapsed);
+        // Link the branch to a variable. Assumes branch name == pad_name (e.g., "P1")
+        UInt_t pad_energy = 0;
+        c->SetBranchAddress((pad_name+"E").c_str(), &pad_energy);
 
-  return 0;
+        cout << "Total events (" << pad_name << "): " << c->GetEntries() << endl;
+        for (int i = 0; i < c->GetEntries(); i++) {
+            c->GetEntry(i);
+
+            // Since pads don't have multiplicity, we just fill the energy if it's non-zero
+            if (pad_energy > 0) {
+                pad_hist->Fill(pad_energy);
+            }
+
+             if (i % 100000 == 0) cout << "\r" << ceil((double) 100 * i / c->GetEntries()) << "% of events processed" << flush;
+        }
+        cout << endl << endl;
+
+        pad_hist->Write();
+        delete c;
+    }
+
+    out->Close();
+
+    clock_t stop = clock();
+    double elapsed = (double) (stop - start) / CLOCKS_PER_SEC;
+    printf("\nTime elapsed: %.5f seconds\n", elapsed);
+
+    return 0;
 }

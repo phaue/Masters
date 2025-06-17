@@ -1,0 +1,39 @@
+# Tue Jun 17 09:04:39 2025
+# Output created from within /home/haue/repositories/Masters/build with the following command
+# ./angle_effect/EnergyEstimation -s ../setup/setup.json --no-target -I a -d U6 --rim -E 5155.4,5485.74,5804.96 -x 0. -y -5. -z 0. 
+# Setup:               ../setup/setup.json
+# Target:              NOT USING TARGET
+# Source point:        (0, -5, 0)
+# Radius of source:    1e-06
+# Number of iteraitons:100000
+# Energies (keV):      5155.4 5485.74 5804.96 
+# Detector=U6	front strips 2..15
+5138.46 5469.42 5789.24 #Strip 2
+5139.01 5469.95 5789.68 #Strip 3
+5139.45 5470.39 5790.14 #Strip 4
+5139.88 5470.76 5790.46 #Strip 5
+5140.12 5471.05 5790.72 #Strip 6
+5140.3 5471.17 5790.95 #Strip 7
+5140.42 5471.28 5791 #Strip 8
+5140.39 5471.29 5791 #Strip 9
+5140.31 5471.21 5790.91 #Strip 10
+5140.12 5471.05 5790.74 #Strip 11
+5139.82 5470.71 5790.5 #Strip 12
+5139.47 5470.41 5790.14 #Strip 13
+5139.02 5469.95 5789.65 #Strip 14
+5138.53 5469.49 5789.21 #Strip 15
+# Detector=U6	back strips 2..15
+5138.07 5469.1 5788.86 #Strip 2
+5138.69 5469.64 5789.41 #Strip 3
+5139.21 5470.07 5789.89 #Strip 4
+5139.62 5470.55 5790.23 #Strip 5
+5139.96 5470.86 5790.56 #Strip 6
+5140.22 5471.13 5790.81 #Strip 7
+5140.37 5471.29 5790.92 #Strip 8
+5140.37 5471.32 5791.04 #Strip 9
+5140.41 5471.26 5790.99 #Strip 10
+5140.27 5471.17 5790.89 #Strip 11
+5140.03 5470.92 5790.66 #Strip 12
+5139.68 5470.64 5790.39 #Strip 13
+5139.32 5470.27 5789.96 #Strip 14
+5138.85 5469.79 5789.56 #Strip 15

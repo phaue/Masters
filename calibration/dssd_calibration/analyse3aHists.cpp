@@ -18,7 +18,7 @@ string input_dir  = getProjectRoot() + "/data/cal";
 string output_dir = getProjectRoot() + "/data/cal";
 
 const vector<string> dead_strips = {
-    "U2F6", "U3B16", "U4F1", "U4F2", "U4B14", "U4B15", "U4B16"
+    "U2F6", "U3B16", "U4F1", "U4B14", "U4B15", "U4B16"
 };
 
 int main(int argc, char* argv[]) {
@@ -35,7 +35,10 @@ int main(int argc, char* argv[]) {
       }
     }
   }
-
+  const vector<string> p_detectors = {"P1", "P2", "P3", "P4", "P6"};
+  for (const auto& p_det : p_detectors) {
+      hist_names.emplace_back(p_det);
+  }
   std::unique_ptr<TFile> in = make_unique<TFile>((input_dir + "/3ah.root").c_str(), "read");
   std::unique_ptr<TFile> out = make_unique<TFile>((output_dir + "/3aha.root").c_str(), "recreate");
 

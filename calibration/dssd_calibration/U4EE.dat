@@ -1,3 +1,12 @@
+# Mon Jun 16 14:29:41 2025
+# Output created from within /home/haue/repositories/Masters/build with the following command
+# ./angle_effect/EnergyEstimation -s ../setup/setup.json -t ../setup/target.json -d U4 -E 385.72,904.02,1843.18,2076.74,2217.45,3337.75,4089.18,5402.61 -i 17.0 
+# Setup:               ../setup/setup.json
+# Target:              ../setup/target.json
+# Source point:        (0, 0, -0.500054)
+# Radius of source:    1e-06
+# Number of iteraitons:100000
+# Energies (keV):      385.72 904.02 1843.18 2076.74 2217.45 3337.75 4089.18 5402.61 
 # Detector=U4	front strips 2..15
 375.972 897.867 1839.36 2073.19 2214.04 3335.19 4087 5400.81 #Strip 2
 376.119 897.98 1839.43 2073.24 2214.09 3335.23 4087.04 5400.84 #Strip 3
