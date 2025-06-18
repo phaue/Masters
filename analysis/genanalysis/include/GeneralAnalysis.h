@@ -92,7 +92,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, Proton, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, Proton, setupSpecs);
-        P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
+        P4 = new Detector_frib(9, "P4", Pad, Proton, setupSpecs);
         P5 = new Detector_frib(10, "P5", Pad, Alpha, setupSpecs); 
         P6 = new Detector_frib(11, "P6", Pad, Proton, setupSpecs);
 

@@ -292,7 +292,7 @@
     {
       "name": "P4",
       "file": "AUPAD_1458_00.json",
-      "calibration": "P4_alpha.cal",
+      "calibration": "P4mult.cal",
       "position": {
         "x": "31.9mm",
         "y": "-0.9mm",

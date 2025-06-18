@@ -15,7 +15,6 @@ include_directories(include)
 
 # Add each analysis subdirectory
 add_subdirectory(analysis/genanalysis)
-add_subdirectory(analysis/ProtonAnalysis)
 add_subdirectory(calibration/pad_calibration)
 add_subdirectory(calibration/dssd_calibration)
 add_subdirectory(angle_effect)
