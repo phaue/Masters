@@ -80,15 +80,6 @@ class BananaMaker : public GeneralAnalysis {
     for(auto hit : telescope_frontside_successes){
       telescope_frontside_candidates.erase(hit);
       }//removes all hits that were a success from the frontside candidates
-      
-      for(auto hit : telescope_backside_successes){
-        telescope_backside_candidates.erase(hit);
-        }//removes all hits that were a success from the frontside candidates
-     
-      for(auto hit : telescope_backside_candidates){
-        treatPadHit(hit);
-        addPadHit(hit);
-      }
   
     for(auto hit : telescope_frontside_candidates){
       treatDSSSDHit(hit);
@@ -372,6 +363,113 @@ private:
     vector<vector<int>> peakSets;
 };//Bananaexplorer
 
+class TwoProton : public GeneralAnalysis {
+public:
+  TwoProton(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+                    bool _include_banana_cuts=false, bool _include_beta_region =false)
+        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
+                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
+
+  void specificAnalysis() override {
+    if (hits.empty()) return;
+
+    int proton_events = 0;
+    
+    pair<vector<Hit*>, vector<Hit*>> telescope_candidates;
+    for (auto &hit : hits) {
+      auto det = hit.detector;
+      switch (det->getType()) {
+        case DSSSD:
+          if (det->hasPartner()
+              //&& det->getId() < 4 && det->getId() > 0// look only for b2p in the best detector telescopes
+          ) {
+            telescope_candidates.first.emplace_back(&hit);
+          }
+          break;
+        case Pad:
+          if (det->hasPartner()
+              //&& det->getId() < 10 && det->getId() > 6 // look only for b2p in the best detector telescopes
+          ) {
+            telescope_candidates.second.emplace_back(&hit);
+          }
+          break;
+        default:
+          // if case is 'HPGe', the scalar Eg1 and/or Eg2 already contains the gamma energy and the boolean 'g' is set to 'true'
+          // do nothing
+          break;
+      }
+    }
+
+    pair<vector<Hit*>, vector<Hit*>> telescope_successes;
+    for (auto front_hit : telescope_candidates.first) {
+      if (std::find(telescope_successes.first.begin(),
+                    telescope_successes.first.end(), 
+                    front_hit) != telescope_successes.first.end()) continue;
+      auto front_det = front_hit->detector;
+      for (auto back_hit : telescope_candidates.second) {
+        if (std::find(telescope_successes.second.begin(),
+                      telescope_successes.second.end(),
+                      back_hit) != telescope_successes.second.end()) continue;
+        auto back_det = back_hit->detector;
+        if (front_det->getPartner() == back_det) {
+          bool success = treatTelescopeHit(front_hit, back_hit);
+          if (success) {
+            if (front_det->getBananaCut()->isInside(back_hit->Edep, front_hit->Edep)) {
+              proton_events++;
+              telescope_successes.first.emplace_back(front_hit);
+              telescope_successes.second.emplace_back(back_hit);
+            }
+          }
+        }
+      }
+    }
+
+    unordered_set<Hit*> deltaE_contained;
+    for (auto front_hit : telescope_candidates.first) {
+      if (std::find(telescope_successes.first.begin(),
+                    telescope_successes.first.end(),
+                    front_hit) == telescope_successes.first.end()) {
+        treatDSSSDHit(front_hit);
+        deltaE_contained.emplace(front_hit);
+        proton_events++;
+      }
+    }
+
+//    if (proton_events > 2) cout << proton_events << "\t" << endl;
+
+    if (proton_events != 2) return;
+
+    vector<Hit*> twoPHits;
+    for (auto hit : telescope_successes.first) {
+      twoPHits.emplace_back(hit);
+      }
+    for (auto hit : deltaE_contained) {
+      twoPHits.emplace_back(hit);
+    }
+
+
+
+    double E1 = twoPHits[0]->E;
+    double E2 = twoPHits[1]->E;
+    Theta = twoPHits[0]->direction.Angle(twoPHits[1]->direction);
+    Q2p = E1 + E2 + PROTON_MASS*(E1 + E2 + 2*sqrt(E1*E2)*cos(Theta))/twoPdaughter.getMass();
+    Theta *= TMath::RadToDeg();
+    // Omega = interp.Eval(Theta);
+    Omega = NAN;
+
+
+    for (auto hit : twoPHits) {
+      addTwoProtonHit(hit);
+    }
+  }
+
+private:
+  gsl_vector* theta;
+  gsl_vector* omega;
+  Interpolator interp = Interpolator(0, kAKIMA);
+};
+
 
 
 
@@ -419,6 +517,10 @@ for(auto &runpart : input){
     }
   else if(specificAnalysis == "GammaSpec"){
     analysis = make_shared<GammaSpec>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
+                                          include_spurious_zone, include_banana_cuts, include_beta_region);
+    }
+  else if(specificAnalysis == "TwoProton"){
+    analysis = make_shared<TwoProton>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
   else if(specificAnalysis == "AboveBananaAnalysis"){

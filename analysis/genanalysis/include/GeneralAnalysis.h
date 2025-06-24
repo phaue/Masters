@@ -59,22 +59,26 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
              include_banana_cuts(_include_banana_cuts), include_beta_region(_include_beta_region){
         //Constructor for the general analysis script
 
-        if(isotopetype=="Si"){
+      if(isotopetype=="Si"){
           implantation_depth = 17/1e6;
+          twoPD = "20Ne";
       }
       else if(isotopetype=="P"){
           implantation_depth = 22.4/1e6;
+          twoPD = "24Mg";
       }
       else if(isotopetype=="Al"){
           implantation_depth = 41/1e6;
+          twoPD = "20Ne";
       }
       else if(isotopetype=="Mg"){
           implantation_depth=45.9/1e6;
+          twoPD = "20Ne";
       }
       else{
         cout<<"No specification on the input isotope?? Hello?" << endl;
       } 
-        
+      twoPdaughter = Ion(twoPD);
       origin = target->getCenter() + (target->getThickness() / 2. - implantation_depth) * target->getNormal();
       //  cout << "target center=(" << target->getCenter().X() << ", " << target->getCenter().Y() << ", " << target->getCenter().Z() << ")" << endl
       //   << " implantation=(" << origin.X() << ", " << origin.Y() << ", " << origin.Z() << ")" << endl
@@ -82,12 +86,12 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         //Define all the detectors in the setup using the Detector.h file
               //betacutoff can now be determined for U1 U2 U3 U4
-        U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
-        U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 400.);
-        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
-        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 750.);// should change according to thicknesses
-        U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 1500.);
-        U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 400.);
+        U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 600.); //these can be defined with betacutoffs aswell
+        U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
+        U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 260.);
+        U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);// should change according to thicknesses
+        U5 = new Detector_frib(4, "U5", DSSSD, Proton, setupSpecs, 2000.);
+        U6 = new Detector_frib(5, "U6", DSSSD, Proton, setupSpecs, 300.);
 
         P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, Proton, setupSpecs);
@@ -109,11 +113,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         if (include_banana_cuts) {
         // need to set the banana cuts here when they are done example of how this is done is seen below
           try {
-              U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id0cut", include_region));
-              U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id1cut", include_region));
-              U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id2cut", include_region));
-              U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id3cut", include_region));
-              U6->setBananaCut(new gCut(getProjectRoot() + "data/cuts/gcuts.root", "id5cut", include_region));
+              U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id0cut;2", include_region));
+              U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id1cut", include_region));
+              U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id2cut", include_region));
+              U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id3cut", include_region));
+              U6->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id5cut", include_region));
 
             } catch (const runtime_error &e) {
               cerr << "Error initializing banana cuts: " << e.what() << endl;
@@ -180,9 +184,9 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         v_E = make_unique<DynamicBranchVector<double>>(*tree, "E", "mul");
         v_Ea = make_unique<DynamicBranchVector<double>>(*tree, "Ea", "mul");
 
-
-        //tree->Branch("Theta", &Theta); // wat the fuck is this
-        //tree->Branch("Omega", &Omega);// what the fuck is this
+        tree->Branch("Q2p", &Q2p);
+        tree->Branch("Theta", &Theta); // wat the fuck is this
+        tree->Branch("Omega", &Omega);// what the fuck is this
         
         //This structure only saves 1 gamma event pr gamma detector pr hit
         tree->Branch("Eg1", &Eg1); 
@@ -212,7 +216,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
     for (auto &layer: target->getLayers()) {
       aTargetCalcs.push_back(defaultRangeInverter(Ion::predefined("a"), layer.getMaterial()));
     }
-
+    
+    
 
     }//General analysis class
 
@@ -385,9 +390,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           double fdl = det->getFrontDeadLayer()/abs(cos(angle));
 
           double E = hit->Edep;
-          if(det->getCalibration() == Alpha) {
-              E*= 1.012;
-          }//if statement
           //double E = hit->Edep; // proton energy correction from the front dead layer and target layers
           E += pSiCalc -> getTotalEnergyCorrection(E, fdl);
           auto &from = hit->position;
@@ -451,11 +453,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           E+= pAlCalc -> getTotalEnergyCorrection(E, back_det_fct);
           E+= pAlCalc -> getTotalEnergyCorrection(E, front_det_bct);
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
-          double Edepped = dsssd_hit->Edep;
-          if(front_det->getCalibration() == Alpha) {
-              Edepped*= 1.012;
-          }//if statement
-          E+= Edepped;
+          E+= dsssd_hit->Edep;
           E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
           auto &from = dsssd_hit->position;
           for (auto &intersection: target->getIntersections(from, origin)) {
@@ -529,31 +527,35 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             mul++;
             p = true;
             }//addTelescopeHit
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        void addPadHit(Hit *hit){
-          v_id->add(hit->id);
-          v_dir->add(hit->direction);
-          v_pos->add(hit->position);
-          v_theta->add(hit->theta);
-          v_phi->add(hit->phi);
-          v_angle->add(hit->angle);
-          v_Edep->add(hit->Edep);
-          v_fEdep->add(NAN);
-          v_bEdep->add(NAN);
-          v_FI->add(hit->FI);
-          v_BI->add(hit->BI);
-          v_FT->add(hit->FT);
-          v_BT->add(hit->BT);
+        void addTwoProtonHit(Hit *hit) {
+            v_id->add(hit->id);
 
-          v_E->add(hit->E);
-          mul++;
-          //p = true
-        }//addPadHit
+            v_dir->add(hit->direction);
+            v_pos->add(hit->position);
 
-        static bool GammaGate(double E, double Emin, double Emax){
-          return Emin <= E && E <= Emax;
-        }
+            v_theta->add(hit->theta);
+            v_phi->add(hit->phi);
+            v_angle->add(hit->angle);
+
+            v_Edep->add(hit->Edep);
+            v_fEdep->add(NAN);
+            v_bEdep->add(NAN);
+
+            v_FI->add(hit->FI);
+            v_BI->add(hit->BI);
+            v_FE->add(hit->FE);
+            v_BE->add(hit->BE);
+            v_FT->add(hit->FT);
+            v_BT->add(hit->BT);
+
+            v_E->add(hit->E);
+            v_Ea->add(NAN);
+
+            mul++;
+            p = true;
+          }
+
 
         //code that runs after all events have been analyzed
       void terminate() override { //after analyzing we need to terminate the program
@@ -566,7 +568,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //must clear all assigned variables used in analysis before going again
         mul = 0;
         p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = false;
-        Eg1, Eg2, Eg1mul, Eg2mul= NAN;
+        Eg1= Eg2= Q2p= Theta= Omega= NAN;
         AUSA::clear(
         *v_id,
         *v_dir, *v_pos,
@@ -589,7 +591,8 @@ TVector3 origin; // origin of the projectiles to be analyzed
 shared_ptr<Setup> setupSpecs;
 shared_ptr<Target> target;
 double implantation_depth;
-string isotopetype;
+string isotopetype, twoPD;
+Ion twoPdaughter;
 bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
 Bool_t p, g1, g2, pg1, pg2, b, bg1, bg2;
 TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
@@ -604,7 +607,7 @@ int NUM;
 UInt_t mul{}, CLOCK{}; //TPATTERN{}, TPROTONS{},
 SortedSignal clock; //tpattern, tprotons, are these tprotons the time related to the measurements?
 
-Double_t Eg1, Eg2, Eg1mul, Eg2mul;
+Double_t Eg1, Eg2, Q2p, Theta, Omega;
 unique_ptr<DynamicBranchVector<unsigned short>> v_id;
 unique_ptr<DynamicBranchVector<TVector3>> v_dir, v_pos;
 unique_ptr<DynamicBranchVector<double>> v_theta, v_phi, v_angle;
