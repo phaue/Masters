@@ -376,6 +376,7 @@ public:
 
     int proton_events = 0;
     
+    //finds the telescope proton events from the hits
     pair<vector<Hit*>, vector<Hit*>> telescope_candidates;
     for (auto &hit : hits) {
       auto det = hit.detector;
@@ -424,7 +425,7 @@ public:
         }
       }
     }
-
+    //find the deltaE contained proton events not treated from the previous telescope treatment
     unordered_set<Hit*> deltaE_contained;
     for (auto front_hit : telescope_candidates.first) {
       if (std::find(telescope_successes.first.begin(),
@@ -437,7 +438,7 @@ public:
     }
 
 //    if (proton_events > 2) cout << proton_events << "\t" << endl;
-
+    //Now if the hit in question has EXACTLY 2 proton events we save it as a twoproton event.
     if (proton_events != 2) return;
 
     vector<Hit*> twoPHits;

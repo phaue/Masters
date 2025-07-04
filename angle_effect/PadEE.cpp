@@ -23,9 +23,7 @@ using namespace EUtil;
 using namespace Telescope;
 
 TRandom randGen;
-/*
-Perhaps change the random generators to take and produce TVector3's instead...
-*/
+
 /* 
 Random point generator within a circle of a given x,y and r
 */
@@ -53,40 +51,31 @@ TVector3 DirectionGenerator(){
 
 bool FindIntersection(const TVector3& source, const TVector3& direction, const TVector3& bound1, const TVector3& bound2, 
             const TVector3& bound4, const TVector3& normal, TVector3& intersection) {
-// Compute a point on the plane (bound1 is used as P0)
-    TVector3 P0 = bound1;
 
-    // Calculate the dot product of the normal and direction
+    TVector3 P0 = bound1;
     double denom = normal.Dot(direction);
     if (std::abs(denom) < 1e-6) {
-    // Line is parallel to the plane
         return false;
     }
 
-    // Compute the parameter t for the line equation
     double t = normal.Dot(P0 - source) / denom;
-
-    // Compute the intersection point
+    if (t < 0) {
+        return false;
+    }
     intersection = source + t * direction;
 
-    // Check if the intersection point lies within the bounds of the plane
-    // (Assuming the plane is a rectangle defined by bound1, bound2, bound3, bound4)
-    TVector3 bound3 = bound2 + (bound4 - bound1); // Compute bound3 from the given bounds
+    TVector3 bound3 = bound2 + (bound4 - bound1); 
 
-    // Vectors along the edges of the rectangle
     TVector3 edge1 = bound2 - bound1;
     TVector3 edge2 = bound4 - bound1;
 
-    // Vector from bound1 to the intersection point
-    TVector3 toIntersection = intersection - bound1;
 
-       // Project the intersection point onto the plane's local coordinate system
+    TVector3 toIntersection = intersection - bound1;
    double u = toIntersection.Dot(edge1) / edge1.Mag2();
    double v = toIntersection.Dot(edge2) / edge2.Mag2();
 
-   // This check is crucial and should be enabled
    if (u >= 0 && u <= 1 && v >= 0 && v <= 1) {
-       return true; // Intersection is valid and within bounds
+       return true;
    }
 
    return false; // Intersection is outside the bounds

@@ -12,6 +12,8 @@
 #include <ausa/setup/SquareDSSD.h>
 #include <ausa/setup/PadDetector.h>
 #include <cxxopts.hpp>
+#include <gsl/gsl_matrix.h>
+
 
 
 
@@ -239,7 +241,7 @@ int main(int argc, char* argv[]){
     target_path = result.count("target") ? result["target"].as<string>() : target_path;
     shared_ptr<Target> target;
     radius = result.count("radius") ? result["radius"].as<double>() : 1e-6;
-    N = result.count("iterations") ? result["iterations"].as<int>() : 100000;
+    N = result.count("iterations") ? result["iterations"].as<int>() : 10000000;
     double implantation_depth = 0.;
     TVector3 origin;
     if (!no_target) {// if a target exists we do...
@@ -283,7 +285,7 @@ int main(int argc, char* argv[]){
 
     
     for (const auto& d : result["detector"].as<vector<string>>()) {
-
+    
     //vector<string> detectors = {"U1", "U2", "U3", "U6"}; // for padvetoed calibration
     //vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45}; //kev - for padvetoed calibration 
     //vector<string> detectors = {"U1"}; // for padvetoed calibration
@@ -305,46 +307,30 @@ int main(int argc, char* argv[]){
     //TVector3 origin = target->getCenter() + (target->getThickness()/2. - implantation_depth)*target->getNormal(); // origin of the point source
     //cout << "target:  "<< target->getThickness() << endl; 
     TVector3 normal = det->getNormal().Unit();
-    
-    for(const string& side : sides){
-        cout << "# Detector=" << d <<  "\t" << side << " strips 2..15" << endl;
-    for(int  s=1; s<15; ++s){ // if i = 1 return strip 2 if i==14 return strip 15 //////////
-    TVector3 bound1, bound2, bound3, bound4;
-    //TVector3 bound1 = det->getContinuousPixelPosition(1.5,1.5); // position between pixel 1 and 2 for both front strip and back strip, should return the corner pos of the  
-    //TVector3 bound2 = det->getContinuousPixelPosition(15.5,1.5); // position between pixel 15 and 16 & 1 and 2 for front and back strip respectively
-    //TVector3 bound3 = det->getContinuousPixelPosition(15.5,15.5);
-    //TVector3 bound4 = det->getContinuousPixelPosition(1.5,15.5);
-
-    /*
-    Define borders for each strip in a loop over strips in a loop over sides.
-    fx. if the side is "front" and strip is 7 then the bounds returns the 4 corners of the strip and the loop then checks whether or not the particle hits this strip
-
-    Im a bit unsure here whether or not the limits should be 1.5 and 15.5 instead of 0.5 and 16.5. 
-    Using 16.5 and 0.5 a given strip E is calculated by allowing events being recorded in 1-16 on the oppsosite side. 
-    fx the front strip 6 energy is an average of all the energy deposited in backstrip 1-16
-    */
-    if(side=="front"){
-    bound1 = det->getContinuousPixelPosition(s+0.5,0.5); 
-    bound2 = det->getContinuousPixelPosition(s+1+0.5,0.5); 
-    bound3 = det->getContinuousPixelPosition(s+1+0.5,16.5);
-    bound4 = det->getContinuousPixelPosition(s+0.5,16.5);    
-    }
-    else if(side=="back"){
-    bound1 = det->getContinuousPixelPosition(0.5,s+0.5); 
-    bound2 = det->getContinuousPixelPosition(16.5,s+0.5); 
-    bound3 = det->getContinuousPixelPosition(16.5,s+1+0.5);
-    bound4 = det->getContinuousPixelPosition(0.5,s+1+0.5);    
-    }
-    else cerr << "Error in sides" << endl;
+    UInt_t fN = det->frontStripCount();
+    gsl_matrix *solid_angles = gsl_matrix_alloc(fN, fN);
     
 
-    
-                                                     
-    TVector3 EmissionPoint, direction, source, intersection;
+
+    for (size_t i = 0; i < solid_angles->size1; i++) {
+      for (size_t j = 0; j < solid_angles->size2; j++) {
+        //if(i==0 || i==15 || j==15 || j==15){
+        //    gsl_matrix_set(solid_angles, i, j, 0);
+        //    continue;
+        //}
+        double SA = 0;
+        TVector3 bound1, bound2, bound3, bound4;
+        bound1 = det->getContinuousPixelPosition(i+0.5,j+0.5); 
+        bound2 = det->getContinuousPixelPosition(i+1+0.5,j+0.5); 
+        bound3 = det->getContinuousPixelPosition(i+1+0.5,j+1+0.5);
+        bound4 = det->getContinuousPixelPosition(i+0.5,j+1+0.5);
+                           
+        TVector3 EmissionPoint, direction, source, intersection;
 
     for (const auto& e : result["energy"].as<vector<double>>()) {
+    
     double Etot = 0;
-    int counter =0;
+    double counter =0;
         //cout << "peakE" << e << endl;
     for(int i=0; i<N; i++){
 
@@ -393,17 +379,36 @@ int main(int argc, char* argv[]){
     
     }//does the source hit the infitie plane extended by the detector surface?
 }//is the frame hit?
-    }//for i in N
-Etot/=counter;
+}//for i in N
+SA += (counter/N) * (4.0*M_PI);
 
-cout << Etot << " ";
+//cout << Etot << " ";
 
 }//for e in energies
+SA /= result["energy"].as<vector<double>>().size();
+//cout << "#Strip " << s+1 << endl;
+gsl_matrix_set(solid_angles, i, j, SA);
+}//for i frontstrip
+}//for j in backstrip
 
-cout << "#Strip " << s+1 << endl;
+cout << "# Solid angles of pixels of " << d.c_str() << endl;
+cout << "# ";
+    for (int j = 0; j < solid_angles->size2; j++) {
+      cout << j + 1 << "\t";
+    }
+    cout << endl;
+    for (size_t i = 0; i < solid_angles->size1; i++) {
+      //cout << "#";
+      for (size_t j = 0; j < solid_angles->size2; j++) {
+        cout << gsl_matrix_get(solid_angles, i, j);
+        if (j + 1 != solid_angles->size2) {
+          cout << "\t";
+        } else {
+          cout << "\t # " << i + 1 << endl;
+        }
+      }
+    }
 
-}//for i in strips 
-}//for side in sides
 }//for d in detectors
 return 0;
 }//main
