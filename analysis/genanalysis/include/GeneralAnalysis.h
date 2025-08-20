@@ -203,6 +203,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         tree->Branch("bg1", &bg1);
         tree->Branch("bg2", &bg2);
         
+        tree->Branch("pb", &pb);
+
         //tree->Branch("CLOCK", &CLOCK);
 
     pSiCalc = defaultRangeInverter("p", "Silicon"); //Eloss in detector material of protons
@@ -248,6 +250,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         pg2 = p && g2;
         bg1 = b && g1;
         bg2 = b && g2;
+        pb = b && p;
         tree->Fill();
         NUM++; //counts number of events
       }//analyze
@@ -292,7 +295,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.Edep = energy(out, i); // from AUSA
 
           //if(hit.Edep < 150) continue;
-          if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
+          //if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
 
           auto FI = fSeg(out, i); // from AUSA
           auto BI = bSeg(out, i); // from AUSA
@@ -373,7 +376,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }
         double G2eff(double E){
           double A = 0.138; double B=-0.5;
-          return A * pow(E,-B);
+          return A * pow(E,B);
           }
         
         double G1eff_error(double E) {
@@ -420,6 +423,13 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
  */
         void treatDSSSDHit(Hit *hit) {
           auto det = hit->detector;
+
+          if(!include_beta_region && hit->Edep <= det->getBetaCut()) {
+            hit->E = 0;
+            hit->Ea = 0;
+            return;
+          };
+
           double angle = hit->angle;
           //finds the front dead layer accounting for the thickness change with changing angle of incidence
           double fdl = det->getFrontDeadLayer()/abs(cos(angle));
@@ -469,6 +479,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
               if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
                   b = true;
           }}
+          
+          if(!include_beta_region && dsssd_hit->Edep <= dsssd_hit->detector->getBetaCut()) return false;
 
           auto front_det = dsssd_hit->detector;
           auto back_det = pad_hit->detector;
@@ -602,7 +614,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //We need to clear the memory - done manually in cpp
         //must clear all assigned variables used in analysis before going again
         mul = 0;
-        p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = false;
+        p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = pb = false;
         Eg1= Eg2= Q2p= Theta= Omega= eff1=eff2= eff1_err=eff2_err = NAN;
         AUSA::clear(
         *v_id,
@@ -629,7 +641,7 @@ double implantation_depth;
 string isotopetype, twoPD;
 Ion twoPdaughter;
 bool exclude_hpges, include_DSSSD_rim, include_spurious_zone, include_banana_cuts, include_beta_region;
-Bool_t p, g1, g2, pg1, pg2, b, bg1, bg2;
+Bool_t p, g1, g2, pg1, pg2, b, bg1, bg2, pb;
 TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
 
 
