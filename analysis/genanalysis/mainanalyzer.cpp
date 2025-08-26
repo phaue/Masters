@@ -451,8 +451,8 @@ public:
 
 
 
-    double E1 = twoPHits[0]->E;
-    double E2 = twoPHits[1]->E;
+    E1 = twoPHits[0]->E;
+    E2 = twoPHits[1]->E;
     Theta = twoPHits[0]->direction.Angle(twoPHits[1]->direction);
     Q2p = E1 + E2 + PROTON_MASS*(E1 + E2 + 2*sqrt(E1*E2)*cos(Theta))/twoPdaughter.getMass();
     Theta *= TMath::RadToDeg();

@@ -185,6 +185,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         v_Ea = make_unique<DynamicBranchVector<double>>(*tree, "Ea", "mul");
 
         tree->Branch("Q2p", &Q2p);
+        tree->Branch("E1", &E1);
+        tree->Branch("E2", &E2);
         tree->Branch("Theta", &Theta); // wat the fuck is this
         tree->Branch("Omega", &Omega);// what the fuck is this
         
@@ -204,6 +206,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         tree->Branch("bg2", &bg2);
         
         tree->Branch("pb", &pb);
+        tree->Branch("b", &b);
 
         //tree->Branch("CLOCK", &CLOCK);
 
@@ -295,7 +298,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           hit.Edep = energy(out, i); // from AUSA
 
           //if(hit.Edep < 150) continue;
-          //if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
+          if(!include_beta_region && hit.Edep <= detector->getBetaCut()) continue;
 
           auto FI = fSeg(out, i); // from AUSA
           auto BI = bSeg(out, i); // from AUSA
@@ -393,7 +396,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           double A = 0.138; double B = -0.5;
           double err_A = 0.04 * std::abs(A);
           double err_B = 0.04 * std::abs(B);
-          return sqrt(pow(pow(E, -B) * err_A, 2) + pow(-A * pow(E, -B) * log(E) * err_B, 2));
+          return sqrt(pow(pow(E, B) * err_A, 2) + pow(-A * pow(E, -B) * log(E) * err_B, 2));
         }
         
         void findGermaniumHit(Detector_frib *detector) {
@@ -424,11 +427,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         void treatDSSSDHit(Hit *hit) {
           auto det = hit->detector;
 
-          if(!include_beta_region && hit->Edep <= det->getBetaCut()) {
-            hit->E = 0;
-            hit->Ea = 0;
-            return;
-          };
+          //if(!include_beta_region && hit->Edep <= det->getBetaCut()) {
+          //  hit->E = 0;
+          //  hit->Ea = 0;
+          //  return;
+          //};
 
           double angle = hit->angle;
           //finds the front dead layer accounting for the thickness change with changing angle of incidence
@@ -475,12 +478,12 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           // if there is no energy recorded in either then there is no telescope hit therefore return false
           if (dsssd_hit->Edep == 0 || pad_hit->Edep == 0) return false;
 
-          if (dsssd_hit->detector->getName()=="U4"){
-              if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
-                  b = true;
-          }}
+          ////if (dsssd_hit->detector->getName()=="U4"){
+          if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
+              b = true;}
+          //}
           
-          if(!include_beta_region && dsssd_hit->Edep <= dsssd_hit->detector->getBetaCut()) return false;
+          //if(!include_beta_region && dsssd_hit->Edep <= dsssd_hit->detector->getBetaCut()) return false;
 
           auto front_det = dsssd_hit->detector;
           auto back_det = pad_hit->detector;
@@ -615,7 +618,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //must clear all assigned variables used in analysis before going again
         mul = 0;
         p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = pb = false;
-        Eg1= Eg2= Q2p= Theta= Omega= eff1=eff2= eff1_err=eff2_err = NAN;
+        Eg1= Eg2= Q2p= Theta= Omega= eff1=eff2= eff1_err=eff2_err =E1 = E2 = NAN;
         AUSA::clear(
         *v_id,
         *v_dir, *v_pos,
@@ -654,7 +657,7 @@ int NUM;
 UInt_t mul{}, CLOCK{}; //TPATTERN{}, TPROTONS{},
 SortedSignal clock; //tpattern, tprotons, are these tprotons the time related to the measurements?
 
-Double_t Eg1, Eg2, Q2p, Theta, Omega, eff1, eff2, eff1_err, eff2_err;
+Double_t Eg1, Eg2, Q2p, Theta, Omega, eff1, eff2, eff1_err, eff2_err, E1, E2;
 unique_ptr<DynamicBranchVector<unsigned short>> v_id;
 unique_ptr<DynamicBranchVector<TVector3>> v_dir, v_pos;
 unique_ptr<DynamicBranchVector<double>> v_theta, v_phi, v_angle;
