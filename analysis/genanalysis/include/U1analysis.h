@@ -87,7 +87,7 @@ class U1analysis : public AbstractSortedAnalyzer{
         U2 = new Detector_frib(1, "U2", DSSSD, Proton, setupSpecs, 500.);
         U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
         U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);
-        P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
+        P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
         P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
         P3 = new Detector_frib(8, "P3", Pad, Alpha, setupSpecs);
         P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);

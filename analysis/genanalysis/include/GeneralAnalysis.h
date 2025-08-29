@@ -478,10 +478,10 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           // if there is no energy recorded in either then there is no telescope hit therefore return false
           if (dsssd_hit->Edep == 0 || pad_hit->Edep == 0) return false;
 
-          ////if (dsssd_hit->detector->getName()=="U4"){
+          if (dsssd_hit->detector->getName()=="U4"){
           if (dsssd_hit->Edep<dsssd_hit->detector->getBetaCut() && pad_hit->Edep<dsssd_hit->detector->getBetaCut()*1.5) {
               b = true;}
-          //}
+          }
           
           //if(!include_beta_region && dsssd_hit->Edep <= dsssd_hit->detector->getBetaCut()) return false;
 
