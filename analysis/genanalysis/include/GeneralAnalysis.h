@@ -187,10 +187,9 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         tree->Branch("Q2p", &Q2p);
         tree->Branch("E1", &E1);
         tree->Branch("E2", &E2);
-        tree->Branch("Theta", &Theta); // wat the fuck is this
-        tree->Branch("Omega", &Omega);// what the fuck is this
+        tree->Branch("Theta", &Theta); //
+        tree->Branch("Omega", &Omega);//
         
-        //This structure only saves 1 gamma event pr gamma detector pr hit
         tree->Branch("Eg1", &Eg1); 
         tree->Branch("Eg2", &Eg2);
 
