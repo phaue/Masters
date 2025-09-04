@@ -264,24 +264,16 @@ class AboveBananaAnalysis : public U1analysis{
       auto pad_det = pad_hit->detector;
       if(dsssd_det->getPartner() == pad_det){
         if(dsssd_det->getBananaCut()->isSatisfied(pad_hit->Edep, dsssd_hit->Edep)){            
-          if(pad_hit->Edep+dsssd_hit->Edep <4100 && pad_hit->Edep+dsssd_hit->Edep > 3900){
-            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4100);
+          if(pad_hit->Edep+dsssd_hit->Edep <4300 && pad_hit->Edep+dsssd_hit->Edep > 3900){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4089.18);
             if(telescope_success){
               telescope_frontside_successes.emplace(dsssd_hit);
               telescope_backside_successes.emplace(pad_hit);
               addTelescopeHit(dsssd_hit, pad_hit);
               }
           }
-          else if(pad_hit->Edep+dsssd_hit->Edep <5500 && pad_hit->Edep+dsssd_hit->Edep > 5200){
-            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 5400);
-            if(telescope_success){
-              telescope_frontside_successes.emplace(dsssd_hit);
-              telescope_backside_successes.emplace(pad_hit);
-              addTelescopeHit(dsssd_hit, pad_hit);
-              }
-          }
-          else if(pad_hit->Edep+dsssd_hit->Edep <4700 && pad_hit->Edep+dsssd_hit->Edep > 4400){
-            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4700);
+          else if(pad_hit->Edep+dsssd_hit->Edep <5570 && pad_hit->Edep+dsssd_hit->Edep > 5250){
+            bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 5402.61);
             if(telescope_success){
               telescope_frontside_successes.emplace(dsssd_hit);
               telescope_backside_successes.emplace(pad_hit);

@@ -88,9 +88,9 @@ class U1analysis : public AbstractSortedAnalyzer{
         U3 = new Detector_frib(2, "U3", DSSSD, Proton, setupSpecs, 500.);
         U4 = new Detector_frib(3, "U4", DSSSD, Proton, setupSpecs, 1000.);
         P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
-        P2 = new Detector_frib(7, "P2", Pad, Alpha, setupSpecs);
-        P3 = new Detector_frib(8, "P3", Pad, Alpha, setupSpecs);
-        P4 = new Detector_frib(9, "P4", Pad, Alpha, setupSpecs);
+        P2 = new Detector_frib(7, "P2", Pad, Proton, setupSpecs);
+        P3 = new Detector_frib(8, "P3", Pad, Proton, setupSpecs);
+        P4 = new Detector_frib(9, "P4", Pad, Proton, setupSpecs);
         makePartners(U1, P1);
         makePartners(U2, P2);
         makePartners(U3, P3);
@@ -279,70 +279,70 @@ class U1analysis : public AbstractSortedAnalyzer{
           return true;
           }//treatTelescopeHit
     
-        bool specialTelescopeTreatment(Hit* dsssd_hit, Hit* pad_hit, double initial_E){
-            auto front_det = dsssd_hit->detector;
-            auto back_det = pad_hit->detector;
+          bool specialTelescopeTreatment(Hit* dsssd_hit, Hit* pad_hit, double initial_E){
+              auto front_det = dsssd_hit->detector;
+              auto back_det = pad_hit->detector;
 
-            /*
-    Ideally the initial_E is the corrected energy from the assumed spectrum
-    That energy has corrections from front_det_fdl and target intersections.
-    This means that the energy set as initial_E is not in fact the energy that traverses the active area.
-    This energy needs to have subtracted losses to the target layers and fdl.
-    In order to achieve this i have to assume a fdl, and that is set to its thickness with no angle corrections
-    This is a minor error of maximum 55 nm at 50 degrees.
-            */
-           auto min_fdl = front_det->getFrontDeadLayer();
-           initial_E -= pSiCalc->getTotalEnergyLoss(initial_E, min_fdl);
-           auto &from = dsssd_hit->position;
-           for (auto &intersection: target->getIntersections(from, origin)) {
-             auto &calc = pTargetCalcs[intersection.index];
-             initial_E -= calc->getTotalEnergyLoss(initial_E, intersection.transversed);
-           }//forloop for initial_E energy correction
-            auto func = [=](double* x, double* par) {
-                return TMath::Abs(calc->getTotalEnergyLoss(initial_E, x[0]) - dsssd_hit->Edep);
-                };
-          // Calc range for some suitable limits
-            calc -> getTotalEnergyLoss(initial_E,10e9,range);
-            auto j = TF1("m", func, 0, range, 0);
-            double thickness = j.GetMinimumX();
-            double traversed_thickness = front_det->getThickness()-front_det->getFrontDeadLayer()-front_det->getBackDeadLayer()-front_det->getBackContactThickness();
-            /// Should maybe actually include back contact thickness soon..
-            
-            //cout << "Detector thickness" << front_det->getThickness() << "Traversed thickness " << traversed_thickness << "backdeadlayer " << front_det->getBackDeadLayer() << "Calculated thickness " << thickness << endl; 
+              double angle = 0.0;
+              double corrected_E = initial_E;
+              auto &from = dsssd_hit->position;
+              auto &calc = *pSiCalc;
 
-            double angle = acos(traversed_thickness/thickness); // set to zero
-            
-            auto front_det_fdl = front_det->getFrontDeadLayer()/abs(cos(angle));
-            auto front_det_bdl = front_det->getBackDeadLayer()/abs(cos(angle));
-            auto front_det_bct = front_det->getBackContactThickness()/abs(cos(angle));
-            auto back_det_fct = back_det->getFrontContactThickness()/abs(cos(angle));
-            auto back_det_dl = back_det->getFrontDeadLayer()/abs(cos(angle)); 
-            double E = pad_hit->Edep;
-          if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
-            E *= 1.016; 
-          }//if statement
-          
-          E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_dl);
-          E+= pAlCalc -> getTotalEnergyCorrection(E, back_det_fct);
-          E+= pAlCalc -> getTotalEnergyCorrection(E, front_det_bct);
-          E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
-          E+= dsssd_hit->Edep;
-          E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
-          for (auto &intersection: target->getIntersections(from, origin)) {
-            auto &calc = pTargetCalcs[intersection.index];
-            E += calc->getTotalEnergyCorrection(E, intersection.transversed);
-          }//forloop for E energy correction
-          dsssd_hit->angle = angle;
-          dsssd_hit->E = E;
-          if(isnan(angle)){
-          double somev = (origin.Z()-dsssd_hit->position.Z())/dsssd_hit->direction.Z();
-          double_t tarx = dsssd_hit->position.X()+somev*dsssd_hit->direction.X();
-          TVector3 tarpos(tarx,dsssd_hit->position.Y(),origin.Z());
-          dsssd_hit->targetposition = tarpos;
+              for (int iter = 0; iter < 5; ++iter) {
+                  double ca = cos(angle);
+                  if (abs(ca) < 1e-6) ca = (ca >= 0 ? 1e-6 : -1e-6);
+                  double eff_fdl = front_det->getFrontDeadLayer() / abs(ca);
+                  
+                  for (auto &intersection: target->getIntersections(origin, from)) {
+                      auto &tc = pTargetCalcs[intersection.index];
+                      corrected_E -= tc->getTotalEnergyLoss(corrected_E, intersection.transversed);
+                  }
+                  
+                  corrected_E = initial_E - pSiCalc->getTotalEnergyLoss(initial_E, eff_fdl);
+
+                  auto func = [&](double* x, double* par) {
+                      return TMath::Abs(calc.getTotalEnergyLoss(corrected_E, x[0]) - dsssd_hit->Edep);
+                  };
+                  calc.getTotalEnergyLoss(corrected_E, 1e10, range);
+                  TF1 j("m", func, 0, range, 0);
+                  double thickness = j.GetMinimumX();
+
+                  double traversed_thickness = front_det->getThickness()
+                                            - front_det->getFrontDeadLayer()
+                                            - front_det->getBackDeadLayer()
+                                            - front_det->getBackContactThickness();
+
+                  angle = acos(traversed_thickness / thickness);
+              }
+
+              auto front_det_fdl = front_det->getFrontDeadLayer()/abs(cos(angle));
+              auto front_det_bdl = front_det->getBackDeadLayer()/abs(cos(angle));
+              auto front_det_bct = front_det->getBackContactThickness()/abs(cos(angle));
+              auto back_det_fct = back_det->getFrontContactThickness()/abs(cos(angle));
+              auto back_det_dl = back_det->getFrontDeadLayer()/abs(cos(angle)); 
+              double E = pad_hit->Edep;
+
+              E+= pSiCalc -> getTotalEnergyCorrection(E, back_det_dl);
+              E+= pAlCalc -> getTotalEnergyCorrection(E, back_det_fct);
+              E+= pAlCalc -> getTotalEnergyCorrection(E, front_det_bct);
+              E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_bdl);
+              E+= dsssd_hit->Edep;
+              E+= pSiCalc -> getTotalEnergyCorrection(E, front_det_fdl);
+              for (auto &intersection: target->getIntersections(from, origin)) {
+                  auto &calc = pTargetCalcs[intersection.index];
+                  E += calc->getTotalEnergyCorrection(E, intersection.transversed);
+              }
+              dsssd_hit->angle = angle;
+              dsssd_hit->E = E;
+              if(isnan(angle)){
+                  double somev = (origin.Z()-dsssd_hit->position.Z())/dsssd_hit->direction.Z();
+                  double_t tarx = dsssd_hit->position.X()+somev*dsssd_hit->direction.X();
+                  TVector3 tarpos(tarx,dsssd_hit->position.Y(),origin.Z());
+                  dsssd_hit->targetposition = tarpos;
+              }
+
+              return true;
           }
-
-          return true;
-        }
         void addTelescopeHit(Hit *dsssd_hit, Hit *pad_hit){
             v_id->add(dsssd_hit->id); //id of the dsssd determines the id of the telescope hit
             v_pos->add(dsssd_hit->position);
