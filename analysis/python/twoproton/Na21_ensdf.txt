@@ -1,0 +1,261 @@
+ 21NA    ADOPTED LEVELS, GAMMAS                                  15NDS    201507
+ 21NA  H TYP=FUL$AUT=R.B. FIRESTONE$CIT=NDS 127, 1 (2015)$CUT=15-Jan-2015$      
+ 21NA  Q -13098    1617106.6 11 2431.6828 -6561.34     2012WA38                 
+ 21NA CL BAND(A)$GS BAND                                                        
+ 21NA  XA20NE(P,P),(POL P,P)                                                    
+ 21NA  XB23NA(P,T)                                                              
+ 21NA  XC19F(3HE,N)                                                             
+ 21NA  XD21MG B+ DECAY                                                          
+ 21NA  XE20NE(P,G)                                                              
+ 21NA  XF20NE(D,N),(D,NG)                                                       
+ 21NA  XG20NE(3HE,DG),(3HE,D)                                                   
+ 21NA  XH22AL ECP DECAY:91.1 MS                                                 
+ 21NA  XI23SI EC2P DECAY                                                        
+ 21NA  XJ24MG(P,A),(P,AG)                                                       
+ 21NA  XK16O(7LI,2NG)                                                           
+ 21NA  XL20NE(3HE,D) E=25.83 MEV                                                
+ 21NA  XM9BE(20NE,21NAG)                                                        
+ 21NA  XNCOULOMB EXCITATION                                                     
+ 21NA  XPSI(P,X),C(P,X):MOME2                                                   
+ 21NA PN                                                                     6  
+ 21NA  L 0.0         3/2+              22.49 S   4                          A   
+ 21NAX L XREF=ABCDEFGHIJKLMNP                                                   
+ 21NA cL T$Weighted average of 22.55 s {I10} (1974Al03), 22.48 s {I4} (1977Az01)
+ 21NA cL J$From magnetic moment. Mirror of {+21}Ne ground state.                
+ 21NA2 L %EC+%B+=100                                                            
+ 21NAM L MOMM1=+2.38630 10$MOME2=+0.124 14                                      
+ 21NA cL MOMM1,MOME2$From 2011StZZ                                              
+ 21NA  L 331.90    10 5/2+              7.08 PS   8                         A   
+ 21NAX L XREF=BDEFGHIJKLMNP                                                     
+ 21NA2 L MOMM1=3.7 3                                                            
+ 21NA cL MOMM1,MOME2$From 2011StZZ                                              
+ 21NA3 L BE2=0.016 3                                                            
+ 21NA cL BE2$Weighted average of discrepant values 0.0205 {I14} (2008Sc18) and  
+ 21NA2cL 0.0137 {I9} (2009Sc28) with external error.                            
+ 21NA cL T$From {+2}H({+20}Ne,n) (1978Ro10). Other values: 10 ps {I2}           
+ 21NA2cL (1968Ba12), 6.9 ps {I3} (1977Be30).                                    
+ 21NA cL J$log| {Ift}=4.79 from 5/2+, {+20}Ne(p,|g) angular correlation.        
+ 21NA2cL Mirror of 350.7 keV, 5/2+ level in {+21}Ne.                            
+ 21NA  G 331.91    10100       M1+E2      +0.083 3                              
+ 21NAB G BM1=0.1513 17                                                          
+ 21NAB G BM1W=0.0845 10$BE2W=39 3                                               
+ 21NA  L 1716.1    3 7/2+              37 FS     8                          A   
+ 21NA cL MOMM1,MOME2$From time differential perturbed angular correlation       
+ 21NA2cL (TDPAC) measurement (1977Be30)                                         
+ 21NAX L XREF=BDEFHJKLM                                                         
+ 21NA cL J$log| {Ift}=5.11 from 5/2+ and {+24}Mg(|a,p) |a-p{-0} angular         
+ 21NA2cL correlations. Mirror of 1745.9 keV, 7/2+ level in {+21}Ne.             
+ 21NA  G 1384.1    3    100.022 M1+E2    +0.14   3                              
+ 21NAB G BM1W=0.20 5$BE2W=16 8                                                  
+ 21NA  G 1715.9    7      7.522  [E2]                                           
+ 21NAB G BE2W=21 8                                                              
+ 21NA  L 2423.8    4 1/2+              1.7 FS    4                              
+ 21NAX L XREF=BEFJLM                                                            
+ 21NA cL J$L=0 in {+20}Na(d,n), mirror of 2794.1 keV 1/2+ in {+21}Ne.           
+ 21NA  G 2423.3    5 100         [M1]                                           
+ 21NAB G BM1W=0.91 22                                                           
+ 21NA  L 2797.9    5 1/2-              13 FS     4                              
+ 21NAX L XREF=BEFJ                                                              
+ 21NA cL J${+24}Mg(|a,p) |a-p{-0} angular correlation, l=1 in                   
+ 21NA2cL {+20}Na(d,n). Mirror of 2788.8 keV 1/2- in {+21}Ne.                    
+ 21NA  G 373.3            100 7  [E1]                                           
+ 21NAB G BE1W=0.73 24                                                           
+ 21NA  G 2466              20 4  [M2]                                           
+ 21NAB G BM2W=3.8E+2 15                                                         
+ 21NA  G 2797.6    14      59 7  [E1]                                           
+ 21NAB G BE1W=0.0010 4                                                          
+ 21NA  L 2829.1    7  9/2+                                                  A   
+ 21NAX L XREF=EJK                                                               
+ 21NA cL J${+24}Mg(|a,p) |a-p{-0} angular correlation. Mirror of                
+ 21NA2cL 2866.8 keV 9/2+ in {+21}Ne.                                            
+ 21NA  G 1113             100 8 M1+E2    +0.12   3                              
+ 21NA  G 2497              58 8  [E2]                                           
+ 21NA  L 3544.3    4 5/2+                15.5 EV 14                             
+ 21NAX L XREF=ABDEFGJ                                                           
+ 21NA cL J${+24}Mg(|a,p) |a-p{-0} angular correlation, and (p,|g)               
+ 21NA2cL angular correlation. M1+E2 to 3/2+.                                    
+ 21NA  G 1828.0    9      6.5 5 [M1]                                            
+ 21NA  G 3212.1    6      2.2 5 [M1]                                            
+ 21NA  G 3544.0    6    100   3 M1+E2    +0.07   2                              
+ 21NAB G BM1W=15.39 5$BE2W=40 30                                                
+ 21NA  L 3678.9    4 3/2-              193 EV    13                             
+ 21NAX L XREF=ABEFGJ                                                            
+ 21NA cL J$From (p,p)                                                           
+ 21NA  G 880.7     5       38 3  [M1]                                           
+ 21NA  G 1255      1       28 3  [E1]                                           
+ 21NA  G 3346.8    4      100 5  [E1]                                           
+ 21NA  L 3862.2    5 5/2-              2.6 EV    3                              
+ 21NAX L XREF=ABEFGJ                                                            
+ 21NA cL J$5/2- or 7/2- from (p,p), 7/2- excluded by (p,|g)                     
+ 21NA  G 3530.0    5      100 8  [E1]                                           
+ 21NA  G 3862.0    10      45 8  [E1]                                           
+ 21NA  L 4169.6    7 3/2-              180 KEV   15                             
+ 21NAX L XREF=AEFGJ                                                             
+ 21NA cL J$From (p,p)                                                           
+ 21NA  G 1745              67 5  [E1]                                           
+ 21NA  G 3838             100 5  [E1]                                           
+ 21NA  L 4294.3    6 5/2+              3.93 KEV  10                             
+ 21NAX L XREF=ABDEFGJM                                                          
+ 21NA cL J$From (p,p)                                                           
+ 21NA  G 2578             1.6 5 [M1]                                            
+ 21NA  G 3962             100 5 M1+E2    -0.09   7                              
+ 21NA  G 4294              60 5 M1+E2    +0.20   5                              
+ 21NA  L 4419      2 (11/2+)                                                A   
+ 21NAX L XREF=BDFGHJK                                                           
+ 21NA cL J$Member of g.s. band                                                  
+ 21NA  L 4467.9    7 3/2+              21 KEV    3                              
+ 21NAX L XREF=AM                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  G 4136              8915  [M1]                                           
+ 21NA  G 4467             10015  [M1]                                           
+ 21NA  L 4984      8 1/2-              200 KEV                                  
+ 21NAX L XREF=AJ                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 5020      9 (3/2,5/2,7/2)+                                             
+ 21NAX L XREF=DF                                                                
+ 21NA cL J$log| {Ift}=4.48 from 5/2+                                            
+ 21NA  L 5380      9 (3/2,5/2,7/2)+                                             
+ 21NAX L XREF=D                                                                 
+ 21NA cL J$log| {Ift}=4.95 from 5/2+                                            
+ 21NA  L 5457      1 1/2+              110 KEV                                  
+ 21NAX L XREF=AE                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 5770      20(3/2,5/2,7/2)+      20 KEV   AP                            
+ 21NAX L XREF=BD                                                                
+ 21NA cL J$log| {Ift}=4.86 from 5/2+                                            
+ 21NA  L 5815      1 7/2-               0.4 KEV   AP                            
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 5828      1 3/2-               25 KEV                                  
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 5884      20(3/2,5/2,7/2)+                                             
+ 21NAX L XREF=DH                                                                
+ 21NA cL J$log| {Ift}=5.59 from 5/2+                                            
+ 21NA  L 5979      15(3/2,5/2,7/2)+                                             
+ 21NAX L XREF=D                                                                 
+ 21NA cL J$log| {Ift}=5.30 from 5/2+                                            
+ 21NA  L 6070      20(5/2,7/2)-         5 KEV                                   
+ 21NAX L XREF=ABDH                                                              
+ 21NA cL J$From (p,p), log| {Ift}=5.38 from 5/2+                                
+ 21NA  L 6165      30(3/2,5/2,7/2)+                                             
+ 21NAX L XREF=D                                                                 
+ 21NA cL J$log| {Ift}=5.84 from 5/2+                                            
+ 21NA  L 6341      20(3/2,5/2,7/2)+                                             
+ 21NAX L XREF=DH                                                                
+ 21NA cL J$log| {Ift}=4.99 from 5/2+                                            
+ 21NA  L 6468      203/2+              145 KEV   15                             
+ 21NAX L XREF=ABD                                                               
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 6879      153/2-              22 KEV    7                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 6992      157/2-              35 KEV    9                              
+ 21NAX L XREF=AB                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7253      151/2+              220 KEV   20                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7571      153/2-              116 KEV   12                             
+ 21NAX L XREF=AB                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7575      151/2-              128 KEV   20                             
+ 21NAX L XREF=AB                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7609      153/2+              112 KEV   20                            ?
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7930      155/2-              28 KEV    11                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7946      157/2-              25 KEV    9                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 7960      151/2-              58 KEV    7                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8097      153/2-              25 KEV    9                              
+ 21NAX L XREF=AB                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8135      155/2+              32 KEV    9                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8303      13(3/2,5/2,7/2)+                                             
+ 21NAX L XREF=BD                                                                
+ 21NA cL J$log| {Ift}=4.60 from 5/2+                                            
+ 21NA  L 8388      151/2+              21 KEV    8                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8397      153/2+              30 KEV    13                             
+ 21NAX L XREF=AD                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8464      153/2+              25 KEV    9                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8554      151/2+              100 KEV   8                              
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8562      153/2+              20 KEV    LT                            ?
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8595      155/2+              138 KEV   15                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8624      151/2-              92 KEV    10                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8715      153/2+              360 KEV   25                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8738      153/2-              110 KEV   18                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8742      151/2+              98 KEV    25                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8827      155/2+              138 KEV   16                             
+ 21NAX L XREF=AD                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8960      151/2+              25 KEV    6                              
+ 21NAX L XREF=ABD                                                               
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 8976      2 5/2+              650 EV    50                             
+ 21NAX L XREF=ACD                                                               
+ 21NA cL J$From (p,p)                                                           
+ 21NA2 L ISPIN=3/2                                                              
+ 21NA  L 8981      155/2+              23 KEV    16                             
+ 21NAX L XREF=AC                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 9051      157/2-              36 KEV    11                             
+ 21NAX L XREF=A                                                                 
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 9155      153/2+              34 KEV    13                             
+ 21NAX L XREF=AB                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA  L 9217      2 1/2+               2.8 KEV  35                             
+ 21NAX L XREF=AC                                                                
+ 21NA cL J$From (p,p)                                                           
+ 21NA2 L ISPIN=3/2                                                              
+ 21NA  L 9280      30(3/2,5/2,7/2)                                              
+ 21NA cL J$log| {Ift}=5.4 from 5/2+                                             
+ 21NAX L XREF=D                                                                 
+ 21NA  L 9348      151/2+              23 KEV    9                              
+ 21NA cL J$From (p,p)                                                           
+ 21NAX L XREF=A                                                                 
+ 21NA  L 9563      157/2-              63 KEV    15                             
+ 21NA cL J$From (p,p)                                                           
+ 21NAX L XREF=A                                                                 
+ 21NA  L 9725      253/2+              256 KEV   20                             
+ 21NA cL J$From (p,p)                                                           
+ 21NAX L XREF=A                                                                 
+ 21NA  L 9775      151/2-              56 KEV    11                             
+ 21NA cL J$From (p,p)                                                           
+ 21NAX L XREF=A                                                                 
+ 21NA  L 9779      157/2-              41 KEV    9                              
+ 21NA cL J$From (p,p)                                                           
+ 21NAX L XREF=A                                                                 
+ 21NA  L 9808      153/2-              80 KEV    16                             
+ 21NA cL J$From (p,p)                                                           
+ 21NAX L XREF=A                                                                 
+ 21NA  L 10050     40                                                           
+ 21NAX L XREF=BL 
