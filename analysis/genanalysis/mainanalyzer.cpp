@@ -99,7 +99,6 @@ class SingleProton : public GeneralAnalysis{
 
   void specificAnalysis() override {
     if (hits.empty()) return;
-
     unordered_set<Hit*> telescope_frontside_candidates;
     unordered_set<Hit*> telescope_backside_candidates;
 
@@ -156,6 +155,38 @@ class SingleProton : public GeneralAnalysis{
       }//treats the leftover non-matched dsssd hits.
   }//specificanalysis
 };//singleproton
+
+
+class Alphas : public GeneralAnalysis{
+  public:
+  Alphas(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
+                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
+                    bool _include_banana_cuts=false, bool _include_beta_region =false)
+        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
+                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
+
+  void specificAnalysis() override {
+    if (hits.empty()) return;
+
+    for (auto &hit : hits) {
+          auto det = hit.detector;
+          switch (det->getType()) {
+            case DSSSD:
+              if ((det->getName() != "U2" && det->getName() != "U3")) continue;
+              if (hit.Edep > 3000) {
+                  treatDSSSDHit(&hit);
+                  addDSSSDHit(&hit);
+              }
+              break;
+            default:
+              // if case is 'HPGe', the scalar Eg1 and/or Eg2 already contains the gamma energy and the boolean 'g' is set to 'true'
+              // do nothing
+              break;
+          }
+        }
+      }
+    };
+
 
 class GammaSpec : public GeneralAnalysis {
   public:
@@ -506,6 +537,10 @@ for(auto &runpart : input){
     }//type of analysis can add more else 
   else if(specificAnalysis == "SingleProton"){
     analysis = make_shared<SingleProton>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
+                                          include_spurious_zone, include_banana_cuts, include_beta_region);
+    }
+  else if(specificAnalysis == "Alphas"){
+    analysis = make_shared<Alphas>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
   else if(specificAnalysis == "GammaSpec"){

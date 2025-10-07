@@ -193,11 +193,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         tree->Branch("Eg1", &Eg1); 
         tree->Branch("Eg2", &Eg2);
 
-        tree->Branch("eff1", &eff1); 
-        tree->Branch("eff2", &eff2); 
-        tree->Branch("eff1_err", &eff1_err); 
-        tree->Branch("eff2_err", &eff2_err); 
-
         tree->Branch("pg1", &pg1); 
         tree->Branch("pg2", &pg2); 
         
@@ -310,9 +305,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
                 Energy_threshold = tabulation->getEnergyDepositionAtReachThrough(FI, BI);
               }//if statement
             }//forloop
-            // this part here checks whether or not the Edep energy lies within the zone where we cannot "see" the energy
-            // due to the energy lying between the reach through energy and punch through energy, if the particle stops in either
-            //the back deadlayer of the DSSSD or the front dead layer of the pad.
+            //this part checks whether or not the energy is above the spurious zone 
             if (hit.Edep >= Energy_threshold) continue;
           }//spurious zone correction
 
@@ -371,32 +364,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         }//findPadHit
 
 
-        double G1eff(double E){
-          double A = -1.23; double B=6.4*1e-2; double C=1.2*1e7;
-          double ln_e_value = A * log(E) + B * pow(log(E), 2) - C / pow(E, 3);
-          return exp(ln_e_value);
-          }
-        double G2eff(double E){
-          double A = 0.138; double B=-0.5;
-          return A * pow(E,B);
-          }
-        
-        double G1eff_error(double E) {
-          double A = -1.23; double B = 6.4e-2; double C = 1.2e7;
-          double err_A = 0.02 * std::abs(A);
-          double err_B = 0.3 * std::abs(B);
-          double err_C = 0.8 * std::abs(C);
-          double log_E = log(E);
-          double e_value = exp(A * log_E + B * pow(log_E, 2) - C / pow(E, 3));
-          return e_value * sqrt(pow(log_E * err_A, 2) + pow(pow(log_E, 2) * err_B, 2) + pow(-1.0 / pow(E, 3) * err_C, 2));
-        }        
-        
-        double G2eff_error(double E) {
-          double A = 0.138; double B = -0.5;
-          double err_A = 0.04 * std::abs(A);
-          double err_B = 0.04 * std::abs(B);
-          return sqrt(pow(pow(E, B) * err_A, 2) + pow(-A * pow(E, -B) * log(E) * err_B, 2));
-        }
         
         void findGermaniumHit(Detector_frib *detector) {
           unsigned short id = detector->getId();
@@ -407,14 +374,10 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
                   double energy = out.energy(i);
                   if (id == G1->getId()) {
                       Eg1 = energy;
-                      eff1 = G1eff(Eg1);
-                      eff1_err = G1eff_error(Eg1);
                       g1 = true;
                   }
                   if (id == G2->getId()) {
                       Eg2 = energy;
-                      eff2 = G2eff(Eg2);
-                      eff2_err = G2eff_error(Eg2);
                       g2 = true;
                   }
               }
@@ -446,7 +409,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }//forloop for E energy correction
           hit->E = E; // set the energy of the hit to this energy corrected value
           
-          double Ea = hit->Edep;
+          double Ea = hit->Edep/1.014;
           Ea += aSiCalc->getTotalEnergyCorrection(Ea, fdl);
           for (auto &intersection: target->getIntersections(from, origin)) {
               auto &calc = aTargetCalcs[intersection.index];
@@ -617,7 +580,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         //must clear all assigned variables used in analysis before going again
         mul = 0;
         p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = pb = false;
-        Eg1= Eg2= Q2p= Theta= Omega= eff1=eff2= eff1_err=eff2_err =E1 = E2 = NAN;
+        Eg1= Eg2= Q2p= Theta= Omega =E1 = E2 = NAN;
         AUSA::clear(
         *v_id,
         *v_dir, *v_pos,
@@ -656,7 +619,7 @@ int NUM;
 UInt_t mul{}, CLOCK{}; //TPATTERN{}, TPROTONS{},
 SortedSignal clock; //tpattern, tprotons, are these tprotons the time related to the measurements?
 
-Double_t Eg1, Eg2, Q2p, Theta, Omega, eff1, eff2, eff1_err, eff2_err, E1, E2;
+Double_t Eg1, Eg2, Q2p, Theta, Omega, E1, E2;
 unique_ptr<DynamicBranchVector<unsigned short>> v_id;
 unique_ptr<DynamicBranchVector<TVector3>> v_dir, v_pos;
 unique_ptr<DynamicBranchVector<double>> v_theta, v_phi, v_angle;
