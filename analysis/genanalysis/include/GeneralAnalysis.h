@@ -152,9 +152,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         U4->addTelescopeTabulation(pU4P4);
         U6->addTelescopeTabulation(pU6P6);
 
-//missing U5, U6, P5, P6
         detectors.insert({U1, U2, U3, U4, U5, U6, P1, P2, P3, P4, P5, P6, G1, G2}); 
-        //detectors.insert({U1, U2, U3, U4, P1, P2, P3, P4, G1, G2}); 
 
         output->cd(); //something about output file used for mid-analysis dumping
         tree = new TTree("a", "a");
