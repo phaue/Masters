@@ -407,7 +407,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           }//forloop for E energy correction
           hit->E = E; // set the energy of the hit to this energy corrected value
           
-          double Ea = hit->Edep/1.014;
+          double Ea = hit->Edep;
           Ea += aSiCalc->getTotalEnergyCorrection(Ea, fdl);
           for (auto &intersection: target->getIntersections(from, origin)) {
               auto &calc = aTargetCalcs[intersection.index];
