@@ -1,6 +1,7 @@
 //
-// Created by erik on 11/12/23.
-//
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
+// Modified with addition of pad spectras
+
 
 #include <TChain.h>
 #include <TFile.h>
@@ -11,7 +12,7 @@
 using namespace EUtil;
 using namespace std;
 
-map<string, vector<string>> det_run_map = {
+map<string, vector<string>> det_run_map = { //dssd runs taken before experiment
     {"U1", {"008_000.root", "008_001.root", "008_002.root", "008_003.root"}},
     {"U2", {"008_000.root", "008_001.root", "008_002.root", "008_003.root"}},
     {"U3", {"009_000.root", "009_001.root", "009_002.root", "009_003.root"}},
@@ -19,7 +20,7 @@ map<string, vector<string>> det_run_map = {
     {"U5", {"010_000.root", "010_001.root", "010_002.root", "010_003.root", "010_004.root", "010_005.root"}},
     {"U6", {"011_000.root", "011_001.root", "011_002.root", "011_003.root", "011_004.root"}}
 };/*
-map<string, vector<string>> det_run_map = {
+map<string, vector<string>> det_run_map = { //dssd runs taken after experiment
     {"U1", {"128_000.root", "128_001.root"}},
     {"U2", {"128_000.root", "128_001.root"}},
     {"U3", {"126_000.root", "126_001.root"}},
@@ -35,7 +36,7 @@ map<string, vector<string>> pad_run_map = { //pad runs taken after experiment
     {"P6", {"131_000.root"}}
 };
 /*
-map<string, vector<string>> pad_run_map = { //pad runs taken after experiment
+map<string, vector<string>> pad_run_map = { //pad runs taken before experiment
     {"P1", {"005_000.root", "005_001.root"}},
     {"P2", {"003_000.root"}},
     {"P3", {"002_000.root", "002_001.root"}},
@@ -43,7 +44,6 @@ map<string, vector<string>> pad_run_map = { //pad runs taken after experiment
     {"P6", {"001_000.root", "001_001.root"}}
 };*/
 
-// TODO: only looking at pre-experiment 3a for now. look also at post-experiment 3a and compare.
 
 typedef struct detector_side {
   UInt_t *mul_branch{}, *pad_branch{}, *index_branch{}, *energy_branch{};
@@ -111,9 +111,8 @@ int main(int argc, char* argv[]) {
 
     for (const auto& hist : hists) hist.second->Write();
   }
-    // ===================================================================
-    // NEW: Loop for Pad Detectors
-    // ===================================================================
+    // Loop for pad detectors
+
     cout << "--- Now processing Pad Detectors ---" << endl;
     for (const auto& [pad_name, runs] : pad_run_map) {
         auto* c = new TChain("h101");
@@ -122,11 +121,9 @@ int main(int argc, char* argv[]) {
             c->Add((input_dir + "/" + run).c_str());
         }
 
-        // Create one histogram for this pad
-        Double_t xlow = 0.; Double_t xup = 4000.; // General purpose energy range
+        Double_t xlow = 0.; Double_t xup = 4000.; 
         auto* pad_hist = new TH1D(pad_name.c_str(), pad_name.c_str(), (Int_t)xup, xlow, xup);
 
-        // Link the branch to a variable. Assumes branch name == pad_name (e.g., "P1")
         UInt_t pad_energy = 0;
         c->SetBranchAddress((pad_name+"E").c_str(), &pad_energy);
 
@@ -134,7 +131,6 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < c->GetEntries(); i++) {
             c->GetEntry(i);
 
-            // Since pads don't have multiplicity, we just fill the energy if it's non-zero
             if (pad_energy > 0) {
                 pad_hist->Fill(pad_energy);
             }

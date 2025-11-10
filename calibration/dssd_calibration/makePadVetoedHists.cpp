@@ -1,5 +1,5 @@
 //
-// Created by erik on 11/12/23.
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
 //
 
 #include <TChain.h>

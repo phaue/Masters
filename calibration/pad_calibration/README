@@ -1,3 +1,9 @@
+This calibration routine has not been optimized in any way whatsoever.
+The steps presented for how the calibrations are to be carried out are therefore cumbersome. 
+In future implementations of like analyses one could optimize this routine and filter some of the redundant scripts out. A lot of filler in the /include files and the overall script structure repeated from the actual analysis. 
+However this will do for now.
+
+
 How to:
 (before proceeding to actual scripts)
 Make sure you have a sorted set of data using the most up-to-date U-calibrations and then apply dummy calibrations to pads. store in data/dummypads_sorted/Si/
@@ -5,18 +11,26 @@ Make sure you have a sorted set of data using the most up-to-date U-calibrations
 First of all: (from build folder)
 ./calibration/pad_calibration/padcal padmatcher.cfg ../data/dummypads_sorted/Si/*.root
 
-Then ->
+This creates files where the calibrated DSSSD hits are paired with uncalibrated pad hits and saves them to histograms.
 
+
+Then ->
 ./calibration/pad_calibration/finder padmatcher
 
-Then->
+This routine finds the peaks in the histograms generated from the first analysis
 
+
+Then->
 ./calibration/pad_calibration/padcal padcalc.cfg ../data/dummypads_sorted/Si/*.root
 
-Then ->
+This generates 3 new calculated histograms of the expected energy distributions in the pad detectors
 
+
+Then ->
 ./calibration/pad_calibration/finder padcalc
 
-Then -> 
+Finds the peaks in the histograms.
 
+Then -> 
 run Python script PadCal.ipynb
+Carries out the actual calibrations of the 3 pad detectors and visualizes them.

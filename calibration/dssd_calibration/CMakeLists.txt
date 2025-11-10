@@ -14,12 +14,6 @@ target_link_libraries(analysePadVetoedHists PRIVATE ROOT::Core ROOT::TreePlayer 
 
 
 
-# get eloss corrections for individual strips based on known initial ion kinetic energies
-add_executable(printEnergyCorrections printEnergyCorrections.cpp)
-target_include_directories(printEnergyCorrections PRIVATE include)
-target_link_libraries(printEnergyCorrections PRIVATE cxxopts::cxxopts AUSA::AUSA telescope::telescope)
-
-
 
 # alpha cal. runs, all dssds
 add_executable(make3aHists make3aHists.cpp)
@@ -32,7 +26,7 @@ target_link_libraries(analyse3aHists PRIVATE ROOT::Core ROOT::TreePlayer ROOT::S
 
 
 
-# thick DSSDs U4, U5 based on protons from 21Mg
+# thick DSSDs U4, U5 based on protons from 25Si
 add_executable(makeProtonHists makeProtonHists.cpp)
 target_include_directories(makeProtonHists PRIVATE include)
 target_link_libraries(makeProtonHists PRIVATE ROOT::Core ROOT::TreePlayer)

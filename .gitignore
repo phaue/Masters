@@ -1,11 +1,19 @@
-#Excluding the data, setup and calibration files from the git
+# Exclude the data, setup and calibration files from git
 data/*
-#setup/*
-calibrations/*
+setup/*
 !data/.gitkeep
-#!setup/.gitkeep
-!calibrations/.gitkeep
-#Excluding all build files from the git, the repository is to be build locally.
+!setup/.gitkeep
+
+# Exclude all build files (build locally)
 **/build/
-#Excluding figure output from python
-analysis/python/figure_output/*
+
+analysis/python/dataquality/implantation_analysis/
+
+# Ignore JetBrains IDE project settings
+.idea/
+
+# Ignore all PDFs and PNGs
+*.pdf
+*.png
+
+run_log.txt

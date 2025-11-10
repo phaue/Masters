@@ -90,8 +90,8 @@ bool IsFrameHit(const TVector3& source, const TVector3& direction,
     double dx = direction.X(), dy = direction.Y(), dz = direction.Z();
     
     double halfThickness = ringThickness / 2.0;
-    double ringBottomZ = -halfThickness;  // -0.3mm
-    double ringTopZ = halfThickness;     // +0.3mm
+    double ringBottomZ = -halfThickness;  
+    double ringTopZ = halfThickness;     
     
     double a = dx*dx + dy*dy;
     double b = 2.0 * (sx*dx + sy*dy);
@@ -162,7 +162,7 @@ bool IsFrameHit(const TVector3& source, const TVector3& direction,
             }
         }
     }
-    return false;
+    return false;//IsFrameHit returns false if the targetframe is not hit
 }
 
 
@@ -174,9 +174,9 @@ int main(int argc, char* argv[]){
     double x = 0., y = 0., z = 0.;
     double radius = 1e-6;
     vector<string> sides = {"front", "back"};
-    int N = 100000; // minimum to obtain no variances in energy
-    double rframe = 6; // mm
-    double tframe = 1; // mm
+    int N = 100000; // minimum to obtain no variances in energy - greatly reduces the runtime of the script...
+    double rframe = 6; // mm  - extension of target frame
+    double tframe = 1; // mm  - extension of target frame
 
 
     cxxopts::Options options("printEnergyCorrections",
@@ -286,11 +286,6 @@ int main(int argc, char* argv[]){
     
     for (const auto& d : result["detector"].as<vector<string>>()) {
     
-    //vector<string> detectors = {"U1", "U2", "U3", "U6"}; // for padvetoed calibration
-    //vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45}; //kev - for padvetoed calibration 
-    //vector<string> detectors = {"U1"}; // for padvetoed calibration
-    //vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45,3337.75,4089.18,5402.61}; //kev - for padvetoed calibration 
-    //vector<double> peakenergies = {4089.18}; // for TRIM simulations
 
     unique_ptr<EnergyLossRangeInverter> SiCalc = defaultRangeInverter(ion, "Silicon");
     unique_ptr<EnergyLossRangeInverter> AlCalc = defaultRangeInverter(ion,"Aluminum");
@@ -298,14 +293,11 @@ int main(int argc, char* argv[]){
     if (target) {
     for (auto &layer: target->getLayers()) {
         TargetCalcs.push_back(defaultRangeInverter(Ion::predefined(ion), layer.getMaterial()));
-        //eloss of given particle in target material
       }}
 
     auto det = setup->getDSSD(d);
     
     auto dfdl = AUSA::getFrontDeadLayer(*setup->getDSSD(d));
-    //TVector3 origin = target->getCenter() + (target->getThickness()/2. - implantation_depth)*target->getNormal(); // origin of the point source
-    //cout << "target:  "<< target->getThickness() << endl; 
     TVector3 normal = det->getNormal().Unit();
     UInt_t fN = det->frontStripCount();
     gsl_matrix *solid_angles = gsl_matrix_alloc(fN, fN);
@@ -314,10 +306,7 @@ int main(int argc, char* argv[]){
 
     for (size_t i = 0; i < solid_angles->size1; i++) {
       for (size_t j = 0; j < solid_angles->size2; j++) {
-        //if(i==0 || i==15 || j==15 || j==15){
-        //    gsl_matrix_set(solid_angles, i, j, 0);
-        //    continue;
-        //}
+
         double SA = 0;
         TVector3 bound1, bound2, bound3, bound4;
         bound1 = det->getContinuousPixelPosition(i+0.5,j+0.5); 
@@ -377,7 +366,7 @@ int main(int argc, char* argv[]){
             //if(E!=0) cout << TMath::RadToDeg()*abs(angle) << endl;
 
     
-    }//does the source hit the infitie plane extended by the detector surface?
+    }//does the source hit the plane extended by the detector surface?
 }//is the frame hit?
 }//for i in N
 SA += (counter/N) * (4.0*M_PI);

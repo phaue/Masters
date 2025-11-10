@@ -103,7 +103,7 @@ class BackwardCalculation : public CalibrationAnalysis {
     double peak, sigma, fitmean;
 
     while (infile >> detector >> ch >> peak >> fitmean >> sigma) {
-        string detID = detector.substr(0, 2); // Get "P1", "P2", etc.
+        string detID = detector.substr(0, 2); 
         detectorPeaks[detID].means.push_back(fitmean);
         detectorPeaks[detID].sigmas.push_back(sigma);
         //cout << "detector " << detector << "   ch " << ch << "    peak " << fitmean << "    sigma " << sigma << endl;  
@@ -142,20 +142,17 @@ for (auto dsssd_hit : telescope_frontside_candidates) {
     for (auto pad_hit : telescope_backside_candidates) {
         auto pad_det = pad_hit->detector;
 
-        // 1) Check partner and energy threshold
         if (dsssd_det->getPartner() != pad_det || pad_hit->Edep <= 500){
             continue;}
 
-        // 2) Look up “P1”, “P2” or “P3” in your map
         string detName = pad_det->getName();
         auto it = detectorPeaks.find(detName);
         if (it == detectorPeaks.end())
             continue;
 
-        // 3) Reference that detector’s peak data
         PeakData &peaks = it->second;
 
-        // 4) Loop over all peaks for this detector
+ 
         for (size_t i = 0; i < peaks.means.size(); ++i) {
             double mean = peaks.means[i];
             double sig  = peaks.sigmas[i];
@@ -165,7 +162,6 @@ for (auto dsssd_hit : telescope_frontside_candidates) {
             {
                 bool success = treatBackwardHit(dsssd_hit, pad_hit, real_peaks[i]);
                 if (success) {
-                    // 5) Fill the correct histogram based on detName
                     if (detName == "P1")      histP1->Fill(pad_hit->Ecal);
                     else if (detName == "P2") histP2->Fill(pad_hit->Ecal);
                     else if (detName == "P3") histP3->Fill(pad_hit->Ecal);
@@ -196,8 +192,6 @@ private:
 
 
 
-////should read in from cfg file, there it should be specified what isotope it is and the path to directories
-//and not least which analysis we want to carry out.
 
 int main(int argc, char *argv[]) {
 
@@ -210,11 +204,9 @@ int main(int argc, char *argv[]) {
   system(("mkdir -p " + output_path_dir).c_str());
 
   vector<string> input;
-  //auto setup = JSON::readSetupFromJSON("/home/haue/repositories/Masters/setup/cal_setup.json");
-  //auto target = make_shared<Target>(JSON::readTargetFromJSON("/home/haue/repositories/Masters/setup/target.json"));
+
 
   for (int i = 2; i < argc; i++) {
-    //check if argv is a file
     ifstream file(argv[i]);
     if (!file.good()) {
         cerr << "File " << argv[i] << " not found!" << endl;

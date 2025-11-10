@@ -1,0 +1,25 @@
+What is included in the different notebooks
+
+BetaEffectivity.ipynb :
+Estimation of the beta effectivity of the U4 telescope (id3)
+
+eg.ipynb :
+Visualization of beta cuts
+
+Fits_id*_sub2p.ipynb :
+These scripts are for each detector telescope usable for peak determination (id1,id2,id3 / U2,U3,U4). There is included a fitting function that extracts errors and counts where possible.
+The procedure is the same for all three scripts that hold this name. The difference lies in the calculation of the calibration errors.
+
+GammaPeaks_bg.ipynb :
+Calculation of gamma events based on beta gated gamma spectra from the two detectors, G1 and G2. The beta effectivity used was the thresholded cut from the BetaEffectivity.ipynb analysis.
+
+GrossBranchingDetermination.ipynb :
+In this script the overall branching ratios are determined along with the feeding to the IAS in 22Mg. 
+The 1p branching ratios are also defined in the very bottom on this script.
+
+SingleP.ipynb :
+Visualization tool of the single proton spectra. At the end of the script the final peak positions are determined based on read offs on a printed version of a zoomed in plot.
+
+Weightedmeans.ipynb :
+Calculates the weighted means of all the determined states both from the single proton analysis and the alpha analysis. 
+

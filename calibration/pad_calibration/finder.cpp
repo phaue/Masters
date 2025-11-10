@@ -24,7 +24,7 @@ vector<string> getMatchingFiles(const string& dir, const string& suffix) {
             string filename = entry.path().filename().string();
             if (filename.size() >= suffix.size() &&
                 filename.compare(filename.size() - suffix.size(), suffix.size(), suffix) == 0) {
-                matched.push_back(entry.path().string());  // full path
+                matched.push_back(entry.path().string());  
             }
         }
     }
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
         hist_names = {"P1cal", "P2cal", "P3cal", "P6cal"};
     } else {
         cerr << "Unexpected input name: " << subdir << endl;
-        return 1;  // or handle error
+        return 1;  
     }
     map<string, unique_ptr<TH1D>> summed_hists;
 
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
         if (!summed_hists[name]) continue;
 
         TH1D* h1 = summed_hists[name].get();
-        h1->Write();  // original histogram
+        h1->Write();  
 
         const Int_t N = h1->GetNbinsX() - 2;
         vector<Double_t> spec_in(N);
@@ -111,12 +111,10 @@ int main(int argc, char* argv[]) {
         Int_t nfound = s->SearchHighRes(spec_in.data(), spec_out.data(), N,
                                         12, 2, kTRUE, 3, kTRUE, 3);
 
-        const int max_peaks = 4; // Set your desired maximum number of peaks
+        const int max_peaks = 4; 
         if (nfound > max_peaks) {
             nfound = max_peaks;
         }
-
-        // Construct filtered histogram
         auto* h2 = new TH1D((name + "A").c_str(), (name + "A").c_str(),
                             h1->GetNbinsX(), h1->GetXaxis()->GetXmin(), h1->GetXaxis()->GetXmax());
         for (Int_t i = 0; i < N; i++) {
@@ -148,7 +146,8 @@ for (int i = 0; i < nfound; ++i) {
     double peakX = xpeaks[i]*h1->GetBinWidth(1);
     int bin = h1->FindBin(peakX);
     double height = h1->GetBinContent(bin);
-    if (subdir == "padmatcher") {
+    if (subdir == "padmatcher") { // The two different finding routines need different sigma in order to find the correct peaks
+                                // These have been determined empirically for this specific dataset
         sigmaGuess = 12;}
     else if (subdir == "padcalc"){
         sigmaGuess = 25;
@@ -161,12 +160,12 @@ for (int i = 0; i < nfound; ++i) {
 
     fitHist->Fit(fit, "RQ+");
 
-    sigmas_vec[i] = fit->GetParameter(2); // store fitted sigma
+    sigmas_vec[i] = fit->GetParameter(2); 
     fitmeans_vec[i] = fit->GetParameter(1);
     delete fit;
 }
 
-// --- Step 2: Sort using indices ---
+
 vector<size_t> indices(nfound);
 iota(indices.begin(), indices.end(), 0);
 
@@ -174,7 +173,7 @@ sort(indices.begin(), indices.end(), [&](size_t i1, size_t i2) {
     return xpeaks_vec[i1] < xpeaks_vec[i2];
 });
 
-// --- Step 3: Output sorted results ---
+
 for (size_t rank = 0; rank < indices.size(); ++rank) {
     size_t i = indices[rank];
     Pout << name << " " << rank + 1 << " "

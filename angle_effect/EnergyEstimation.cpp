@@ -88,8 +88,8 @@ bool IsFrameHit(const TVector3& source, const TVector3& direction,
     double dx = direction.X(), dy = direction.Y(), dz = direction.Z();
     
     double halfThickness = ringThickness / 2.0;
-    double ringBottomZ = -halfThickness;  // -0.3mm
-    double ringTopZ = halfThickness;     // +0.3mm
+    double ringBottomZ = -halfThickness;  
+    double ringTopZ = halfThickness;     
     
     double a = dx*dx + dy*dy;
     double b = 2.0 * (sx*dx + sy*dy);
@@ -136,7 +136,7 @@ bool IsFrameHit(const TVector3& source, const TVector3& direction,
         if (t_enter_slab > t_exit_slab) {
             std::swap(t_enter_slab, t_exit_slab);
         }
-        double tolerance = 0.1; // mm
+        double tolerance = 0.1; 
         
         for (double t : {t_enter_slab, t_exit_slab}) {
             double x = sx + t * dx;
@@ -160,7 +160,7 @@ bool IsFrameHit(const TVector3& source, const TVector3& direction,
             }
         }
     }
-    return false;
+    return false; //IsFrameHit returns false if the targetframe is not hit
 }
 
 
@@ -172,9 +172,9 @@ int main(int argc, char* argv[]){
     double x = 0., y = 0., z = 0.;
     double radius = 1e-6;
     vector<string> sides = {"front", "back"};
-    int N = 100000; // minimum to obtain no variances in energy
-    double rframe = 6; // mm
-    double tframe = 1; // mm
+    int N = 100000; // minimum to obtain no variances in energy - greatly reduces the runtime of the script...
+    double rframe = 6; // mm - extension of target frame
+    double tframe = 1; // mm - extension of target frame
 
 
     cxxopts::Options options("printEnergyCorrections",
@@ -284,11 +284,7 @@ int main(int argc, char* argv[]){
     
     for (const auto& d : result["detector"].as<vector<string>>()) {
 
-    //vector<string> detectors = {"U1", "U2", "U3", "U6"}; // for padvetoed calibration
-    //vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45}; //kev - for padvetoed calibration 
-    //vector<string> detectors = {"U1"}; // for padvetoed calibration
-    //vector<double> peakenergies = {385.72,904.02,1843.18,2076.74,2217.45,3337.75,4089.18,5402.61}; //kev - for padvetoed calibration 
-    //vector<double> peakenergies = {4089.18}; // for TRIM simulations
+
 
     unique_ptr<EnergyLossRangeInverter> SiCalc = defaultRangeInverter(ion, "Silicon");
     unique_ptr<EnergyLossRangeInverter> AlCalc = defaultRangeInverter(ion,"Aluminum");
@@ -310,18 +306,11 @@ int main(int argc, char* argv[]){
         cout << "# Detector=" << d <<  "\t" << side << " strips 2..15" << endl;
     for(int  s=1; s<15; ++s){ // if i = 1 return strip 2 if i==14 return strip 15 //////////
     TVector3 bound1, bound2, bound3, bound4;
-    //TVector3 bound1 = det->getContinuousPixelPosition(1.5,1.5); // position between pixel 1 and 2 for both front strip and back strip, should return the corner pos of the  
-    //TVector3 bound2 = det->getContinuousPixelPosition(15.5,1.5); // position between pixel 15 and 16 & 1 and 2 for front and back strip respectively
-    //TVector3 bound3 = det->getContinuousPixelPosition(15.5,15.5);
-    //TVector3 bound4 = det->getContinuousPixelPosition(1.5,15.5);
 
     /*
     Define borders for each strip in a loop over strips in a loop over sides.
     fx. if the side is "front" and strip is 7 then the bounds returns the 4 corners of the strip and the loop then checks whether or not the particle hits this strip
 
-    Im a bit unsure here whether or not the limits should be 1.5 and 15.5 instead of 0.5 and 16.5. 
-    Using 16.5 and 0.5 a given strip E is calculated by allowing events being recorded in 1-16 on the oppsosite side. 
-    fx the front strip 6 energy is an average of all the energy deposited in backstrip 1-16
     */
     if(side=="front"){
     bound1 = det->getContinuousPixelPosition(s+0.5,0.5); 
@@ -391,7 +380,7 @@ int main(int argc, char* argv[]){
             //if(E!=0) cout << TMath::RadToDeg()*abs(angle) << endl;
 
     
-    }//does the source hit the infitie plane extended by the detector surface?
+    }//does the source hit the plane extended by the detector surface?
 }//is the frame hit?
     }//for i in N
 Etot/=counter;

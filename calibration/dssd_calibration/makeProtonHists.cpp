@@ -1,11 +1,8 @@
 //
-// Created by erik on 11/12/23.
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
 // changed to fit new calibrations on 30/04 by philip
 //
-/*Denne fil tager de unpackede filer og danner histogrammer med de ukalibrerede data fra DSSSD 4 
-den laver et histogram pr bagstrip og pr forstrip, dvs 32 histogrammer i alt - det er så dem vi kan lave
-videre analyse på i næste script
-*/
+
 #include <TChain.h>
 #include <TFile.h>
 #include "projectutil.h"

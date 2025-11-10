@@ -1,0 +1,16 @@
+This folder holds different versions of the same primitive montecarlo simulation tool.
+
+angle_effect.cpp
+A script that tries to calculate how much of a difference it makes if the beamspot is wider than a point source.
+This script was the first one made and it has not been updated to have a dynamic read in of parameters and one needs to go into the code and tune parameters for each run...
+This is the script that was used to find the apparent angle distribution of events coming approximately from the center of the target in each detector. This has been used in the TRIM estimations of thickness.
+
+EnergyEstimation.cpp
+A script that calculates the actual energy seen in a given strip of a dsssd when we have some initial energy. This is used in the energy calibration of the dsssds.
+
+SolidAngle.cpp
+A script that calculates the solid angle coverage of each pixel in a given detector given a specific source location. This is used to estimate the anomalous source solid angles.
+Due to the sample size needing to be so large for the solid angle to converge this script is very very slow since there are 256 pixels. Optimizations should be considered.
+
+PadEE.cpp 
+A script that is used to find the comparative energy of the original alpha calibration such that we can compare the new proton calibration and the old alpha calibration.
