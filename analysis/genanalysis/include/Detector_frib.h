@@ -1,6 +1,9 @@
 #ifndef DETECTOR_FRIB_H
 #define DETECTOR_FRIB_H
 
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
+// With slight modifications
+
 #include "gCut.h"
 
 #include <string>
@@ -103,7 +106,6 @@ namespace Detectors_ {
    //add telescope tabulations
    void addTelescopeTabulation(TelescopeTabulation* tT) { this->tTabulations.emplace_back(tT); }
 
-   // If i have to make the addition of a solid angle load in then it can go here
 
 
    bool hasPartner() const {return withPartner;}

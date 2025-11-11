@@ -1,6 +1,9 @@
 #ifndef GCUT_H
 #define GCUT_H
 
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
+
+
 #include <iostream>
 #include <string>
 #include <TGraph.h>

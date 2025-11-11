@@ -1,6 +1,19 @@
 #ifndef U1ANALYSIS_H
 #define U1ANALYSIS_H
 
+/*
+
+This script is not optimized in any way. It was created as a quick fix to the original piece of code in a brute-force sort of way.
+The script is most likely redundant and can be implemented into the GeneralAnalysis script now that I've gained further coding skills.
+However, the script works, which for the sake of this very small part of the analysis is completely fine. It has not been deemed relevant to try to improve on this script.
+But it could definitely be done in the future...
+
+
+
+*/
+
+
+
 #include <libconfig.h++>
 #include "projectutil.h"
 #include "Hit.h"
@@ -98,8 +111,8 @@ class U1analysis : public AbstractSortedAnalyzer{
         detectors.insert({U1,P1, U2, P2, U3, P3, U4, P4}); 
         }
         else{
-          U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 500.); //these can be defined with betacutoffs aswell
-          P1 = new Detector_frib(6, "P1", Pad, Alpha, setupSpecs);
+          U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 600.); //these can be defined with betacutoffs aswell
+          P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
           makePartners(U1, P1);
           U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/totcuts.root", "abovebanU1", include_region));
           detectors.insert({U1,P1}); 
@@ -259,7 +272,7 @@ class U1analysis : public AbstractSortedAnalyzer{
           auto back_det_fdl = back_det->getFrontDeadLayer()/abs(cos(angle));
           double E = pad_hit->Edep;
           if(front_det->getCalibration() == Proton && back_det->getCalibration() == Alpha) {
-            E *= 1.016; // This value is extracted from Eriks thesis as a multiplier to somewhat account
+            E *= 1.014; // This value is extracted from Eriks thesis as a multiplier to somewhat account
                 //for the poorer calibrations of the pad detectors.
           }//if statement
           //Energy correction for protons in the

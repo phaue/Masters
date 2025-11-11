@@ -1,6 +1,8 @@
 #ifndef ANALYSIS_CONFIG_H
 #define ANALYSIS_CONFIG_H
 
+// Based on the AnalysisConfig script from Erik - https://gitlab.au.dk/ausa/erik/e21010
+
 
 #include <string>
 #include <cstdio>

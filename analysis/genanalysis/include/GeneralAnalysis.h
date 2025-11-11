@@ -1,6 +1,8 @@
 #ifndef GENERALANALYSIS_H
 #define GENERALANALYSIS_H
 
+// Based on the GeneralAnalysis script from Erik - https://gitlab.au.dk/ausa/erik/e21010
+
 #include <libconfig.h++>
 #include "projectutil.h"
 #include "Hit.h"
@@ -126,9 +128,8 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       } // bananas
 
         //beta region is the region that lies in the very low energies, these zones are different for each detector
-        //i should ideally include them, change detector header and this file when done
 
-        //set telescope tabulations -->> to be seen whether or not these are required remove them if they have no relevance
+        //set telescope tabulations -->> 
         pU1P1 = new TelescopeTabulation(setupSpecs, target, "U1", "P1", "p");
         pU2P2 = new TelescopeTabulation(setupSpecs, target, "U2", "P2", "p");
         pU3P3 = new TelescopeTabulation(setupSpecs, target, "U3", "P3", "p");
@@ -136,7 +137,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         pU6P6 = new TelescopeTabulation(setupSpecs, target, "U6", "P6", "p");
 
 
-        //Sets the implantation depth for all the tabulations missing , pU6P6, aU6P6
           for (auto &tabulations : {pU1P1, pU2P2, pU3P3, pU4P4, pU6P6}) {
           tabulations->setImplantationDepth(implantation_depth);}
         
@@ -154,7 +154,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         detectors.insert({U1, U2, U3, U4, U5, U6, P1, P2, P3, P4, P5, P6, G1, G2}); 
 
-        output->cd(); //something about output file used for mid-analysis dumping
+        output->cd();
         tree = new TTree("a", "a");
         tree->Branch("num", &NUM);
         tree->Branch("mul", &mul);
@@ -200,7 +200,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         tree->Branch("pb", &pb);
         tree->Branch("b", &b);
 
-        //tree->Branch("CLOCK", &CLOCK);
+        tree->Branch("CLOCK", &CLOCK);
 
     pSiCalc = defaultRangeInverter("p", "Silicon"); //Eloss in detector material of protons
     for (auto &layer: target->getLayers()) {
@@ -238,7 +238,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       // analyze function, first it clears, then it starts the clock
       //then the hits are found and the analysis run and the tree filled
         clear();
-        //CLOCK = clock.getValue();
+        CLOCK = clock.getValue();
         findHits();
         specificAnalysis();
         pg1 = p && g1;
@@ -329,7 +329,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
 
       void findPadHit(Detector_frib *detector) {
-        if (detector->getName() == "P5") return; // Pad still dead
+        if (detector->getName() == "P5") return; // Pad not present
         unsigned short id = detector->getId();
         auto &out = output.getSingleOutput(detector->getName());
         auto &d = out.detector();
@@ -387,18 +387,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         void treatDSSSDHit(Hit *hit) {
           auto det = hit->detector;
 
-          //if(!include_beta_region && hit->Edep <= det->getBetaCut()) {
-          //  hit->E = 0;
-          //  hit->Ea = 0;
-          //  return;
-          //};
-
           double angle = hit->angle;
           //finds the front dead layer accounting for the thickness change with changing angle of incidence
           double fdl = det->getFrontDeadLayer()/abs(cos(angle));
 
           double E = hit->Edep;
-          //double E = hit->Edep; // proton energy correction from the front dead layer and target layers
           E += pSiCalc -> getTotalEnergyCorrection(E, fdl);
           auto &from = hit->position;
           for (auto &intersection: target->getIntersections(from, origin)) {
@@ -417,22 +410,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
 
         }//treatDSSSDHit
 
-        void treatPadHit(Hit *hit){
-          auto det = hit->detector;
-          double angle = hit->angle;
-          double fct = det->getFrontContactThickness()/abs(cos(angle));
-          double fdl = det->getFrontDeadLayer()/abs(cos(angle));
-
-          double E = hit->Edep;
-          E += pAlCalc -> getTotalEnergyCorrection(E, fct);
-          E += pSiCalc -> getTotalEnergyCorrection(E, fdl);
-        auto &from = hit->position;
-        for (auto &intersection: target->getIntersections(from, origin)) {
-          auto &calc = pTargetCalcs[intersection.index];
-          E += calc->getTotalEnergyCorrection(E, intersection.transversed);
-        }//forloop for E energy correction
-        hit->E = E;
-        }//treatPadHit
 
         bool treatTelescopeHit(Hit *dsssd_hit, Hit *pad_hit) {
           // if there is no energy recorded in either then there is no telescope hit therefore return false
@@ -474,7 +451,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
           if (!include_spurious_zone) {
             auto FI = dsssd_hit->FI;
             auto BI = dsssd_hit->BI;
-//I think these values are to ensure there are no ambiguities with the punch through or reach through values
             double E_lower_threshold = INFINITY, E_upper_threshold = -1.*INFINITY;
             for (auto &tabulation : front_det->getTelescopeTabulations()) {
               if (tabulation->getIon() != "p") continue;
@@ -489,7 +465,6 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
             return false;
           } // this ensures that spurious zones are omitted from the telscope hits, since they cannot theoretically happen
           //since energies between punch through and reach through energies are not able to be seen.
-          //is this a problem when determining thicknesses?
           }//if spurious zones
           dsssd_hit->E = E;
           return true;
@@ -574,7 +549,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
       }//terminate
 
       void clear() {
-        //We need to clear the memory - done manually in cpp
+        //We need to clear the memory 
         //must clear all assigned variables used in analysis before going again
         mul = 0;
         p = g1 = g2 = pg1 = pg2 = b = bg1 = bg2 = pb = false;
@@ -609,7 +584,7 @@ TelescopeTabulation *pU1P1, *pU2P2, *pU3P3, *pU4P4, *pU6P6;
 
 
 unordered_set<Detector_frib *> detectors;
-Detector_frib *U1, *U2, *U3, *U4, *U5, *U6, *P1, *P2, *P3, *P4, *P5, *P6, *G1, *G2;//, *U5, *U6, *P5, *P6
+Detector_frib *U1, *U2, *U3, *U4, *U5, *U6, *P1, *P2, *P3, *P4, *P5, *P6, *G1, *G2;
 
 TTree *tree; //defines the tree in which we save the new parameters
 int NUM;

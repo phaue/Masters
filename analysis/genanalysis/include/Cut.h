@@ -1,6 +1,8 @@
 #ifndef CUT_H
 #define CUT_H
 
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
+
 #include <iostream>
 #include <string>
 #include <TROOT.h>

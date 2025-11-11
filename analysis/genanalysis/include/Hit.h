@@ -1,6 +1,8 @@
 #ifndef HIT_H
 #define HIT_H
 
+// Adopted from Erik - https://gitlab.au.dk/ausa/erik/e21010
+
 #include <TVector3.h>
 #include <TLorentzVector.h>
 #include "Detector_frib.h"
@@ -21,7 +23,7 @@ struct Hit{
   double FT, BT;
   double Edep; //average energy of FE and BE --> FE+BE /2
 
-  double E, Ea, Eg; // energy
+  double E, Ea; // energy
   };
 
  #endif

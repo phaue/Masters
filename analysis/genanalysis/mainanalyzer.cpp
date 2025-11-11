@@ -1,3 +1,6 @@
+// Based on the main.cpp script from Erik - https://gitlab.au.dk/ausa/erik/e21010
+
+
 #include <libconfig.h++>
 #include "projectutil.h"
 #include "Hit.h"
@@ -179,80 +182,12 @@ class Alphas : public GeneralAnalysis{
               }
               break;
             default:
-              // if case is 'HPGe', the scalar Eg1 and/or Eg2 already contains the gamma energy and the boolean 'g' is set to 'true'
-              // do nothing
               break;
           }
         }
       }
     };
 
-
-class GammaSpec : public GeneralAnalysis {
-  public:
-  GammaSpec(const shared_ptr<Setup> &_setupSpecs, const shared_ptr<Target> &_target, TFile *output, string _isotopetype,
-                    bool _exclude_hpges = false, bool _include_DSSSD_rim = false, bool _include_spurious_zone = false,
-                    bool _include_banana_cuts=false, bool _include_beta_region =false)
-        : GeneralAnalysis(_setupSpecs, _target, output, _isotopetype, _exclude_hpges,
-                          _include_DSSSD_rim, _include_spurious_zone, _include_banana_cuts, _include_beta_region) {}
-
-  void specificAnalysis() override {
-    if (hits.empty()) return;
-
-    unordered_set<Hit*> telescope_frontside_candidates;
-    unordered_set<Hit*> telescope_backside_candidates;
-
-    for(auto &hit : hits) {
-      auto det = hit.detector;
-      switch(det->getType()) {
-        case DSSSD:
-          if(det->hasPartner()){
-            telescope_frontside_candidates.emplace(&hit);
-            }
-            else { //U5 doesnt have a partner so we need to treat it aswell
-              treatDSSSDHit(&hit);
-              addDSSSDHit(&hit);
-              }
-              break;
-        case Pad:
-          telescope_backside_candidates.emplace(&hit);
-          break;
-      default: //treats the rest of the cases such as NoType and HPGe
-        break;
-      }//switch
-    }//for hit in hits
-
-    unordered_set<Hit*> telescope_frontside_successes;
-    unordered_set<Hit*> telescope_backside_successes;
-    for(auto dsssd_hit : telescope_frontside_candidates) {
-      auto dsssd_det = dsssd_hit->detector;
-      for(auto pad_hit : telescope_backside_candidates) {
-        auto pad_det = pad_hit->detector;
-        if(dsssd_det->getPartner() == pad_det){
-          bool telescope_success = treatTelescopeHit(dsssd_hit, pad_hit);
-          if(telescope_success){
-            telescope_frontside_successes.emplace(dsssd_hit);
-            telescope_backside_successes.emplace(pad_hit);
-            addTelescopeHit(dsssd_hit, pad_hit);
-/*
-            Each hit in the DSSSD is paired with all pad hits and this is done for each hit in the DSSSD
-            This creates multiple pairings between the two
- */
-          }//if telescope hit is a success
-        }//if dsssd and pad is partnered
-      }//for each pad hit in telescope backside candidates
-    }// for each dsssd hit in telescope frontside candidates
-
-    for(auto hit : telescope_frontside_successes){
-      telescope_frontside_candidates.erase(hit);
-      }//removes all hits that were a success from the frontside candidates
-      
-    for(auto hit : telescope_frontside_candidates){
-      treatDSSSDHit(hit);
-      addDSSSDHit(hit);
-      }//treats the leftover non-matched dsssd hits.
-  }//specificanalysis
-};//Gammaspec
 
 
 
@@ -294,6 +229,9 @@ class AboveBananaAnalysis : public U1analysis{
     for(auto pad_hit : telescope_backside_candidates) {
       auto pad_det = pad_hit->detector;
       if(dsssd_det->getPartner() == pad_det){
+/*
+Unfortunately the values are hardcoded for now. This was done due to the ease of implementation. Should be changed if one wishes to extend this analysis to other cases.
+*/
         if(dsssd_det->getBananaCut()->isSatisfied(pad_hit->Edep, dsssd_hit->Edep)){            
           if(pad_hit->Edep+dsssd_hit->Edep <4300 && pad_hit->Edep+dsssd_hit->Edep > 3900){
             bool telescope_success = specialTelescopeTreatment(dsssd_hit, pad_hit, 4089.18);
@@ -344,7 +282,7 @@ class Bananaexplorer : public U1analysis{
         if(det->hasPartner()){
           telescope_frontside_candidates.emplace(&hit);
         }
-        else { //U5 doesnt have a partner so we need to treat it aswell
+        else { 
           break;
         }
           break;
@@ -541,10 +479,6 @@ for(auto &runpart : input){
     }
   else if(specificAnalysis == "Alphas"){
     analysis = make_shared<Alphas>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
-                                          include_spurious_zone, include_banana_cuts, include_beta_region);
-    }
-  else if(specificAnalysis == "GammaSpec"){
-    analysis = make_shared<GammaSpec>(setup, target, &output, isotopetype, exclude_hpges, include_DSSSD_rim,
                                           include_spurious_zone, include_banana_cuts, include_beta_region);
     }
   else if(specificAnalysis == "TwoProton"){
