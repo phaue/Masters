@@ -51,5 +51,6 @@ parallel -u ./analysis/genanalysis/mainanalyzer singleprotons.cfg ::: $(seq 40 4
 Additional Python analysis in run from within the specific notebooks. From the input folders in the python scripts one can see what the required C++ analysis is required for running the individual scripts.
 
 ## Thesis
-The thesis can be found here(tbd).
+The thesis can be found [here](https://wiki.kern.phys.au.dk/Unpublished%20reports%20and%20notes).
+
 
