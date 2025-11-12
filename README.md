@@ -18,8 +18,8 @@ In order to run the scripts presented some prerequisites are needed:
 
 ### Other folders and files needed
 
-* Updated [setup](https://gitlab.au.dk/ausa/e21010) folder:
-* Unpacked data or sorted data.
+* Updated [setup](https://gitlab.au.dk/ausa/e21010) folder
+* Unpacked data or sorted data
 * Ausalib [Sorter](https://gitlab.au.dk/ausa/sorter) (unless in possession of already sorted data)
 
 ## Data Analysis
@@ -52,5 +52,6 @@ Additional Python analysis in run from within the specific notebooks. From the i
 
 ## Thesis
 The thesis can be found [here](https://wiki.kern.phys.au.dk/Unpublished%20reports%20and%20notes).
+
 
 
