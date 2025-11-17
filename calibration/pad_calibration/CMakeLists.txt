@@ -6,7 +6,6 @@ link_libraries(AUSA::AUSA config++ telescope::telescope GSL::gsl)
 file(GLOB HEADERS CONFIGURE_DEPENDS "include/*.h")
 add_executable(padcal PadCalibration.cpp ${HEADERS})
 
-add_executable(fitter fitter.cpp ${HEADERS})
 
 add_executable(finder finder.cpp ${HEADERS})
 
