@@ -115,11 +115,11 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
         if (include_banana_cuts) {
         // need to set the banana cuts here when they are done example of how this is done is seen below
           try {
-              U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id0cut;2", include_region));
-              U2->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id1cut", include_region));
-              U3->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id2cut", include_region));
-              U4->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id3cut", include_region));
-              U6->setBananaCut(new gCut(getProjectRoot() + "data/cuts/updatedgcuts.root", "id5cut", include_region));
+              U1->setBananaCut(new gCut(getProjectRoot() + "cuts/updatedgcuts.root", "id0cut;2", include_region));
+              U2->setBananaCut(new gCut(getProjectRoot() + "cuts/updatedgcuts.root", "id1cut", include_region));
+              U3->setBananaCut(new gCut(getProjectRoot() + "cuts/updatedgcuts.root", "id2cut", include_region));
+              U4->setBananaCut(new gCut(getProjectRoot() + "cuts/updatedgcuts.root", "id3cut", include_region));
+              U6->setBananaCut(new gCut(getProjectRoot() + "cuts/updatedgcuts.root", "id5cut", include_region));
 
             } catch (const runtime_error &e) {
               cerr << "Error initializing banana cuts: " << e.what() << endl;
@@ -229,7 +229,7 @@ class GeneralAnalysis : public AbstractSortedAnalyzer{
     //code that runs before we start iterating over events
       void setup(const SortedSetupOutput &output) override{
       AbstractSortedAnalyzer::setup(output); //calls the setup function from the base class NonSpecficAnalysis
-      //clock = output.getScalerOutput("clock");
+      clock = output.getScalerOutput("CLOCK");
     }//specificanalysis
 
     //code that runs for each event in the file this means that each event carries some info about

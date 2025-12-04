@@ -114,7 +114,7 @@ class U1analysis : public AbstractSortedAnalyzer{
           U1 = new Detector_frib(0, "U1", DSSSD, Proton, setupSpecs, 600.); //these can be defined with betacutoffs aswell
           P1 = new Detector_frib(6, "P1", Pad, Proton, setupSpecs);
           makePartners(U1, P1);
-          U1->setBananaCut(new gCut(getProjectRoot() + "data/cuts/totcuts.root", "abovebanU1", include_region));
+          U1->setBananaCut(new gCut(getProjectRoot() + "cuts/totcuts.root", "abovebanU1", include_region));
           detectors.insert({U1,P1}); 
 
         }
